@@ -615,24 +615,32 @@
   ],
   "worlds": [
     {
-      "name": "",
-      "pack": "",
+      "name": "Nordhaven",
+      "pack": "Businesses & Hobbies",
       "description": "",
       "languages": "",
-      "notes": ""
+      "notes": "",
+      "screenshots": []
     }
   ],
   "lots": [
     {
-      "name": "",
-      "world": "",
-      "type": "",
-      "size": "",
+      "name": "Live-in cafe",
+      "world": "Nordhaven",
+      "type": "Residential",
+      "size": "30x20",
       "tenants": "",
-      "description": "",
-      "notes": ""
+      "description": "Planned: cafe with one apartment attached, run with the Live in Business mod (Live in Cafe lot trait).",
+      "notes": "Name is a placeholder until the lot is placed and named in game. The Live in Cafe trait needs a residential lot and an espresso bar (Get Together). Lock the apartment doors so cafe guests stay downstairs. Source: https://www.curseforge.com/sims4/mods/live-in-business",
+      "screenshots": []
     }
   ],
-  "sessions": [],
+  "sessions": [
+    {
+      "date": "2026-10-12",
+      "summary": "Planning a live-in cafe with one attached apartment on a 30x20 lot in Nordhaven, using the Live in Business mod.",
+      "changes": "Added world Nordhaven (Businesses & Hobbies) in place of the blank world row. Added lot Live-in cafe (Nordhaven, Residential, 30x20, planned) in place of the blank lot row."
+    }
+  ],
   "modsIgnore": []
 }
