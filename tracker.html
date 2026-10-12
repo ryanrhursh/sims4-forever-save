@@ -195,14 +195,16 @@ async function save(){
   if(!token||!sha)return;
   D.updated=today();
   var btn=document.getElementById("saveBtn");if(btn)btn.disabled=true;
+  var okk=false;
   try{
     var r=await gh("PUT",{message:"Update tracker from web page ("+today()+")",content:b64enc(JSON.stringify(D,null,2)+"\n"),sha:sha,branch:REPO.branch});
-    if(r.ok){var j=await r.json();sha=j.content.sha;dirty=false;say("Saved to GitHub. The public page can take a few minutes to catch up; this view is current.");}
+    if(r.ok){var j=await r.json();sha=j.content.sha;dirty=false;okk=true;say("Saved to GitHub. The public page can take a few minutes to catch up; this view is current.");}
     else if(r.status===409||r.status===422){say("Not saved. tracker-data.json changed on GitHub after you loaded it (for example, Claude updated it). Choose Reload from GitHub, then redo your edits.",true);}
     else if(r.status===401||r.status===403){say("Not saved. GitHub rejected the token ("+r.status+"). It may have expired or lacks Contents: read and write on this repo.",true);}
     else say("Not saved. GitHub returned "+r.status+".",true);
   }catch(e){say("Not saved. Could not reach GitHub.",true);}
   renderChrome();
+  return okk;
 }
 
 /* ---------- screenshots ---------- */
@@ -470,20 +472,32 @@ function unitOf(segs,p,ud,direct){
   if(ud==="auto"){for(var i=1;i<=fs.length;i++){var pre=fs.slice(0,i).join("/");if(direct[pre]||i===fs.length)return pre;}}
   return fs.slice(0,ud).join("/");
 }
+function catOf(u){
+  var t=nz(u.unit+" "+u.ex.join(" "));
+  if(/wicked|woohoo|nude|nsfw|kinky|lovers|basemental/.test(t))return "Adult";
+  if(/career|profession|aspiration|jobs?/.test(t))return "Careers";
+  if(u.scr)return "Gameplay (script)";
+  if(/hair|skin|eyes|brow|lash|makeup|lips|blush|dress|shirt|pants|jeans|shorts|skirt|shoes|boots|socks|outfit|clothes|tattoo|nails|piercing|earring|necklace|glasses|swimsuit|lingerie/.test(t))return "CC";
+  if(/furniture|sofa|couch|chair|table|decor|clutter|kitchen|bath|lamp|plant|rug|curtain|window|door|wall|floor|counter|shelf/.test(t))return "Build/Buy";
+  return "Other";
+}
 function autoAdd(){
-  D.mods=D.mods.filter(function(m){return m.auto!==true;});/* drop rows from the earlier folder-name version */
-  var A=analyze("auto"),have={},added=0,skipped=0,today_=today();
+  var before=D.mods.length;D.mods=D.mods.filter(function(m){return m.auto!==true;});/* drop rows from the earlier folder-name version */
+  var removed=before-D.mods.length;
+  var A=analyze("auto"),have={},skipped=0,today_=today(),rows=[],counts={};
   D.mods.forEach(function(m){have[m.id]=1;});
   var cand=A.unmatched.filter(function(u){return u.pk&&nz(u.unit).length>=3;}),limit=cand.length>30;
   cand.forEach(function(u){
-    if(!u.scr&&(limit||u.n>25)){skipped++;return;}
+    var cat=catOf(u);
+    if(!u.scr&&(limit||u.n>25||cat==="CC"||cat==="Build/Buy")){skipped++;return;}
     var kw=nz(u.unit),id="scan-"+kw.slice(0,40),k=id,i=2;while(have[k])k=id+"-"+(i++);have[k]=1;
-    var nm=u.unit.replace(/([a-z])([A-Z])/g,"$1 $2");
-    D.mods.push({id:k,batch:"Found in scan",name:nm,creator:"",category:"Unlisted",required:false,status:"Testing",version:"",testedOn:"",lastChecked:"",url:"",linkText:"Link",
+    counts[cat]=(counts[cat]||0)+1;
+    rows.push({id:k,batch:"Found in scan",name:u.unit.replace(/([a-z])([A-Z])/g,"$1 $2"),creator:"",category:cat,required:false,status:"Testing",version:"",testedOn:"",lastChecked:"",url:"",linkText:"Link",
       notes:"Added automatically from the Mods folder scan on "+today_+" from file names: "+u.n+" file"+(u.n===1?"":"s")+", for example "+u.ex.join("; ")+". Identify it and fill in the creator.",match:[kw],auto:2});
-    added++;
   });
-  return {added:added,skipped:skipped};
+  rows.sort(function(a,b){return a.category<b.category?-1:a.category>b.category?1:(a.name<b.name?-1:1);});
+  rows.forEach(function(r){D.mods.push(r);});
+  return {added:rows.length,skipped:skipped,removed:removed,cats:Object.keys(counts).sort().map(function(c){return counts[c]+" "+c;}).join(", ")};
 }
 function analyze(ud){
   ud=ud||UD;
@@ -524,26 +538,73 @@ function verdict(r){
   if(inst)return ["Missing (tracker says "+st.toLowerCase()+")","s-Broken"];
   return ["Not in folder",""];
 }
+function sigOf(arr){var h=5381,s=arr.map(function(f){return f[0]+"|"+f[1]+"|"+f[2];}).sort().join("\n");for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return arr.length+":"+(h>>>0).toString(36);}
 function scan(list){
   var arr=[],root="";
   Array.prototype.forEach.call(list,function(f){
     var parts=(f.webkitRelativePath||f.name).split("/");
     if(parts.length>1){root=root||parts[0];parts.shift();}
-    var name=parts[parts.length-1];
-    if(/^(\.ds_store|desktop\.ini|thumbs\.db)$/i.test(name))return;
+    if(/^(\.ds_store|desktop\.ini|thumbs\.db)$/i.test(parts[parts.length-1]))return;
     arr.push([parts.join("/"),f.size,f.lastModified]);
   });
-  M={scannedAt:new Date().toISOString(),root:root||"Mods",files:arr};mSaved=false;
+  applyScan(arr,root||"Mods");
+}
+async function applyScan(arr,root){
+  var prev=M,prevSet={};if(prev)prev.files.forEach(function(f){prevSet[f[0]]=1;});
+  var wasDirty=dirty,canSave=!!(token&&sha);
+  M={scannedAt:new Date().toISOString(),root:root,files:arr,sig:sigOf(arr)};mSaved=false;
+  var changed=!prev||prev.sig!==M.sig,ign=(D.modsIgnore||[]).map(nz).filter(Boolean);
+  var fresh=prev?arr.filter(function(f){return !prevSet[f[0]]&&!ignKey(f[0],ign)&&/\.(package|ts4script)$/i.test(f[0]);}):[];
   var msg="Scanned "+arr.length+" files on this device. Nothing was uploaded.";
-  if(token&&sha){
-    var r=autoAdd();
-    if(r.added||r.skipped)mark();
-    if(r.added)msg+=" Added "+r.added+" unrecognized mod"+(r.added===1?"":"s")+" to the Mods table (batch Found in scan).";
-    if(r.skipped)msg+=" "+r.skipped+" more package-only items look like CC, so they were not added. Ignore them below or assign them to a mod.";
-    msg+=" Press Save changes to keep the table updates, and Save scan to GitHub to keep the scan.";
-    tiles();
-  }else msg+=" Enable editing to have unrecognized mods added to the table automatically.";
-  draw();say(msg);
+  if(prev&&!changed)msg+=" No changes since the last scan.";
+  else if(prev)msg+=" "+fresh.length+" new script or package file"+(fresh.length===1?"":"s")+" since the last scan.";
+  if(!canSave){msg+=" Enable editing to add unrecognized mods automatically.";draw();say(msg);return;}
+  var r=autoAdd(),dChanged=r.added>0||r.removed>0;
+  if(r.added)msg+=" Added "+r.added+" unrecognized mod"+(r.added===1?"":"s")+" ("+r.cats+").";
+  if(r.skipped)msg+=" Left out "+r.skipped+" CC or build/buy item"+(r.skipped===1?"":"s")+" (still listed under Unrecognized items).";
+  if(dChanged){mark();tiles();}
+  draw();
+  if(wasDirty){say(msg+" You had unsaved edits, so nothing was saved automatically. Press Save changes"+(changed?" and Save scan to GitHub":"")+".");return;}
+  var ok=true;
+  if(dChanged)ok=await save();
+  if(ok&&changed)ok=await saveManifest();
+  if(document.getElementById("msg").className.indexOf("err")<0)say(msg+(ok&&(dChanged||changed)?" Saved to GitHub.":""));
+}
+/* remembered folder (Chrome and Edge on desktop) */
+var hnd=null,needRescan=false,autoDone=false;
+function idb(){return new Promise(function(res,rej){var r=indexedDB.open("sims4-tracker",1);r.onupgradeneeded=function(){r.result.createObjectStore("kv");};r.onsuccess=function(){res(r.result);};r.onerror=function(){rej(r.error);};});}
+async function idbGet(k){try{var d=await idb();return await new Promise(function(res){var t=d.transaction("kv").objectStore("kv").get(k);t.onsuccess=function(){res(t.result||null);};t.onerror=function(){res(null);};});}catch(e){return null;}}
+async function idbSet(k,v){try{var d=await idb();await new Promise(function(res,rej){var t=d.transaction("kv","readwrite").objectStore("kv").put(v,k);t.onsuccess=function(){res();};t.onerror=function(){rej(t.error);};});return true;}catch(e){return false;}}
+async function idbDel(k){try{var d=await idb();await new Promise(function(res){var t=d.transaction("kv","readwrite").objectStore("kv").delete(k);t.onsuccess=t.onerror=function(){res();};});}catch(e){}}
+async function walkDir(dir,prefix,out){
+  for await(var e of dir.values()){
+    if(e.kind==="directory")await walkDir(e,prefix+e.name+"/",out);
+    else if(!/^(\.ds_store|desktop\.ini|thumbs\.db)$/i.test(e.name)){var f=await e.getFile();out.push([prefix+e.name,f.size,f.lastModified]);}
+  }
+}
+async function rescanHandle(fromClick){
+  if(!hnd)return;
+  var perm=fromClick?await hnd.requestPermission({mode:"read"}):await hnd.queryPermission({mode:"read"});
+  if(perm!=="granted"){needRescan=true;renderChrome();return;}
+  needRescan=false;say("Scanning "+hnd.name+"…");
+  try{var arr=[];await walkDir(hnd,"",arr);await applyScan(arr,hnd.name);}
+  catch(e){say("Could not read the remembered folder ("+(e&&e.name||"error")+"). Choose it again on the Mods folder tab.",true);}
+  renderChrome();
+}
+async function rememberFolder(){
+  try{
+    var h=await window.showDirectoryPicker({mode:"read"});
+    hnd=h;await idbSet("modsDir",h);localStorage.setItem("sims4-tracker-auto","1");
+    await rescanHandle(false);
+  }catch(e){if(e&&e.name!=="AbortError")say("Could not open that folder: "+(e.name||"error"),true);}
+  draw();
+}
+async function forgetFolder(){hnd=null;needRescan=false;await idbDel("modsDir");renderChrome();draw();}
+async function initAuto(){
+  if(autoDone)return;autoDone=true;
+  hnd=window.__testHandle||(window.showDirectoryPicker?await idbGet("modsDir"):null);
+  if(!hnd||!(token&&sha))return;
+  await rescanHandle(false);
 }
 async function loadManifest(){
   M=null;mSha=null;mSaved=true;
@@ -562,20 +623,22 @@ async function loadManifest(){
   }catch(e){M=null;}
 }
 async function saveManifest(){
-  if(!M||!token||!sha)return;
+  if(!M||!token||!sha)return false;
   var ign=(D.modsIgnore||[]).map(nz).filter(Boolean),ig={},keep=[];
   M.files.forEach(function(f){var k=ignKey(f[0],ign);
     if(k){var o=ig[k]||(ig[k]={count:0,bytes:0});o.count++;o.bytes+=f[1];}else keep.push(f);});
-  var out={scannedAt:M.scannedAt,root:M.root||"Mods",files:keep,ignored:ig},text=JSON.stringify(out);
-  if(text.length>900000){say("Not saved: the scan is "+Math.round(text.length/1024)+" KB, over the 900 KB limit. Use Ignore on big CC folders below, then Save scan again.",true);return;}
+  var out={scannedAt:M.scannedAt,root:M.root||"Mods",sig:M.sig,files:keep,ignored:ig},text=JSON.stringify(out);
+  if(text.length>900000){say("Not saved: the scan is "+Math.round(text.length/1024)+" KB, over the 900 KB limit. Use Ignore on big CC folders below, then Save scan again.",true);return false;}
   var body={message:"Update mods folder scan ("+today()+")",content:b64enc(text+"\n"),branch:REPO.branch};
   if(mSha)body.sha=mSha;
+  var good=false;
   try{
     var r=await fetch(CONTENTS+"mods-manifest.json",{method:"PUT",headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+token},body:JSON.stringify(body)});
-    if(r.ok){var j=await r.json();mSha=j.content.sha;M=out;mSaved=true;say("Scan saved to GitHub as mods-manifest.json.");}
+    if(r.ok){var j=await r.json();mSha=j.content.sha;M=out;mSaved=true;good=true;say("Scan saved to GitHub as mods-manifest.json.");}
     else say("Not saved. GitHub returned "+r.status+(r.status===409||r.status===422?" (the file changed on GitHub; reload and scan again).":"."),true);
   }catch(e){say("Not saved. Could not reach GitHub.",true);}
   draw();
+  return good;
 }
 function assignUnit(unit,id){
   var m=D.mods.filter(function(x){return x.id===id;})[0];if(!m)return;
@@ -596,9 +659,14 @@ function folderView(v){
   f.type="file";f.multiple=true;f.setAttribute("webkitdirectory","");f.setAttribute("aria-label","Choose your Mods folder");
   f.onchange=function(){if(f.files.length)scan(f.files);};
   pick.appendChild(f);top.appendChild(pick);
+  if(window.showDirectoryPicker){
+    if(!hnd){var rb=el("button","btn","Remember folder and auto-scan");rb.type="button";rb.onclick=rememberFolder;top.appendChild(rb);}
+    else{var rs=el("button","btn","Rescan "+(hnd.name||"folder")+" now");rs.type="button";rs.onclick=function(){rescanHandle(true);};top.appendChild(rs);
+      var fg=el("button","btn","Forget folder");fg.type="button";fg.onclick=forgetFolder;top.appendChild(fg);}
+  }
   if(M&&token&&sha){var sv=el("button","btn","Save scan to GitHub");sv.type="button";sv.disabled=mSaved;sv.onclick=saveManifest;top.appendChild(sv);}
   v.appendChild(top);
-  v.appendChild(el("p","meta","Choose your Mods folder (usually Documents\\Electronic Arts\\The Sims 4\\Mods). The browser reads only file names, sizes and dates on this device. No file contents are uploaded. Use a desktop browser such as Chrome, Edge or Firefox."));
+  v.appendChild(el("p","meta","Choose your Mods folder (usually Documents\\Electronic Arts\\The Sims 4\\Mods). The browser reads only file names, sizes and dates on this device. No file contents are uploaded. "+(window.showDirectoryPicker?(hnd?"This folder is remembered: every time you open this page, it rescans, adds new mods and saves, with no clicks. Chrome or Edge may ask you to allow access again.":"In Chrome or Edge you can choose Remember folder and auto-scan, so each time you open this page it rescans, adds new mods and saves without any clicks."):"Use desktop Chrome or Edge to remember the folder and have it rescan automatically each time you open this page.")));
   if(!M){v.appendChild(el("div","setup","No scan yet. Choose your Mods folder to check it against the tracker."));return;}
   var A=analyze();
   var total=M.files.length+Object.keys(M.ignored||{}).reduce(function(a,k){return a+M.ignored[k].count;},0);
@@ -661,6 +729,7 @@ function renderChrome(){
       if(editing&&dirty)return say("You have unsaved changes. Save or discard them first.",true);
       editing=!editing;armed=null;say("");renderChrome();draw();};
     a.appendChild(e);
+    if(hnd&&needRescan){var rr=el("button","btn pri","Rescan Mods folder");rr.type="button";rr.onclick=function(){rescanHandle(true);};a.appendChild(rr);}
     var r=el("button","btn","Remove token");r.type="button";r.onclick=function(){if(dirty)return say("Save or discard your changes first.",true);setTok("");token="";sha=null;editing=false;boot();};a.appendChild(r);
   }else{
     var e2=el("button","btn","Enable editing");e2.type="button";e2.onclick=function(){showSetup=!showSetup;renderSetup();};a.appendChild(e2);
@@ -697,6 +766,7 @@ async function boot(keepMsg){
   await loadManifest();
   if(!(token&&sha))editing=false;
   tiles();renderChrome();renderSetup();draw();
+  initAuto();
 }
 window.addEventListener("beforeunload",function(e){if(dirty){e.preventDefault();e.returnValue="";}});
 boot();
