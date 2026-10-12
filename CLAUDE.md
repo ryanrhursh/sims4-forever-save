@@ -5,6 +5,7 @@ Repo for the owner's modded Sims 4 forever world (PC, all expansion packs). Serv
 ## Files
 - `index.html`: install-order checklist (batches b0 to b7, with test gates). Ticks live in the owner's browser (localStorage), so Claude cannot read or change them. Edit only when mod advice changes.
 - `tracker.html`: viewer and editor. Never put data in it. The owner can turn on editing with a fine-grained GitHub token (Contents read/write on this repo) kept in their browser; Save then commits straight to `tracker-data.json` on `main`.
+- `mods-manifest.json`: the last scan of the owner's real Mods folder, written by the page's Mods folder tab (file names, sizes and dates only, never mod files). Do not hand-edit it. It may not exist yet.
 - `tracker-data.json`: the single source of truth for the tracker. Every tracker change is an edit to this file.
 
 ## Main workflow: session rundown
@@ -18,6 +19,7 @@ The owner opens a new session per task and pastes a rundown of what they did in 
    - Backup taken: add to `backups`.
    - New or changed Sims: edit `sims`. First row is the main Sim (restaurant owner and botanist).
    - Worlds and lots: `worlds` has one entry per world (`name`, `pack`, `description`, `languages`, `notes`, `screenshots`). `screenshots` is a list of `{"path": "images/worlds/<file>.jpg", "caption": ""}`; the page uploads them itself, so keep existing entries untouched. If the owner attaches screenshots in a session, resize to at most 1600 px on the long side, save as JPEG in `images/worlds/`, and add them. Never delete image files unless asked. `lots` has one entry per property (`name`, `world` matching a world `name` exactly, `type` such as Residential, Community or Restaurant, `size` as the owner states it, `tenants` as household or Sim names, `description`, `notes`, `screenshots` using the same format with paths under `images/lots/`). Add a world before its lots. When tenants move, update the lot's `tenants` and the matching Sim's `homeWorld`/`household`.
+   - Mods folder check: each mod may have `match`, a list of lowercase keywords with no spaces or punctuation (for example `wickedwhims`). The page matches them as substrings against the normalized path of every file in the scan. An empty list means the mod lives outside the Mods folder. Top-level `modsIgnore` lists folder or file names (normalized) to skip, such as `cc`. If `mods-manifest.json` exists, cross-check it against mod statuses and report mismatches, but only change statuses the owner states.
    - Add one entry to `sessions` every time: `date`, `summary` (their words, short), `changes` (what you edited).
    - Mods not in the list: add a row with a unique kebab-case `id`, and a batch and category that match the others.
 3. Set `updated` to today. Keep the JSON valid and pretty-printed with two-space indents and a trailing newline, the same format the page writes, so diffs stay small. Do not rename or remove keys: the page reads them by name. Blank fields are empty strings.

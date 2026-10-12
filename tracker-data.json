@@ -32,7 +32,21 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Story progression, population and household control. Windows only. Install the core file plus only the modules you want."
+      "notes": "Story progression, population and household control. Windows only. Install the core file plus only the modules you want.",
+      "match": [
+        "mc_cmd_center",
+        "mccc",
+        "mc_settings",
+        "mc_woohoo",
+        "mc_pregnancy",
+        "mc_career",
+        "mc_dresser",
+        "mc_death",
+        "mc_occult",
+        "mc_cleaner",
+        "mc_population",
+        "mc_cas"
+      ]
     },
     {
       "id": "ui-cheats-extension",
@@ -47,7 +61,11 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Edit needs, skills, relationships and traits from the pie menu."
+      "notes": "Edit needs, skills, relationships and traits from the pie menu.",
+      "match": [
+        "uicheatsextension",
+        "uicheats"
+      ]
     },
     {
       "id": "wickedwhims",
@@ -62,7 +80,10 @@
       "lastChecked": "",
       "url": "https://turbodriver.itch.io/wickedwhims",
       "linkText": "Creator page",
-      "notes": "Includes everything in Wonderful Whims, so skip that one. Delete old WickedWhims files before installing a new release."
+      "notes": "Includes everything in Wonderful Whims, so skip that one. Delete old WickedWhims files before installing a new release.",
+      "match": [
+        "wickedwhims"
+      ]
     },
     {
       "id": "nisa-s-wicked-perversions",
@@ -77,7 +98,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "If you use it, match its version to your WickedWhims release. A mismatch causes most WickedWhims error reports."
+      "notes": "If you use it, match its version to your WickedWhims release. A mismatch causes most WickedWhims error reports.",
+      "match": [
+        "wickedperversions"
+      ]
     },
     {
       "id": "basemental-drugs",
@@ -92,7 +116,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Includes the alcohol features, so you do not need a separate alcohol mod."
+      "notes": "Includes the alcohol features, so you do not need a separate alcohol mod.",
+      "match": [
+        "basemental"
+      ]
     },
     {
       "id": "slice-of-life",
@@ -107,7 +134,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Personality quirks, illness, injuries and deeper moods."
+      "notes": "Personality quirks, illness, injuries and deeper moods.",
+      "match": [
+        "sliceoflife"
+      ]
     },
     {
       "id": "meaningful-stories",
@@ -122,7 +152,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Redesigns the mood and emotion system. Mood mods overlap, so add one at a time."
+      "notes": "Redesigns the mood and emotion system. Mood mods overlap, so add one at a time.",
+      "match": [
+        "meaningfulstories"
+      ]
     },
     {
       "id": "first-impressions",
@@ -137,7 +170,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Shows trait-based first impressions in the relationship panel."
+      "notes": "Shows trait-based first impressions in the relationship panel.",
+      "match": [
+        "firstimpressions"
+      ]
     },
     {
       "id": "xml-injector",
@@ -152,7 +188,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Required by Seasonal Emotions."
+      "notes": "Required by Seasonal Emotions.",
+      "match": [
+        "xmlinjector"
+      ]
     },
     {
       "id": "seasonal-emotions",
@@ -167,7 +206,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Needs XML Injector and Seasons."
+      "notes": "Needs XML Injector and Seasons.",
+      "match": [
+        "seasonalemotions"
+      ]
     },
     {
       "id": "connected-sims",
@@ -182,7 +224,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Adds more than 50 ways for friends and family to interact."
+      "notes": "Adds more than 50 ways for friends and family to interact.",
+      "match": [
+        "connectedsims"
+      ]
     },
     {
       "id": "roommate-stories",
@@ -197,7 +242,11 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Optional. The game has its own roommate feature, so this only adds extras: roommate careers, friends and activities of their own."
+      "notes": "Optional. The game has its own roommate feature, so this only adds extras: roommate careers, friends and activities of their own.",
+      "match": [
+        "roommatestories",
+        "roommatecareers"
+      ]
     },
     {
       "id": "dine-out-reloaded-public-version",
@@ -212,7 +261,11 @@
       "lastChecked": "",
       "url": "https://www.patreon.com/posts/64188681",
       "linkText": "Download post",
-      "notes": "Only edit a restaurant while it is closed. Build the restaurant after installing, or chefs may stand outside. Can get blamed when another mod that touches work shifts is out of date."
+      "notes": "Only edit a restaurant while it is closed. Build the restaurant after installing, or chefs may stand outside. Can get blamed when another mod that touches work shifts is out of date.",
+      "match": [
+        "dineoutreloaded",
+        "dineout"
+      ]
     },
     {
       "id": "restaurateur-aspiration",
@@ -227,7 +280,10 @@
       "lastChecked": "",
       "url": "https://snootysims.com/mods/restaurateur-aspiration/",
       "linkText": "Listing",
-      "notes": "Newbie to 5-star restaurant. The reward trait pays 1,000,000 simoleons."
+      "notes": "Newbie to 5-star restaurant. The reward trait pays 1,000,000 simoleons.",
+      "match": [
+        "restaurateur"
+      ]
     },
     {
       "id": "my-own-business-aspiration",
@@ -242,7 +298,10 @@
       "lastChecked": "",
       "url": "https://www.curseforge.com/sims4/mods/my-own-business-aspiration",
       "linkText": "CurseForge",
-      "notes": "Alternative that also covers retail and vet clinics. Skip it if you use the Restaurateur aspiration."
+      "notes": "Alternative that also covers retail and vet clinics. Skip it if you use the Restaurateur aspiration.",
+      "match": [
+        "myownbusiness"
+      ]
     },
     {
       "id": "pharmacist-career",
@@ -257,7 +316,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Adds an herbalism skill that suits a botanist."
+      "notes": "Adds an herbalism skill that suits a botanist.",
+      "match": [
+        "pharmacist"
+      ]
     },
     {
       "id": "more-career-opportunities",
@@ -272,7 +334,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Adds a large set of new careers."
+      "notes": "Adds a large set of new careers.",
+      "match": [
+        "morecareeropportunities"
+      ]
     },
     {
       "id": "midnitetech-careers",
@@ -287,7 +352,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Chiropractor, Librarian and other active or hybrid careers. Take the ones you want, one row each."
+      "notes": "Chiropractor, Librarian and other active or hybrid careers. Take the ones you want, one row each.",
+      "match": [
+        "midnitetech"
+      ]
     },
     {
       "id": "wildlife-biologist-career",
@@ -302,7 +370,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Updated in late June 2026 on CurseForge."
+      "notes": "Updated in late June 2026 on CurseForge.",
+      "match": [
+        "wildlifebiologist"
+      ]
     },
     {
       "id": "landlord-career",
@@ -317,7 +388,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Updated in late June 2026 on CurseForge."
+      "notes": "Updated in late June 2026 on CurseForge.",
+      "match": [
+        "landlordcareer"
+      ]
     },
     {
       "id": "unlimited-jobs",
@@ -332,7 +406,10 @@
       "lastChecked": "",
       "url": "https://www.curseforge.com/sims4/mods/unlimited-jobs",
       "linkText": "CurseForge",
-      "notes": "Lets a Sim add a second freelance trade without dropping the first."
+      "notes": "Lets a Sim add a second freelance trade without dropping the first.",
+      "match": [
+        "unlimitedjobs"
+      ]
     },
     {
       "id": "home-regions",
@@ -347,7 +424,10 @@
       "lastChecked": "",
       "url": "https://kuttoe.itch.io/keep-sims-in-home-region",
       "linkText": "Creator page",
-      "notes": "Keeps walkbys and townies to Sims who live in the local world and spreads townies across worlds. Base Game only. No build naming 1.128 was confirmed."
+      "notes": "Keeps walkbys and townies to Sims who live in the local world and spreads townies across worlds. Base Game only. No build naming 1.128 was confirmed.",
+      "match": [
+        "homeregion"
+      ]
     },
     {
       "id": "language-barriers",
@@ -362,7 +442,10 @@
       "lastChecked": "",
       "url": "https://frankkmods.com/",
       "linkText": "Creator site",
-      "notes": "Gives Sims six languages by home world. No 1.128 build confirmed, so check the site before installing."
+      "notes": "Gives Sims six languages by home world. No 1.128 build confirmed, so check the site before installing.",
+      "match": [
+        "languagebarrier"
+      ]
     },
     {
       "id": "more-columns-in-cas",
@@ -377,7 +460,10 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Keeps a large CC collection browsable in Create a Sim."
+      "notes": "Keeps a large CC collection browsable in Create a Sim.",
+      "match": [
+        "morecolumnsincas"
+      ]
     },
     {
       "id": "sims-4-tray-importer",
@@ -392,7 +478,8 @@
       "lastChecked": "",
       "url": "",
       "linkText": "",
-      "notes": "Imports and manages saved households and lots."
+      "notes": "Imports and manages saved households and lots.",
+      "match": []
     }
   ],
   "patches": [],
@@ -432,5 +519,6 @@
       "notes": ""
     }
   ],
-  "sessions": []
+  "sessions": [],
+  "modsIgnore": []
 }
