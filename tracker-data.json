@@ -480,6 +480,120 @@
       "linkText": "",
       "notes": "Imports and manages saved households and lots.",
       "match": []
+    },
+    {
+      "id": "scan-anim",
+      "batch": "Found in scan",
+      "name": "Anim",
+      "creator": "",
+      "category": "Unlisted",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 9 files in Anim. Identify it and fill in the creator.",
+      "match": [
+        "anim"
+      ],
+      "auto": true
+    },
+    {
+      "id": "scan-bazar",
+      "batch": "Found in scan",
+      "name": "Bazar",
+      "creator": "",
+      "category": "Unlisted",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 21 files in Bazar. Identify it and fill in the creator.",
+      "match": [
+        "bazar"
+      ],
+      "auto": true
+    },
+    {
+      "id": "scan-cas",
+      "batch": "Found in scan",
+      "name": "CAS",
+      "creator": "",
+      "category": "Unlisted",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 4 files in CAS. Identify it and fill in the creator.",
+      "match": [
+        "cas"
+      ],
+      "auto": true
+    },
+    {
+      "id": "scan-gameplay",
+      "batch": "Found in scan",
+      "name": "Gameplay",
+      "creator": "",
+      "category": "Unlisted",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 3 files in Gameplay. Identify it and fill in the creator.",
+      "match": [
+        "gameplay"
+      ],
+      "auto": true
+    },
+    {
+      "id": "scan-foundation",
+      "batch": "Found in scan",
+      "name": "Foundation",
+      "creator": "",
+      "category": "Unlisted",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 5 files in Foundation. Identify it and fill in the creator.",
+      "match": [
+        "foundation"
+      ],
+      "auto": true
+    },
+    {
+      "id": "scan-kawaiistacie",
+      "batch": "Found in scan",
+      "name": "KawaiiStacie",
+      "creator": "",
+      "category": "Unlisted",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 5 files in KawaiiStacie. Identify it and fill in the creator.",
+      "match": [
+        "kawaiistacie"
+      ],
+      "auto": true
     }
   ],
   "patches": [],
