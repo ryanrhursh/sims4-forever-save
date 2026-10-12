@@ -91,6 +91,7 @@ td.notes{min-width:18rem}
 .s-Broken,.s-Open{background:var(--bad-bg);color:var(--bad)}
 .stale{background:var(--warn-bg);color:var(--warn)}
 .opt{color:var(--muted);font-size:.82rem}
+.wcard{text-align:left;font:inherit;color:inherit;cursor:pointer}.wcard[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}.wdesc{margin:6px 0 0;font-size:.88rem;color:var(--muted)}
 .empty{padding:22px;color:var(--muted)}
 dl{display:grid;grid-template-columns:minmax(9rem,14rem) 1fr;gap:0;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px}
 dt,dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
@@ -113,7 +114,7 @@ dt:last-of-type,dd:last-of-type{border-bottom:0}
 </div>
 <script>
 "use strict";
-var D=null, tab="mods", q="", fb="", fs="";
+var D=null, tab="mods", q="", fb="", fs="", fw="";
 var el=function(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
 function pill(t,cls){return el("span","pill "+(cls||""),t);}
 function sCls(s){return "s-"+String(s).split(" ")[0];}
@@ -146,7 +147,7 @@ function tiles(){
   var t=document.getElementById("tiles");t.textContent="";
   items.forEach(function(i){var d=el("div","tile");d.appendChild(el("b",null,i[0]));d.appendChild(el("span",null,i[1]));t.appendChild(d);});
 }
-var TABS=[["mods","Mods"],["issues","Issues"],["patches","Patches"],["backups","Backups"],["sims","Sims"],["sessions","Sessions"],["save","Save info"]];
+var TABS=[["mods","Mods"],["issues","Issues"],["patches","Patches"],["backups","Backups"],["sims","Sims"],["worlds","Worlds"],["sessions","Sessions"],["save","Save info"]];
 function mods(v){
   var tools=el("div","tools"),s=el("input");s.type="search";s.placeholder="Search mods";s.value=q;s.setAttribute("aria-label","Search mods");
   s.oninput=function(){q=s.value;draw(true);};
@@ -172,6 +173,23 @@ function mods(v){
    ["Page",function(x){if(!/^https:\/\//.test(x.url))return "–";var a=el("a",null,x.linkText||"Link");a.href=x.url;a.rel="noopener";return a;}],
    ["Notes",function(x){return x.notes;},"notes"]],rows,"No mods match."));
 }
+function worlds(v){
+  var W=D.worlds||[],L=D.lots||[];
+  var cards=el("div","tiles");
+  W.forEach(function(w){
+    var ls=L.filter(function(l){return l.world===w.name;});
+    var c=el("button","tile wcard");c.type="button";c.setAttribute("aria-pressed",fw===w.name);
+    c.appendChild(el("b",null,w.name));
+    c.appendChild(el("span",null,[w.pack,ls.length+" lot"+(ls.length===1?"":"s"),w.languages].filter(Boolean).join(" · ")));
+    if(w.description)c.appendChild(el("p","wdesc",w.description));
+    if(w.notes)c.appendChild(el("p","wdesc",w.notes));
+    c.onclick=function(){fw=fw===w.name?"":w.name;draw();};
+    cards.appendChild(c);
+  });
+  if(W.length)v.appendChild(cards);
+  var rows=L.filter(function(l){return !fw||l.world===fw;});
+  v.appendChild(table([["Lot",function(l){return l.name;}],["World",function(l){return l.world;}],["Type",function(l){return l.type||"";}],["Size",function(l){return l.size||"";}],["Tenants",function(l){return l.tenants||"";},"notes"],["Description",function(l){return l.description||"";},"notes"],["Notes",function(l){return l.notes||"";},"notes"]],rows,L.length?"No lots in this world.":"No worlds or lots yet. Give Claude a rundown of your lots and it will fill this in."));
+}
 function simple(v,cols,rows,empty){v.appendChild(table(cols,rows,empty));}
 function draw(keepFocus){
   var v=document.getElementById("view");v.textContent="";
@@ -183,6 +201,7 @@ function draw(keepFocus){
   else if(tab==="patches")simple(v,[["Released",g("date")],["Patch",g("patch")],["Full version",g("fullVersion")],["Script mods back on?",g("scriptModsOn")],["Backup first?",g("backup")],["Mods broken",g("broken"),"notes"],["Mods updated",g("updated"),"notes"],["What was done",g("did"),"notes"],["Fixed on",g("fixedOn")]],D.patches,"No patches logged yet. Current game version: "+D.gameVersion+".");
   else if(tab==="backups")simple(v,[["Date",g("date")],["Reason",g("reason")],["Version",g("version")],["Where",g("location"),"notes"],["What",g("what")],["Mods snapshot",g("snapshot")],["Notes",g("notes"),"notes"]],D.backups,"No backups logged yet.");
   else if(tab==="sims")simple(v,[["Sim",g("name")],["Household",g("household")],["Home world",g("homeWorld")],["Life stage",g("lifeStage")],["Role",g("role"),"notes"],["Aspiration",g("aspiration")],["Career",g("career")],["Languages",g("languages")],["Added",g("added")],["Notes",g("notes"),"notes"]],D.sims,"No Sims yet.");
+  else if(tab==="worlds")worlds(v);
   else if(tab==="sessions")simple(v,[["Date",g("date")],["What happened",g("summary"),"notes"],["Tracker changes",g("changes"),"notes"]],D.sessions.slice().reverse(),"No sessions logged yet.");
   else{
     var s=D.save,dl=el("dl");
