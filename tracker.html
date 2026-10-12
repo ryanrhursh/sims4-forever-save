@@ -99,6 +99,26 @@ dt{font-weight:600}
 dt:last-of-type,dd:last-of-type{border-bottom:0}
 @media(max-width:560px){dl{grid-template-columns:1fr}dt{border-bottom:0;padding-bottom:0}}
 </style>
+<style>
+.bar2{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0 0}
+.btn{font:600 .92rem var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 14px;cursor:pointer}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.danger{color:var(--bad)}
+.msg{margin:12px 0 0;padding:10px 14px;border-radius:8px;background:var(--info-bg);color:var(--info);font-size:.92rem}
+.msg.err{background:var(--bad-bg);color:var(--bad)}
+.setup{margin:12px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.setup ol{margin:8px 0;padding-left:1.2rem}
+.setup input{font:inherit;width:100%;max-width:34rem;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+td input[type=text],td input[type=date],td select,td textarea,dd input,dd textarea,.cfg input{font:inherit;font-size:.9rem;width:100%;min-width:7rem;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 7px}
+td textarea,dd textarea{min-width:15rem;min-height:3.2rem;resize:vertical}
+td input[type=checkbox]{width:1.1rem;height:1.1rem;accent-color:var(--accent)}
+.cfg{display:flex;gap:14px;flex-wrap:wrap;margin:0 0 12px;align-items:end}
+.cfg label{font-size:.85rem;color:var(--muted);display:grid;gap:3px}
+.cfg input{min-width:8rem;width:auto}
+.savebar{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:10px 0;margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sub{font:600 1.05rem var(--f-display);margin:20px 0 8px}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -106,49 +126,176 @@ dt:last-of-type,dd:last-of-type{border-bottom:0}
 <nav><a href="index.html">Install order</a><a href="tracker.html" aria-current="page"><b>Tracker</b></a></nav>
 <h1>Forever Save Tracker</h1>
 <p class="meta" id="meta">Loading…</p>
+<div class="bar2" id="auth"></div>
+<div id="setup"></div>
+<div class="msg" id="msg" role="status" hidden></div>
 </header>
 <div class="tiles" id="tiles"></div>
 <div class="tabs" role="tablist" id="tabs"></div>
 <main id="view"></main>
-<p class="meta">This page is read-only. After a play session, tell Claude what you did and it updates <code>tracker-data.json</code> in this repo, which this page reads.</p>
+<div class="savebar" id="savebar" hidden></div>
+<p class="meta" id="foot"></p>
 </div>
 <script>
 "use strict";
-var D=null, tab="mods", q="", fb="", fs="", fw="";
+var REPO={owner:"ryanrhursh",repo:"sims4-forever-save",path:"tracker-data.json",branch:"main"};
+var API="https://api.github.com/repos/"+REPO.owner+"/"+REPO.repo+"/contents/"+REPO.path;
+var KEY="sims4-tracker-token-v1";
+var D=null,sha=null,token="",tab="mods",q="",fb="",fs="",fw="",editing=false,dirty=false,armed=null,showSetup=false;
+var memTok="";
 var el=function(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+function getTok(){try{return localStorage.getItem(KEY)||"";}catch(e){return memTok;}}
+function setTok(v){memTok=v;try{if(v)localStorage.setItem(KEY,v);else localStorage.removeItem(KEY);}catch(e){}}
+function today(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function days(d){if(!d)return null;var t=Date.parse(d+"T00:00:00");return isNaN(t)?null:Math.floor((Date.now()-t)/864e5);}
+function b64dec(s){var b=atob(s.replace(/\s/g,"")),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return new TextDecoder().decode(u);}
+function b64enc(s){var u=new TextEncoder().encode(s),b="";for(var i=0;i<u.length;i++)b+=String.fromCharCode(u[i]);return btoa(b);}
+function say(t,err){var m=document.getElementById("msg");m.hidden=!t;m.textContent=t||"";m.className="msg"+(err?" err":"");}
 function pill(t,cls){return el("span","pill "+(cls||""),t);}
 function sCls(s){return "s-"+String(s).split(" ")[0];}
-function days(d){if(!d)return null;var t=Date.parse(d+"T00:00:00");return isNaN(t)?null:Math.floor((Date.now()-t)/864e5);}
-function table(cols,rows,empty){
+
+/* ---------- GitHub I/O ---------- */
+function gh(method,body){
+  var h={"Accept":"application/vnd.github+json"};
+  if(token)h["Authorization"]="Bearer "+token;
+  return fetch(API+(method==="GET"?"?ref="+REPO.branch:""),{method:method,headers:h,body:body?JSON.stringify(body):undefined,cache:"no-store"});
+}
+async function load(){
+  token=getTok();sha=null;
+  if(token){
+    try{
+      var r=await gh("GET");
+      if(r.ok){var j=await r.json();D=JSON.parse(b64dec(j.content));sha=j.sha;return true;}
+      say(r.status===401||r.status===403||r.status===404?"The saved token was rejected by GitHub ("+r.status+"). Showing the public copy. Open Enable editing to add a new token.":"GitHub returned "+r.status+". Showing the public copy.",true);
+      if(r.status===401||r.status===403||r.status===404)token="";
+    }catch(e){say("Could not reach GitHub. Showing the public copy.",true);token="";}
+  }
+  try{
+    var p=await fetch("tracker-data.json",{cache:"no-cache"});
+    if(!p.ok)throw new Error(p.status);
+    D=await p.json();return true;
+  }catch(e){
+    document.getElementById("meta").textContent="Could not load tracker-data.json ("+e.message+"). Open this page from the GitHub Pages address, not as a local file.";
+    return false;
+  }
+}
+async function save(){
+  if(!token||!sha)return;
+  D.updated=today();
+  var btn=document.getElementById("saveBtn");if(btn)btn.disabled=true;
+  try{
+    var r=await gh("PUT",{message:"Update tracker from web page ("+today()+")",content:b64enc(JSON.stringify(D,null,2)+"\n"),sha:sha,branch:REPO.branch});
+    if(r.ok){var j=await r.json();sha=j.content.sha;dirty=false;say("Saved to GitHub. The public page can take a few minutes to catch up; this view is current.");}
+    else if(r.status===409||r.status===422){say("Not saved. tracker-data.json changed on GitHub after you loaded it (for example, Claude updated it). Choose Reload from GitHub, then redo your edits.",true);}
+    else if(r.status===401||r.status===403){say("Not saved. GitHub rejected the token ("+r.status+"). It may have expired or lacks Contents: read and write on this repo.",true);}
+    else say("Not saved. GitHub returned "+r.status+".",true);
+  }catch(e){say("Not saved. Could not reach GitHub.",true);}
+  renderChrome();
+}
+
+/* ---------- schema ---------- */
+function worldNames(){return (D.worlds||[]).map(function(w){return w.name;}).filter(Boolean);}
+var LIFE=["Infant","Toddler","Child","Teen","Young Adult","Adult","Elder"];
+var SCHEMA={
+ mods:{label:"mod",cols:function(){return [
+  {h:"Batch",f:"batch"},{h:"Mod",f:"name"},{h:"Creator",f:"creator"},{h:"Optional?",f:"required",t:"bool",neg:true},
+  {h:"Status",f:"status",t:"select",o:D.statuses},{h:"Version",f:"version"},{h:"Tested on",f:"testedOn"},{h:"Last checked",f:"lastChecked",t:"date"},
+  {h:"Link URL",f:"url"},{h:"Notes",f:"notes",t:"area",cls:"notes"}];},
+  blank:function(){return {id:"new-"+Date.now().toString(36),batch:"",name:"",creator:"",category:"",required:true,status:"Not installed",version:"",testedOn:"",lastChecked:"",url:"",linkText:"Link",notes:""};}},
+ issues:{label:"issue",cols:function(){return [
+  {h:"Date",f:"date",t:"date"},{h:"Symptom",f:"symptom",t:"area",cls:"notes"},{h:"Version",f:"version"},{h:"Suspected mod",f:"suspect"},{h:"Test used",f:"test"},{h:"50/50 rounds",f:"rounds"},
+  {h:"Fix",f:"fix",t:"area",cls:"notes"},{h:"Status",f:"status",t:"select",o:["Open","Resolved"]},{h:"Resolved",f:"resolved",t:"date"}];},
+  blank:function(){return {date:today(),symptom:"",version:D.gameVersion,suspect:"",test:"",rounds:"",fix:"",status:"Open",resolved:""};}},
+ patches:{label:"patch",cols:function(){return [
+  {h:"Released",f:"date",t:"date"},{h:"Patch",f:"patch"},{h:"Full version",f:"fullVersion"},{h:"Script mods back on?",f:"scriptModsOn",t:"select",o:["","Yes","No"]},{h:"Backup first?",f:"backup",t:"select",o:["","Yes","No"]},
+  {h:"Mods broken",f:"broken",t:"area",cls:"notes"},{h:"Mods updated",f:"updated",t:"area",cls:"notes"},{h:"What was done",f:"did",t:"area",cls:"notes"},{h:"Fixed on",f:"fixedOn",t:"date"}];},
+  blank:function(){return {date:today(),patch:"",fullVersion:"",scriptModsOn:"",backup:"",broken:"",updated:"",did:"",fixedOn:""};}},
+ backups:{label:"backup",cols:function(){return [
+  {h:"Date",f:"date",t:"date"},{h:"Reason",f:"reason"},{h:"Version",f:"version"},{h:"Where",f:"location",t:"area",cls:"notes"},{h:"What",f:"what"},{h:"Mods snapshot",f:"snapshot"},{h:"Notes",f:"notes",t:"area",cls:"notes"}];},
+  blank:function(){return {date:today(),reason:"",version:D.gameVersion,location:"",what:"",snapshot:"",notes:""};}},
+ sims:{label:"Sim",cols:function(){return [
+  {h:"Sim",f:"name"},{h:"Household",f:"household"},{h:"Home world",f:"homeWorld",t:"combo",o:worldNames},{h:"Life stage",f:"lifeStage",t:"select",o:LIFE},{h:"Role",f:"role",t:"area",cls:"notes"},
+  {h:"Aspiration",f:"aspiration"},{h:"Career",f:"career"},{h:"Languages",f:"languages"},{h:"Added",f:"added",t:"date"},{h:"Notes",f:"notes",t:"area",cls:"notes"}];},
+  blank:function(){return {name:"",household:"",homeWorld:"",lifeStage:"Adult",role:"",aspiration:"",career:"",languages:"",added:today(),notes:""};}},
+ worlds:{label:"world",cols:function(){return [
+  {h:"World",f:"name"},{h:"Pack",f:"pack"},{h:"Languages",f:"languages"},{h:"Description",f:"description",t:"area",cls:"notes"},{h:"Notes",f:"notes",t:"area",cls:"notes"}];},
+  blank:function(){return {name:"",pack:"",description:"",languages:"",notes:""};}},
+ lots:{label:"lot",cols:function(){return [
+  {h:"Lot",f:"name"},{h:"World",f:"world",t:"select",o:function(){return [""].concat(worldNames());}},{h:"Type",f:"type",t:"combo",o:["Residential","Community","Restaurant","Garden","Retail","Venue"]},{h:"Size",f:"size"},
+  {h:"Tenants",f:"tenants",t:"area",cls:"notes"},{h:"Description",f:"description",t:"area",cls:"notes"},{h:"Notes",f:"notes",t:"area",cls:"notes"}];},
+  blank:function(){return {name:"",world:fw||"",type:"",size:"",tenants:"",description:"",notes:""};}},
+ sessions:{label:"session",cols:function(){return [
+  {h:"Date",f:"date",t:"date"},{h:"What happened",f:"summary",t:"area",cls:"notes"},{h:"Tracker changes",f:"changes",t:"area",cls:"notes"}];},
+  blank:function(){return {date:today(),summary:"",changes:""};}}
+};
+function optsOf(c){var o=typeof c.o==="function"?c.o():c.o;return o||[];}
+function mark(){if(!dirty){dirty=true;say("");}renderChrome();}
+
+/* ---------- table ---------- */
+var _dl=0;
+function control(key,obj,c){
+  var v=obj[c.f],inp;
+  var onv=function(val){
+    if(key==="worlds"&&c.f==="name"){var old=obj.name;(D.lots||[]).forEach(function(l){if(l.world===old)l.world=val;});}
+    obj[c.f]=val;mark();if(key==="mods")tiles();
+  };
+  if(c.t==="bool"){inp=el("input");inp.type="checkbox";inp.checked=c.neg?!v:!!v;inp.onchange=function(){onv(c.neg?!inp.checked:inp.checked);};inp.setAttribute("aria-label",c.h);return inp;}
+  if(c.t==="select"){inp=el("select");var o=optsOf(c).slice();if(v&&o.indexOf(v)<0)o.push(v);o.forEach(function(x){var op=el("option",null,x||"–");op.value=x;inp.appendChild(op);});inp.value=v==null?"":v;inp.onchange=function(){onv(inp.value);};}
+  else if(c.t==="area"){inp=el("textarea");inp.value=v||"";inp.oninput=function(){onv(inp.value);};}
+  else if(c.t==="date"){inp=el("input");inp.type="date";inp.value=v||"";inp.onchange=function(){onv(inp.value);};}
+  else{inp=el("input");inp.type="text";inp.value=v==null?"":v;inp.oninput=function(){onv(inp.value);};
+    if(c.t==="combo"){var id="dl"+(++_dl),dl=el("datalist");dl.id=id;optsOf(c).forEach(function(x){var op=el("option");op.value=x;dl.appendChild(op);});inp.setAttribute("list",id);var s=el("span");s.append(inp,dl);inp.setAttribute("aria-label",c.h);return s;}}
+  inp.setAttribute("aria-label",c.h);return inp;
+}
+function editTable(key,rows,empty){
+  var S=SCHEMA[key],cols=S.cols(),w=el("div","scroll"),box=el("div");
+  if(rows.length){
+    var t=el("table"),h=el("tr"),th=el("thead");
+    cols.forEach(function(c){h.appendChild(el("th",null,c.h));});h.appendChild(el("th",null,""));th.appendChild(h);t.appendChild(th);
+    var tb=el("tbody");
+    rows.forEach(function(r){
+      var tr=el("tr");
+      cols.forEach(function(c){var td=el("td",c.cls||"");td.appendChild(control(key,r,c));tr.appendChild(td);});
+      var td=el("td"),b=el("button","btn danger",armed===r?"Confirm delete":"Delete");b.type="button";
+      b.onclick=function(){if(armed===r){var a=D[key];a.splice(a.indexOf(r),1);armed=null;mark();if(key==="mods")tiles();draw();}else{armed=r;draw();}};
+      td.appendChild(b);tr.appendChild(td);tb.appendChild(tr);
+    });
+    t.appendChild(tb);w.appendChild(t);box.appendChild(w);
+  }else box.appendChild(Object.assign(el("div","scroll"),{})).appendChild(el("div","empty",empty));
+  var add=el("button","btn","Add "+S.label);add.type="button";add.style.marginTop="10px";
+  add.onclick=function(){D[key]=D[key]||[];D[key].push(S.blank());mark();draw();};
+  box.appendChild(add);return box;
+}
+function readTable(cols,rows,empty){
   var w=el("div","scroll");
   if(!rows.length){w.appendChild(el("div","empty",empty));return w;}
-  var t=el("table"),h=el("tr");
-  cols.forEach(function(c){h.appendChild(el("th",null,c[0]));});
-  var th=el("thead");th.appendChild(h);t.appendChild(th);
+  var t=el("table"),h=el("tr"),th=el("thead");
+  cols.forEach(function(c){h.appendChild(el("th",null,c[0]));});th.appendChild(h);t.appendChild(th);
   var tb=el("tbody");
   rows.forEach(function(r){
     var tr=el("tr");
-    cols.forEach(function(c){
-      var td=el("td",c[2]||""),v=c[1](r);
-      if(v instanceof Node)td.appendChild(v);else td.textContent=v==null?"":v;
-      tr.appendChild(td);
-    });
+    cols.forEach(function(c){var td=el("td",c[2]||""),v=c[1](r);if(v instanceof Node)td.appendChild(v);else td.textContent=v==null?"":v;tr.appendChild(td);});
     tb.appendChild(tr);
   });
   t.appendChild(tb);w.appendChild(t);return w;
 }
+
+/* ---------- tiles ---------- */
 function tiles(){
   var m=D.mods,n=function(f){return m.filter(f).length;};
   var inst=m.filter(function(x){return x.status!=="Not installed"&&x.status!=="Retired";});
   var stale=inst.filter(function(x){var d=days(x.lastChecked);return d===null||d>D.staleDays;});
   var items=[[n(function(x){return x.status==="Working";}),"Working"],[n(function(x){return x.status==="Testing";}),"Testing"],
    [n(function(x){return x.status==="Needs update"||x.status==="Broken";}),"Need attention"],[stale.length,"Stale (>"+D.staleDays+" days)"],
-   [n(function(x){return x.status==="Not installed"&&x.required;}),"Required, not installed"],[D.issues.filter(function(i){return i.status!=="Resolved";}).length,"Open issues"]];
+   [n(function(x){return x.status==="Not installed"&&x.required;}),"Required, not installed"],[(D.issues||[]).filter(function(i){return i.status!=="Resolved";}).length,"Open issues"]];
   var t=document.getElementById("tiles");t.textContent="";
   items.forEach(function(i){var d=el("div","tile");d.appendChild(el("b",null,i[0]));d.appendChild(el("span",null,i[1]));t.appendChild(d);});
 }
+
+/* ---------- views ---------- */
 var TABS=[["mods","Mods"],["issues","Issues"],["patches","Patches"],["backups","Backups"],["sims","Sims"],["worlds","Worlds"],["sessions","Sessions"],["save","Save info"]];
-function mods(v){
+function g(k){return function(r){return r[k]||"";};}
+function modsView(v){
   var tools=el("div","tools"),s=el("input");s.type="search";s.placeholder="Search mods";s.value=q;s.setAttribute("aria-label","Search mods");
   s.oninput=function(){q=s.value;draw(true);};
   var b=el("select");b.setAttribute("aria-label","Batch");
@@ -158,23 +305,23 @@ function mods(v){
   [""].concat(D.statuses).forEach(function(x){var o=el("option",null,x||"All statuses");o.value=x;st.appendChild(o);});
   st.value=fs;st.onchange=function(){fs=st.value;draw();};
   tools.append(s,b,st);v.appendChild(tools);
-  var rows=D.mods.filter(function(x){
-    return (!fb||x.batch===fb)&&(!fs||x.status===fs)&&(!q||(x.name+" "+x.creator+" "+x.notes).toLowerCase().indexOf(q.toLowerCase())>-1);});
-  v.appendChild(table([
-   ["Batch",function(x){return x.batch;}],
+  var rows=D.mods.filter(function(x){return (!fb||x.batch===fb)&&(!fs||x.status===fs)&&(!q||(x.name+" "+x.creator+" "+x.notes).toLowerCase().indexOf(q.toLowerCase())>-1);});
+  if(editing){v.appendChild(editTable("mods",rows,"No mods match."));return;}
+  v.appendChild(readTable([
+   ["Batch",g("batch")],
    ["Mod",function(x){var f=el("span");f.appendChild(document.createTextNode(x.name));if(!x.required){f.appendChild(document.createElement("br"));f.appendChild(el("span","opt","Optional"));}return f;}],
-   ["Creator",function(x){return x.creator;}],
-   ["Status",function(x){return pill(x.status,sCls(x.status));}],
-   ["Version",function(x){return x.version||"–";}],
-   ["Tested on",function(x){return x.testedOn||"–";}],
-   ["Last checked",function(x){
-      if(!x.lastChecked)return "–";var d=days(x.lastChecked),f=el("span",null,x.lastChecked);
+   ["Creator",g("creator")],["Status",function(x){return pill(x.status,sCls(x.status));}],["Version",function(x){return x.version||"–";}],["Tested on",function(x){return x.testedOn||"–";}],
+   ["Last checked",function(x){if(!x.lastChecked)return "–";var d=days(x.lastChecked),f=el("span",null,x.lastChecked);
       if(x.status!=="Not installed"&&x.status!=="Retired"&&d!==null&&d>D.staleDays){f.appendChild(document.createTextNode(" "));f.appendChild(pill(d+" days","stale"));}return f;}],
    ["Page",function(x){if(!/^https:\/\//.test(x.url))return "–";var a=el("a",null,x.linkText||"Link");a.href=x.url;a.rel="noopener";return a;}],
-   ["Notes",function(x){return x.notes;},"notes"]],rows,"No mods match."));
+   ["Notes",g("notes"),"notes"]],rows,"No mods match."));
 }
-function worlds(v){
+function worldsView(v){
   var W=D.worlds||[],L=D.lots||[];
+  if(editing){
+    v.appendChild(el("h2","sub","Worlds"));v.appendChild(editTable("worlds",W,"No worlds yet."));
+    v.appendChild(el("h2","sub","Lots"));v.appendChild(editTable("lots",L,"No lots yet."));return;
+  }
   var cards=el("div","tiles");
   W.forEach(function(w){
     var ls=L.filter(function(l){return l.world===w.name;});
@@ -183,40 +330,99 @@ function worlds(v){
     c.appendChild(el("span",null,[w.pack,ls.length+" lot"+(ls.length===1?"":"s"),w.languages].filter(Boolean).join(" · ")));
     if(w.description)c.appendChild(el("p","wdesc",w.description));
     if(w.notes)c.appendChild(el("p","wdesc",w.notes));
-    c.onclick=function(){fw=fw===w.name?"":w.name;draw();};
-    cards.appendChild(c);
+    c.onclick=function(){fw=fw===w.name?"":w.name;draw();};cards.appendChild(c);
   });
   if(W.length)v.appendChild(cards);
   var rows=L.filter(function(l){return !fw||l.world===fw;});
-  v.appendChild(table([["Lot",function(l){return l.name;}],["World",function(l){return l.world;}],["Type",function(l){return l.type||"";}],["Size",function(l){return l.size||"";}],["Tenants",function(l){return l.tenants||"";},"notes"],["Description",function(l){return l.description||"";},"notes"],["Notes",function(l){return l.notes||"";},"notes"]],rows,L.length?"No lots in this world.":"No worlds or lots yet. Give Claude a rundown of your lots and it will fill this in."));
+  v.appendChild(readTable([["Lot",g("name")],["World",g("world")],["Type",g("type")],["Size",g("size")],["Tenants",g("tenants"),"notes"],["Description",g("description"),"notes"],["Notes",g("notes"),"notes"]],rows,L.length?"No lots in this world.":"No worlds or lots yet."+(token?" Switch on Edit to add some, or give Claude a rundown.":" Give Claude a rundown of your lots and it will fill this in.")));
 }
-function simple(v,cols,rows,empty){v.appendChild(table(cols,rows,empty));}
+function simpleView(v,key,cols,rows,empty){
+  if(editing)v.appendChild(editTable(key,rows,empty));else v.appendChild(readTable(cols,rows,empty));
+}
+function saveView(v){
+  var s=D.save,dl=el("dl");
+  var fields=[["Save","name"],["Creator","creator"],["Source","url"],["Slot name","slot"],["Started","startedOn","date"],["Known issue","knownIssue","area"]];
+  fields.forEach(function(p){
+    dl.appendChild(el("dt",null,p[0]));var dd=el("dd");
+    if(editing){
+      var i=el(p[2]==="area"?"textarea":"input");if(p[2]==="date")i.type="date";else if(p[2]!=="area")i.type="text";
+      i.value=s[p[1]]||"";i.setAttribute("aria-label",p[0]);i.oninput=i.onchange=function(){s[p[1]]=i.value;mark();};dd.appendChild(i);
+    }else if(p[1]==="url"&&/^https:\/\//.test(s.url||"")){var a=el("a",null,"CurseForge page");a.href=s.url;a.rel="noopener";dd.appendChild(a);}
+    else dd.textContent=s[p[1]]||"–";
+    dl.appendChild(dd);
+  });
+  dl.appendChild(el("dt",null,"Game version"));var d2=el("dd");d2.textContent=D.gameVersion;dl.appendChild(d2);
+  v.appendChild(dl);
+}
 function draw(keepFocus){
   var v=document.getElementById("view");v.textContent="";
   var tb=document.getElementById("tabs");tb.textContent="";
-  TABS.forEach(function(t){var b=el("button",null,t[1]);b.setAttribute("role","tab");b.setAttribute("aria-selected",t[0]===tab);b.onclick=function(){tab=t[0];draw();};tb.appendChild(b);});
-  var g=function(k){return function(r){return r[k]||"";};};
-  if(tab==="mods")mods(v);
-  else if(tab==="issues")simple(v,[["Date",g("date")],["Symptom",g("symptom"),"notes"],["Version",g("version")],["Suspected mod",g("suspect")],["Test used",g("test")],["50/50 rounds",g("rounds")],["Fix",g("fix"),"notes"],["Status",function(r){return pill(r.status,sCls(r.status));}],["Resolved",g("resolved")]],D.issues,"No issues logged yet.");
-  else if(tab==="patches")simple(v,[["Released",g("date")],["Patch",g("patch")],["Full version",g("fullVersion")],["Script mods back on?",g("scriptModsOn")],["Backup first?",g("backup")],["Mods broken",g("broken"),"notes"],["Mods updated",g("updated"),"notes"],["What was done",g("did"),"notes"],["Fixed on",g("fixedOn")]],D.patches,"No patches logged yet. Current game version: "+D.gameVersion+".");
-  else if(tab==="backups")simple(v,[["Date",g("date")],["Reason",g("reason")],["Version",g("version")],["Where",g("location"),"notes"],["What",g("what")],["Mods snapshot",g("snapshot")],["Notes",g("notes"),"notes"]],D.backups,"No backups logged yet.");
-  else if(tab==="sims")simple(v,[["Sim",g("name")],["Household",g("household")],["Home world",g("homeWorld")],["Life stage",g("lifeStage")],["Role",g("role"),"notes"],["Aspiration",g("aspiration")],["Career",g("career")],["Languages",g("languages")],["Added",g("added")],["Notes",g("notes"),"notes"]],D.sims,"No Sims yet.");
-  else if(tab==="worlds")worlds(v);
-  else if(tab==="sessions")simple(v,[["Date",g("date")],["What happened",g("summary"),"notes"],["Tracker changes",g("changes"),"notes"]],D.sessions.slice().reverse(),"No sessions logged yet.");
-  else{
-    var s=D.save,dl=el("dl");
-    [["Save",s.name],["Creator",s.creator],["Source",s.url],["Game version",D.gameVersion],["Slot name",s.slot||"–"],["Started",s.startedOn||"–"],["Known issue",s.knownIssue]].forEach(function(p){
-      dl.appendChild(el("dt",null,p[0]));var dd=el("dd");
-      if(/^https:\/\//.test(p[1])){var a=el("a",null,"CurseForge page");a.href=p[1];a.rel="noopener";dd.appendChild(a);}else dd.textContent=p[1];dl.appendChild(dd);});
-    v.appendChild(dl);
+  TABS.forEach(function(t){var b=el("button",null,t[1]);b.setAttribute("role","tab");b.setAttribute("aria-selected",t[0]===tab);b.onclick=function(){tab=t[0];armed=null;draw();};tb.appendChild(b);});
+  if(editing&&tab==="mods"){/* settings strip */
+    var cfg=el("div","cfg");
+    [["Game version","gameVersion","text"],["Stale after (days)","staleDays","number"]].forEach(function(p){
+      var l=el("label",null,p[0]),i=el("input");i.type=p[2];i.value=D[p[1]];i.oninput=function(){D[p[1]]=p[2]==="number"?(parseInt(i.value,10)||0):i.value;mark();tiles();};l.appendChild(i);cfg.appendChild(l);});
+    v.appendChild(cfg);
   }
-  if(keepFocus){var i=v.querySelector("input");if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length);}}
+  if(tab==="mods")modsView(v);
+  else if(tab==="issues")simpleView(v,"issues",[["Date",g("date")],["Symptom",g("symptom"),"notes"],["Version",g("version")],["Suspected mod",g("suspect")],["Test used",g("test")],["50/50 rounds",g("rounds")],["Fix",g("fix"),"notes"],["Status",function(r){return pill(r.status,sCls(r.status));}],["Resolved",g("resolved")]],D.issues,"No issues logged yet.");
+  else if(tab==="patches")simpleView(v,"patches",[["Released",g("date")],["Patch",g("patch")],["Full version",g("fullVersion")],["Script mods back on?",g("scriptModsOn")],["Backup first?",g("backup")],["Mods broken",g("broken"),"notes"],["Mods updated",g("updated"),"notes"],["What was done",g("did"),"notes"],["Fixed on",g("fixedOn")]],D.patches,"No patches logged yet. Current game version: "+D.gameVersion+".");
+  else if(tab==="backups")simpleView(v,"backups",[["Date",g("date")],["Reason",g("reason")],["Version",g("version")],["Where",g("location"),"notes"],["What",g("what")],["Mods snapshot",g("snapshot")],["Notes",g("notes"),"notes"]],D.backups,"No backups logged yet.");
+  else if(tab==="sims")simpleView(v,"sims",[["Sim",g("name")],["Household",g("household")],["Home world",g("homeWorld")],["Life stage",g("lifeStage")],["Role",g("role"),"notes"],["Aspiration",g("aspiration")],["Career",g("career")],["Languages",g("languages")],["Added",g("added")],["Notes",g("notes"),"notes"]],D.sims,"No Sims yet.");
+  else if(tab==="worlds")worldsView(v);
+  else if(tab==="sessions")simpleView(v,"sessions",[["Date",g("date")],["What happened",g("summary"),"notes"],["Tracker changes",g("changes"),"notes"]],D.sessions.slice().reverse(),"No sessions logged yet.");
+  else saveView(v);
+  if(keepFocus){var i=v.querySelector("input[type=search]");if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length);}}
 }
-fetch("tracker-data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();}).then(function(d){
-  D=d;document.getElementById("meta").textContent="Game version "+d.gameVersion+". Data last updated "+d.updated+".";tiles();draw();
-}).catch(function(e){
-  document.getElementById("meta").textContent="Could not load tracker-data.json ("+e.message+"). Open this page from the GitHub Pages address, not as a local file.";
-});
+
+/* ---------- auth / chrome ---------- */
+function renderChrome(){
+  var a=document.getElementById("auth");a.textContent="";
+  var sb=document.getElementById("savebar");sb.textContent="";sb.hidden=!editing;
+  if(token&&sha){
+    var e=el("button","btn"+(editing?" pri":""),editing?"Editing on":"Edit");e.type="button";e.setAttribute("aria-pressed",editing);
+    e.onclick=function(){
+      if(editing&&dirty)return say("You have unsaved changes. Save or discard them first.",true);
+      editing=!editing;armed=null;say("");renderChrome();draw();};
+    a.appendChild(e);
+    var r=el("button","btn","Remove token");r.type="button";r.onclick=function(){if(dirty)return say("Save or discard your changes first.",true);setTok("");token="";sha=null;editing=false;boot();};a.appendChild(r);
+  }else{
+    var e2=el("button","btn","Enable editing");e2.type="button";e2.onclick=function(){showSetup=!showSetup;renderSetup();};a.appendChild(e2);
+  }
+  if(editing){
+    var s=el("button","btn pri","Save changes");s.type="button";s.id="saveBtn";s.disabled=!dirty;s.onclick=save;
+    var d=el("button","btn","Reload from GitHub");d.type="button";d.onclick=async function(){if(dirty&&!window.__okDiscard){say("This discards your unsaved edits. Press Reload from GitHub again to confirm.",true);window.__okDiscard=true;return;}window.__okDiscard=false;dirty=false;say("");await boot(true);};
+    var t=el("span","opt",dirty?"Unsaved changes":"No unsaved changes");
+    sb.append(s,d,t);
+  }
+  document.getElementById("foot").textContent=editing?"Edits are written straight to tracker-data.json in the repo with your token. Claude edits the same file, so save before you start a session with it.":(token?"Switch on Edit to change the tables. Claude also updates tracker-data.json from your session rundowns.":"This page is read-only until you enable editing. Claude also updates tracker-data.json from your session rundowns.");
+  document.getElementById("meta").textContent="Game version "+D.gameVersion+". Data last updated "+D.updated+(token&&sha?". Loaded live from GitHub.":".");
+}
+function renderSetup(){
+  var s=document.getElementById("setup");s.textContent="";if(!showSetup)return;
+  var b=el("div","setup");
+  b.appendChild(el("b",null,"Enable editing on this device"));
+  var ol=el("ol");
+  ["On GitHub open Settings, Developer settings, Personal access tokens, Fine-grained tokens, and choose Generate new token.",
+   "Name it, set an expiration, and under Repository access choose Only select repositories, then sims4-forever-save.",
+   "Under Repository permissions set Contents to Read and write. Leave everything else alone, then Generate token and copy it.",
+   "Paste it below. It is stored only in this browser and sent only to api.github.com."].forEach(function(t){ol.appendChild(el("li",null,t));});
+  b.appendChild(ol);
+  var i=el("input");i.type="password";i.placeholder="github_pat_…";i.autocomplete="off";i.setAttribute("aria-label","GitHub token");
+  var go=el("button","btn pri","Save token and check");go.type="button";go.style.marginTop="8px";
+  go.onclick=async function(){var v=i.value.trim();if(!v)return;setTok(v);showSetup=false;await boot(true);if(!(token&&sha))say("That token did not work for this repo. Check it has Contents: Read and write on sims4-forever-save.",true);else say("Editing enabled. Press Edit to start.");};
+  b.append(i,document.createElement("br"),go);
+  b.appendChild(el("p","meta","The token can write to this repo only. Other pages on ryanrhursh.github.io share this browser storage, so only use this on a device you trust, and set a short expiry."));
+  s.appendChild(b);
+}
+async function boot(keepMsg){
+  if(!keepMsg)say("");
+  var ok=await load();if(!ok)return;
+  if(!(token&&sha))editing=false;
+  tiles();renderChrome();renderSetup();draw();
+}
+window.addEventListener("beforeunload",function(e){if(dirty){e.preventDefault();e.returnValue="";}});
+boot();
 </script>
 </body>
 </html>
