@@ -412,7 +412,25 @@
       "notes": "Fill in name, household, home world and languages from your first session rundown."
     }
   ],
-  "worlds": [],
-  "lots": [],
+  "worlds": [
+    {
+      "name": "",
+      "pack": "",
+      "description": "",
+      "languages": "",
+      "notes": ""
+    }
+  ],
+  "lots": [
+    {
+      "name": "",
+      "world": "",
+      "type": "",
+      "size": "",
+      "tenants": "",
+      "description": "",
+      "notes": ""
+    }
+  ],
   "sessions": []
 }
