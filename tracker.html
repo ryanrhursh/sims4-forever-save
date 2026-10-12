@@ -452,9 +452,18 @@ function ignKey(p,ign){
   if(!ign.length)return null;
   var g=p.split("/");g[g.length-1]=g[g.length-1].replace(/\.[^.]+$/,"");
   for(var i=0;i<g.length;i++){var s="";for(var j=i;j<g.length;j++){s+=nz(g[j]);if(ign.indexOf(s)>-1)return s;}}
+  var np=nz(p);for(var k=0;k<ign.length;k++){if(ign[k].length>=6&&np.indexOf(ign[k])>-1)return ign[k];}
   return null;
 }
+var STOP=/^(v?\d[\d.]*|script|scripts|package|packages|main|core|tuning|tune|strings?|stbl|patch|fix|data|resource|animations?|anims?|cas|bb|buildbuy|override|overrides|addon|module|part\d*|lite|full|optional|default|merged)$/i;
+function modKey(p){
+  var stem=p.split("/").pop().replace(/\.[^.]+$/,"").replace(/[\[\](){}]/g," ");
+  var tk=stem.split(/[_\-\s.]+/).filter(Boolean),out=[];
+  for(var i=0;i<tk.length;i++){if(STOP.test(tk[i])){if(out.length)break;continue;}out.push(tk[i]);if(out.length===3)break;}
+  return out.length?out.join(" "):(tk.join(" ")||stem);
+}
 function unitOf(segs,p,ud,direct){
+  if(ud==="auto")return modKey(p);
   var fs=segs.slice(0,-1);
   if(!fs.length)return segs[0].replace(/\.[^.]+$/,"");
   if(ud==="file")return p;
@@ -462,15 +471,16 @@ function unitOf(segs,p,ud,direct){
   return fs.slice(0,ud).join("/");
 }
 function autoAdd(){
+  D.mods=D.mods.filter(function(m){return m.auto!==true;});/* drop rows from the earlier folder-name version */
   var A=analyze("auto"),have={},added=0,skipped=0,today_=today();
   D.mods.forEach(function(m){have[m.id]=1;});
   var cand=A.unmatched.filter(function(u){return u.pk&&nz(u.unit).length>=3;}),limit=cand.length>30;
   cand.forEach(function(u){
-    if(limit&&!u.scr){skipped++;return;}
+    if(!u.scr&&(limit||u.n>25)){skipped++;return;}
     var kw=nz(u.unit),id="scan-"+kw.slice(0,40),k=id,i=2;while(have[k])k=id+"-"+(i++);have[k]=1;
-    var nm=u.unit.split("/").map(function(x){return x.replace(/[_-]+/g," ").trim();}).join(" / ")||u.unit;
+    var nm=u.unit.replace(/([a-z])([A-Z])/g,"$1 $2");
     D.mods.push({id:k,batch:"Found in scan",name:nm,creator:"",category:"Unlisted",required:false,status:"Testing",version:"",testedOn:"",lastChecked:"",url:"",linkText:"Link",
-      notes:"Added automatically from the Mods folder scan on "+today_+": "+u.n+" file"+(u.n===1?"":"s")+" in "+u.unit+". Identify it and fill in the creator.",match:[kw],auto:true});
+      notes:"Added automatically from the Mods folder scan on "+today_+" from file names: "+u.n+" file"+(u.n===1?"":"s")+", for example "+u.ex.join("; ")+". Identify it and fill in the creator.",match:[kw],auto:2});
     added++;
   });
   return {added:added,skipped:skipped};
@@ -495,7 +505,7 @@ function analyze(ud){
       per.forEach(function(r){if(r.kw.some(function(k){return np.indexOf(k)>-1;})){r.n++;r.b+=f[1];if(f[2]>r.t)r.t=f[2];names.push(r.m.name);}});
       if(!names.length&&!JUNK.test(p)){
         var fs=segs.slice(0,-1),unit=unitOf(segs,p,ud,direct);
-        var u=unm[unit]||(unm[unit]={unit:unit,n:0,b:0,t:0,scr:false,pk:false});if(ext==="ts4script")u.scr=true;if(ext==="ts4script"||ext==="package")u.pk=true;u.n++;u.b+=f[1];if(f[2]>u.t)u.t=f[2];
+        var u=unm[unit]||(unm[unit]={unit:unit,n:0,b:0,t:0,scr:false,pk:false,ex:[]});if(u.ex.length<3)u.ex.push(p);if(ext==="ts4script")u.scr=true;if(ext==="ts4script"||ext==="package")u.pk=true;u.n++;u.b+=f[1];if(f[2]>u.t)u.t=f[2];
       }
     }
     for(var d=1;d<segs.length;d++){
@@ -618,11 +628,11 @@ function folderView(v){
   v.appendChild(el("h2","sub","Unrecognized items"));
   v.appendChild(el("p","meta","Files and folders that match no tracked mod. "+(editing?"Assign one to a mod so it is recognized next time, or ignore it if it is CC. Press Save changes afterward.":"Turn on Edit to assign them to a mod or ignore them.")));
   var gb=el("div","tools"),gl=el("label",null,"Group by "),gs=el("select");gl.style.cssText="display:flex;gap:8px;align-items:center;color:var(--muted);font-size:.9rem";
-  [["auto","Auto (recommended)"],[1,"Top folder"],[2,"First 2 folder levels"],[3,"First 3 folder levels"],["file","Each file"]].forEach(function(o){var op=el("option",null,o[1]);op.value=o[0];gs.appendChild(op);});
+  [["auto","Mod name from files (recommended)"],[1,"Top folder"],[2,"First 2 folder levels"],[3,"First 3 folder levels"],["file","Each file"]].forEach(function(o){var op=el("option",null,o[1]);op.value=o[0];gs.appendChild(op);});
   gs.value=String(UD);gs.onchange=function(){UD=(gs.value==="file"||gs.value==="auto")?gs.value:parseInt(gs.value,10);draw();};gl.appendChild(gs);gb.appendChild(gl);v.appendChild(gb);
   var ig=D.modsIgnore||[];
   if(editing&&ig.length){var chips=el("div","tools");ig.forEach(function(k){var c=el("button","btn","Ignoring: "+k+" ×");c.type="button";c.onclick=function(){D.modsIgnore.splice(D.modsIgnore.indexOf(k),1);mark();draw();};chips.appendChild(c);});v.appendChild(chips);}
-  var cols=[["Item",function(u){return u.unit;}],["Files",function(u){return String(u.n);}],["Size",function(u){return fmtSize(u.b);}],["Newest",function(u){return fmtDate(u.t);}]];
+  var cols=[[UD==="auto"?"Mod (from file names)":"Item",function(u){return u.unit;}],["Files",function(u){return String(u.n);}],["Size",function(u){return fmtSize(u.b);}],["Newest",function(u){return fmtDate(u.t);}]];
   if(editing)cols.push(["Action",function(u){
     var box=el("div","tools"),s=el("select");s.setAttribute("aria-label","Assign "+u.unit+" to a mod");
     var o0=el("option",null,"Assign to…");o0.value="";s.appendChild(o0);
