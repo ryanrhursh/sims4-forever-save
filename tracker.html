@@ -315,7 +315,7 @@ function editTable(key,rows,empty){
       var tr=el("tr");
       cols.forEach(function(c){var td=el("td",c.cls||"");td.appendChild(control(key,r,c));tr.appendChild(td);});
       var td=el("td"),b=el("button","btn danger",armed===r?"Confirm delete":"Delete");b.type="button";
-      b.onclick=function(){if(armed===r){var a=D[key];a.splice(a.indexOf(r),1);armed=null;mark();if(key==="mods")tiles();draw();}else{armed=r;draw();}};
+      b.onclick=function(){if(armed===r){var a=D[key];if(key==="mods"&&r.auto&&Array.isArray(r.match)&&r.match[0]){D.modsIgnore=D.modsIgnore||[];D.modsIgnore.push(r.match[0]);}a.splice(a.indexOf(r),1);armed=null;mark();if(key==="mods")tiles();draw();}else{armed=r;draw();}};
       td.appendChild(b);tr.appendChild(td);tb.appendChild(tr);
     });
     t.appendChild(tb);w.appendChild(t);box.appendChild(w);
@@ -442,34 +442,70 @@ function draw(keepFocus){
 }
 
 /* ---------- mods folder ---------- */
-var M=null,mSha=null,mSaved=true;
+var M=null,mSha=null,mSaved=true,UD="auto";
 var JUNK=/\.(txt|md|png|jpe?g|gif|html?|pdf|url|ini|db|log|docx?|rtf)$/i;
 function nz(s){return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");}
 function fmtSize(b){if(b>=1073741824)return (b/1073741824).toFixed(2)+" GB";if(b>=1048576)return (b/1048576).toFixed(1)+" MB";if(b>=1024)return Math.round(b/1024)+" KB";return b+" B";}
 function fmtDate(ms){if(!ms)return "–";var d=new Date(ms);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
-function isIgn(p,ign){var g=p.split("/");g[g.length-1]=g[g.length-1].replace(/\.[^.]+$/,"");return g.some(function(x){return ign.indexOf(nz(x))>-1;});}
 function modKw(m){return (Array.isArray(m.match)?m.match:[m.name]).map(nz).filter(function(k){return k.length>=3;});}
-function analyze(){
+function ignKey(p,ign){
+  if(!ign.length)return null;
+  var g=p.split("/");g[g.length-1]=g[g.length-1].replace(/\.[^.]+$/,"");
+  for(var i=0;i<g.length;i++){var s="";for(var j=i;j<g.length;j++){s+=nz(g[j]);if(ign.indexOf(s)>-1)return s;}}
+  return null;
+}
+function unitOf(segs,p,ud,direct){
+  var fs=segs.slice(0,-1);
+  if(!fs.length)return segs[0].replace(/\.[^.]+$/,"");
+  if(ud==="file")return p;
+  if(ud==="auto"){for(var i=1;i<=fs.length;i++){var pre=fs.slice(0,i).join("/");if(direct[pre]||i===fs.length)return pre;}}
+  return fs.slice(0,ud).join("/");
+}
+function autoAdd(){
+  var A=analyze("auto"),have={},added=0,skipped=0,today_=today();
+  D.mods.forEach(function(m){have[m.id]=1;});
+  var cand=A.unmatched.filter(function(u){return u.pk&&nz(u.unit).length>=3;}),limit=cand.length>30;
+  cand.forEach(function(u){
+    if(limit&&!u.scr){skipped++;return;}
+    var kw=nz(u.unit),id="scan-"+kw.slice(0,40),k=id,i=2;while(have[k])k=id+"-"+(i++);have[k]=1;
+    var nm=u.unit.split("/").map(function(x){return x.replace(/[_-]+/g," ").trim();}).join(" / ")||u.unit;
+    D.mods.push({id:k,batch:"Found in scan",name:nm,creator:"",category:"Unlisted",required:false,status:"Testing",version:"",testedOn:"",lastChecked:"",url:"",linkText:"Link",
+      notes:"Added automatically from the Mods folder scan on "+today_+": "+u.n+" file"+(u.n===1?"":"s")+" in "+u.unit+". Identify it and fill in the creator.",match:[kw],auto:true});
+    added++;
+  });
+  return {added:added,skipped:skipped};
+}
+function analyze(ud){
+  ud=ud||UD;
   var files=M.files,ign=(D.modsIgnore||[]).map(nz).filter(Boolean);
   var per=D.mods.map(function(m){return {m:m,kw:modKw(m),n:0,b:0,t:0,checkable:Array.isArray(m.match)?m.match.length>0:true};});
-  var unm={},ignored=0,ignoredB=0,deep=[],arch=[],exe=[],seen={},dups=[];
+  var unm={},dirs={},ignored=0,ignoredB=0,deep=[],arch=[],exe=[],seen={},dups=[],maxDepth=0,direct={};
+  files.forEach(function(f){var q=f[0].split("/");q.pop();direct[q.join("/")]=1;});
   files.forEach(function(f){
-    var p=f[0],np=nz(p),ext=((p.match(/\.([^.\/]+)$/)||[])[1]||"").toLowerCase();
-    if(ext==="ts4script"&&p.split("/").length-1>1)deep.push(p);
+    var p=f[0],np=nz(p),segs=p.split("/"),ext=((p.match(/\.([^.\/]+)$/)||[])[1]||"").toLowerCase();
+    if(segs.length-1>maxDepth)maxDepth=segs.length-1;
+    if(ext==="ts4script"&&segs.length-1>1)deep.push(p);
     if(/^(zip|rar|7z|tar|gz)$/.test(ext))arch.push(p);
     if(/^(exe|bat|cmd|msi|ps1|vbs|scr|jar)$/.test(ext))exe.push(p);
-    var key=p.split("/").pop().toLowerCase()+"|"+f[1];
+    var key=segs[segs.length-1].toLowerCase()+"|"+f[1];
     if(/^(package|ts4script)$/.test(ext)){if(seen[key])dups.push(p+"  =  "+seen[key]);else seen[key]=p;}
-    if(isIgn(p,ign)){ignored++;ignoredB+=f[1];return;}
-    var hit=false;
-    per.forEach(function(r){if(r.kw.some(function(k){return np.indexOf(k)>-1;})){r.n++;r.b+=f[1];if(f[2]>r.t)r.t=f[2];hit=true;}});
-    if(!hit&&!JUNK.test(p)){
-      var parts=p.split("/"),unit=parts.length>1?parts[0]:parts[0].replace(/\.[^.]+$/,"");
-      var u=unm[unit]||(unm[unit]={unit:unit,n:0,b:0,t:0,ex:p});u.n++;u.b+=f[1];if(f[2]>u.t)u.t=f[2];
+    var isI=!!ignKey(p,ign),names=[];
+    if(isI){ignored++;ignoredB+=f[1];}
+    else{
+      per.forEach(function(r){if(r.kw.some(function(k){return np.indexOf(k)>-1;})){r.n++;r.b+=f[1];if(f[2]>r.t)r.t=f[2];names.push(r.m.name);}});
+      if(!names.length&&!JUNK.test(p)){
+        var fs=segs.slice(0,-1),unit=unitOf(segs,p,ud,direct);
+        var u=unm[unit]||(unm[unit]={unit:unit,n:0,b:0,t:0,scr:false,pk:false});if(ext==="ts4script")u.scr=true;if(ext==="ts4script"||ext==="package")u.pk=true;u.n++;u.b+=f[1];if(f[2]>u.t)u.t=f[2];
+      }
+    }
+    for(var d=1;d<segs.length;d++){
+      var dp=segs.slice(0,d).join("/"),o=dirs[dp]||(dirs[dp]={path:dp,depth:d,n:0,b:0,mods:{},ign:0});
+      o.n++;o.b+=f[1];if(isI)o.ign++;names.forEach(function(x){o.mods[x]=1;});
     }
   });
   var si=0,sb=0,st=M.ignored||{};Object.keys(st).forEach(function(k){si+=st[k].count;sb+=st[k].bytes;});
-  return {per:per,unmatched:Object.keys(unm).map(function(k){return unm[k];}).sort(function(a,b){return b.b-a.b;}),ignored:ignored+si,ignoredB:ignoredB+sb,deep:deep,arch:arch,exe:exe,dups:dups};
+  return {per:per,unmatched:Object.keys(unm).map(function(k){return unm[k];}).sort(function(a,b){return b.b-a.b;}),ignored:ignored+si,ignoredB:ignoredB+sb,deep:deep,arch:arch,exe:exe,dups:dups,
+    dirs:Object.keys(dirs).sort(function(a,b){return a.toLowerCase()<b.toLowerCase()?-1:1;}).map(function(k){return dirs[k];}),maxDepth:maxDepth};
 }
 function verdict(r){
   var st=r.m.status,inst=st!=="Not installed"&&st!=="Retired";
@@ -488,8 +524,16 @@ function scan(list){
     arr.push([parts.join("/"),f.size,f.lastModified]);
   });
   M={scannedAt:new Date().toISOString(),root:root||"Mods",files:arr};mSaved=false;
-  say("Scanned "+arr.length+" files on this device. Nothing was uploaded."+(token&&sha?" Press Save scan to GitHub to keep the result.":""));
-  draw();
+  var msg="Scanned "+arr.length+" files on this device. Nothing was uploaded.";
+  if(token&&sha){
+    var r=autoAdd();
+    if(r.added||r.skipped)mark();
+    if(r.added)msg+=" Added "+r.added+" unrecognized mod"+(r.added===1?"":"s")+" to the Mods table (batch Found in scan).";
+    if(r.skipped)msg+=" "+r.skipped+" more package-only items look like CC, so they were not added. Ignore them below or assign them to a mod.";
+    msg+=" Press Save changes to keep the table updates, and Save scan to GitHub to keep the scan.";
+    tiles();
+  }else msg+=" Enable editing to have unrecognized mods added to the table automatically.";
+  draw();say(msg);
 }
 async function loadManifest(){
   M=null;mSha=null;mSaved=true;
@@ -510,7 +554,7 @@ async function loadManifest(){
 async function saveManifest(){
   if(!M||!token||!sha)return;
   var ign=(D.modsIgnore||[]).map(nz).filter(Boolean),ig={},keep=[];
-  M.files.forEach(function(f){var k=isIgn(f[0],ign)?ign.filter(function(x){return f[0].split("/").some(function(g){return nz(g.replace(/\.[^.]+$/,""))===x;});})[0]:null;
+  M.files.forEach(function(f){var k=ignKey(f[0],ign);
     if(k){var o=ig[k]||(ig[k]={count:0,bytes:0});o.count++;o.bytes+=f[1];}else keep.push(f);});
   var out={scannedAt:M.scannedAt,root:M.root||"Mods",files:keep,ignored:ig},text=JSON.stringify(out);
   if(text.length>900000){say("Not saved: the scan is "+Math.round(text.length/1024)+" KB, over the 900 KB limit. Use Ignore on big CC folders below, then Save scan again.",true);return;}
@@ -528,7 +572,7 @@ function assignUnit(unit,id){
   if(!Array.isArray(m.match))m.match=[nz(m.name)];
   m.match.push(nz(unit));mark();tiles();draw();
 }
-function ignoreUnit(unit){D.modsIgnore=D.modsIgnore||[];D.modsIgnore.push(nz(unit));mark();draw();}
+function ignoreUnit(unit){D.modsIgnore=D.modsIgnore||[];var k=nz(unit);D.modsIgnore.push(k);D.mods=D.mods.filter(function(m){return !(m.auto&&Array.isArray(m.match)&&m.match.indexOf(k)>-1);});mark();tiles();draw();}
 function listBlock(v,title,items,okText){
   v.appendChild(el("h2","sub",title));
   if(!items.length){v.appendChild(el("p","meta",okText));return;}
@@ -548,7 +592,7 @@ function folderView(v){
   if(!M){v.appendChild(el("div","setup","No scan yet. Choose your Mods folder to check it against the tracker."));return;}
   var A=analyze();
   var total=M.files.length+Object.keys(M.ignored||{}).reduce(function(a,k){return a+M.ignored[k].count;},0);
-  v.appendChild(el("p","meta","Scan of "+(M.root||"Mods")+" from "+fmtDate(Date.parse(M.scannedAt))+": "+total+" files."+(mSaved?"":" Not saved to GitHub yet.")));
+  v.appendChild(el("p","meta","Scan of "+(M.root||"Mods")+" from "+fmtDate(Date.parse(M.scannedAt))+": "+total+" files in "+A.dirs.length+" folders and subfolders, up to "+A.maxDepth+" level"+(A.maxDepth===1?"":"s")+" deep."+(mSaved?"":" Not saved to GitHub yet.")));
   var chk=A.per.filter(function(r){return r.checkable;});
   var found=chk.filter(function(r){return r.n>0;}).length;
   var missing=chk.filter(function(r){return r.n===0&&r.m.status!=="Not installed"&&r.m.status!=="Retired";}).length;
@@ -573,6 +617,9 @@ function folderView(v){
   listBlock(v,"Possible duplicates (same name and size)",A.dups,"None.");
   v.appendChild(el("h2","sub","Unrecognized items"));
   v.appendChild(el("p","meta","Files and folders that match no tracked mod. "+(editing?"Assign one to a mod so it is recognized next time, or ignore it if it is CC. Press Save changes afterward.":"Turn on Edit to assign them to a mod or ignore them.")));
+  var gb=el("div","tools"),gl=el("label",null,"Group by "),gs=el("select");gl.style.cssText="display:flex;gap:8px;align-items:center;color:var(--muted);font-size:.9rem";
+  [["auto","Auto (recommended)"],[1,"Top folder"],[2,"First 2 folder levels"],[3,"First 3 folder levels"],["file","Each file"]].forEach(function(o){var op=el("option",null,o[1]);op.value=o[0];gs.appendChild(op);});
+  gs.value=String(UD);gs.onchange=function(){UD=(gs.value==="file"||gs.value==="auto")?gs.value:parseInt(gs.value,10);draw();};gl.appendChild(gs);gb.appendChild(gl);v.appendChild(gb);
   var ig=D.modsIgnore||[];
   if(editing&&ig.length){var chips=el("div","tools");ig.forEach(function(k){var c=el("button","btn","Ignoring: "+k+" ×");c.type="button";c.onclick=function(){D.modsIgnore.splice(D.modsIgnore.indexOf(k),1);mark();draw();};chips.appendChild(c);});v.appendChild(chips);}
   var cols=[["Item",function(u){return u.unit;}],["Files",function(u){return String(u.n);}],["Size",function(u){return fmtSize(u.b);}],["Newest",function(u){return fmtDate(u.t);}]];
@@ -585,12 +632,19 @@ function folderView(v){
     box.append(s,b);return box;}]);
   v.appendChild(readTable(cols,A.unmatched.slice(0,100),"Everything in the folder matches a tracked mod or is ignored."));
   if(A.unmatched.length>100)v.appendChild(el("p","meta","Showing the 100 largest of "+A.unmatched.length+"."));
+  var det=el("details");det.style.marginTop="18px";var sm=el("summary","sub","All folders and subfolders ("+A.dirs.length+")");sm.style.cursor="pointer";det.appendChild(sm);
+  det.appendChild(readTable([
+    ["Folder",function(d){var s=el("span",null,d.path);s.style.paddingLeft=((d.depth-1)*14)+"px";s.style.fontFamily="var(--f-mono)";s.style.fontSize=".85rem";return s;}],
+    ["Files (with subfolders)",function(d){return String(d.n);}],["Size",function(d){return fmtSize(d.b);}],
+    ["Recognized as",function(d){var k=Object.keys(d.mods);var t=k.slice(0,3).join(", ")+(k.length>3?" +"+(k.length-3)+" more":"");if(d.ign)t+=(t?"; ":"")+d.ign+" ignored";return t||"nothing tracked";},"notes"]],A.dirs.slice(0,400),"No subfolders: every file sits directly in the Mods folder."));
+  if(A.dirs.length>400)det.appendChild(el("p","meta","Showing the first 400 of "+A.dirs.length+" folders."));
+  v.appendChild(det);
 }
 
 /* ---------- auth / chrome ---------- */
 function renderChrome(){
   var a=document.getElementById("auth");a.textContent="";
-  var sb=document.getElementById("savebar");sb.textContent="";sb.hidden=!editing;
+  var sb=document.getElementById("savebar");sb.textContent="";sb.hidden=!(editing||dirty);
   if(token&&sha){
     var e=el("button","btn"+(editing?" pri":""),editing?"Editing on":"Edit");e.type="button";e.setAttribute("aria-pressed",editing);
     e.onclick=function(){
@@ -601,7 +655,7 @@ function renderChrome(){
   }else{
     var e2=el("button","btn","Enable editing");e2.type="button";e2.onclick=function(){showSetup=!showSetup;renderSetup();};a.appendChild(e2);
   }
-  if(editing){
+  if(editing||dirty){
     var s=el("button","btn pri","Save changes");s.type="button";s.id="saveBtn";s.disabled=!dirty;s.onclick=save;
     var d=el("button","btn","Reload from GitHub");d.type="button";d.onclick=async function(){if(dirty&&!window.__okDiscard){say("This discards your unsaved edits. Press Reload from GitHub again to confirm.",true);window.__okDiscard=true;return;}window.__okDiscard=false;dirty=false;say("");await boot(true);};
     var t=el("span","opt",dirty?"Unsaved changes":"No unsaved changes");
