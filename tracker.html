@@ -122,6 +122,7 @@ td input[type=checkbox]{width:1.1rem;height:1.1rem;accent-color:var(--accent)}
 .shots{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start;min-width:12rem}
 .shot{display:grid;gap:4px;justify-items:start}
 .shot .btn{padding:2px 8px;font-size:.78rem}
+.shot input[type=text]{width:9rem;min-width:0}
 .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:10px;margin:0 0 18px}
 .gallery img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block;background:var(--line)}
 .cover{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;margin:0 0 8px;display:block;background:var(--line)}
@@ -205,7 +206,7 @@ async function save(){
 }
 
 /* ---------- screenshots ---------- */
-function okPath(p){return /^images\/worlds\/[A-Za-z0-9._-]+$/.test(p||"");}
+function okPath(p){return /^images\/(worlds|lots)\/[A-Za-z0-9._-]+$/.test(p||"");}
 function mkImg(p,cls,alt){
   var i=el("img",cls);i.loading="lazy";i.alt=alt;i.src=localImg[p]||p;
   i.onerror=function(){i.onerror=null;i.src="https://raw.githubusercontent.com/"+REPO.owner+"/"+REPO.repo+"/"+REPO.branch+"/"+p;};
@@ -219,15 +220,15 @@ async function shrink(file){
   return new Promise(function(res,rej){c.toBlob(function(b){b?res(b):rej(new Error("encode"));},"image/jpeg",0.82);});
 }
 function blobB64(b){return new Promise(function(res){var r=new FileReader();r.onload=function(){res(String(r.result).split(",")[1]);};r.readAsDataURL(b);});}
-async function uploadShots(w,files){
-  var slug=(w.name||"world").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"world",ok=0,bad=0;
+async function uploadShots(w,files,folder){
+  var slug=(folder==="lots"?[w.world,w.name].join(" "):(w.name||"world")).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"world",ok=0,bad=0;
   w.screenshots=w.screenshots||[];
   say("Uploading "+files.length+" screenshot"+(files.length===1?"":"s")+"…");
   for(var i=0;i<files.length;i++){
     try{
-      var blob=await shrink(files[i]),path="images/worlds/"+slug+"-"+Date.now().toString(36)+"-"+i+".jpg";
+      var blob=await shrink(files[i]),path="images/"+folder+"/"+slug+"-"+Date.now().toString(36)+"-"+i+".jpg";
       var r=await fetch(CONTENTS+path,{method:"PUT",headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+token},
-        body:JSON.stringify({message:"Add screenshot for "+(w.name||"world"),content:await blobB64(blob),branch:REPO.branch})});
+        body:JSON.stringify({message:"Add screenshot for "+(w.name||folder),content:await blobB64(blob),branch:REPO.branch})});
       if(r.ok){localImg[path]=URL.createObjectURL(blob);w.screenshots.push({path:path,caption:""});ok++;}else bad++;
     }catch(e){bad++;}
   }
@@ -235,16 +236,17 @@ async function uploadShots(w,files){
   say((ok?"Uploaded "+ok+". Press Save changes to attach "+(ok===1?"it":"them")+" to the world.":"")+(bad?(ok?" ":"")+bad+" failed (unreadable image or GitHub refused it).":""),!ok);
   draw();
 }
-function shotsControl(w){
+function shotsControl(w,folder){
   var box=el("div","shots");
   (w.screenshots||[]).forEach(function(x){
     if(!x||!okPath(x.path))return;
     var c=el("div","shot");c.appendChild(mkImg(x.path,"thumb",(w.name||"World")+" screenshot"));
+    var ci=el("input");ci.type="text";ci.placeholder="Caption";ci.value=x.caption||"";ci.setAttribute("aria-label","Caption");ci.oninput=function(){x.caption=ci.value;mark();};c.appendChild(ci);
     var b=el("button","btn","Remove");b.type="button";b.setAttribute("aria-label","Remove screenshot");
     b.onclick=function(){w.screenshots.splice(w.screenshots.indexOf(x),1);mark();draw();};c.appendChild(b);box.appendChild(c);
   });
   var add=el("span","btn fileBtn","Add screenshots"),f=el("input");f.type="file";f.accept="image/*";f.multiple=true;f.setAttribute("aria-label","Add screenshots for "+(w.name||"this world"));
-  f.onchange=function(){var fl=Array.prototype.slice.call(f.files);if(fl.length)uploadShots(w,fl);};
+  f.onchange=function(){var fl=Array.prototype.slice.call(f.files);if(fl.length)uploadShots(w,fl,folder);};
   add.appendChild(f);box.appendChild(add);return box;
 }
 
@@ -273,12 +275,12 @@ var SCHEMA={
   {h:"Aspiration",f:"aspiration"},{h:"Career",f:"career"},{h:"Languages",f:"languages"},{h:"Added",f:"added",t:"date"},{h:"Notes",f:"notes",t:"area",cls:"notes"}];},
   blank:function(){return {name:"",household:"",homeWorld:"",lifeStage:"Adult",role:"",aspiration:"",career:"",languages:"",added:today(),notes:""};}},
  worlds:{label:"world",cols:function(){return [
-  {h:"World",f:"name"},{h:"Pack",f:"pack"},{h:"Languages",f:"languages"},{h:"Description",f:"description",t:"area",cls:"notes"},{h:"Notes",f:"notes",t:"area",cls:"notes"},{h:"Screenshots",f:"screenshots",t:"shots"}];},
+  {h:"World",f:"name"},{h:"Pack",f:"pack"},{h:"Languages",f:"languages"},{h:"Description",f:"description",t:"area",cls:"notes"},{h:"Notes",f:"notes",t:"area",cls:"notes"},{h:"Screenshots",f:"screenshots",t:"shots",folder:"worlds"}];},
   blank:function(){return {name:"",pack:"",description:"",languages:"",notes:"",screenshots:[]};}},
  lots:{label:"lot",cols:function(){return [
   {h:"Lot",f:"name"},{h:"World",f:"world",t:"select",o:function(){return [""].concat(worldNames());}},{h:"Type",f:"type",t:"combo",o:["Residential","Community","Restaurant","Garden","Retail","Venue"]},{h:"Size",f:"size"},
-  {h:"Tenants",f:"tenants",t:"area",cls:"notes"},{h:"Description",f:"description",t:"area",cls:"notes"},{h:"Notes",f:"notes",t:"area",cls:"notes"}];},
-  blank:function(){return {name:"",world:fw||"",type:"",size:"",tenants:"",description:"",notes:""};}},
+  {h:"Tenants",f:"tenants",t:"area",cls:"notes"},{h:"Description",f:"description",t:"area",cls:"notes"},{h:"Notes",f:"notes",t:"area",cls:"notes"},{h:"Screenshots",f:"screenshots",t:"shots",folder:"lots"}];},
+  blank:function(){return {name:"",world:fw||"",type:"",size:"",tenants:"",description:"",notes:"",screenshots:[]};}},
  sessions:{label:"session",cols:function(){return [
   {h:"Date",f:"date",t:"date"},{h:"What happened",f:"summary",t:"area",cls:"notes"},{h:"Tracker changes",f:"changes",t:"area",cls:"notes"}];},
   blank:function(){return {date:today(),summary:"",changes:""};}}
@@ -294,7 +296,7 @@ function control(key,obj,c){
     if(key==="worlds"&&c.f==="name"){var old=obj.name;(D.lots||[]).forEach(function(l){if(l.world===old)l.world=val;});}
     obj[c.f]=val;mark();if(key==="mods")tiles();
   };
-  if(c.t==="shots")return shotsControl(obj);
+  if(c.t==="shots")return shotsControl(obj,c.folder);
   if(c.t==="bool"){inp=el("input");inp.type="checkbox";inp.checked=c.neg?!v:!!v;inp.onchange=function(){onv(c.neg?!inp.checked:inp.checked);};inp.setAttribute("aria-label",c.h);return inp;}
   if(c.t==="select"){inp=el("select");var o=optsOf(c).slice();if(v&&o.indexOf(v)<0)o.push(v);o.forEach(function(x){var op=el("option",null,x||"–");op.value=x;inp.appendChild(op);});inp.value=v==null?"":v;inp.onchange=function(){onv(inp.value);};}
   else if(c.t==="area"){inp=el("textarea");inp.value=v||"";inp.oninput=function(){onv(inp.value);};}
@@ -393,11 +395,11 @@ function worldsView(v){
   var sel=W.filter(function(w){return w.name===fw;})[0];
   if(sel&&shots(sel).length){
     var gal=el("div","gallery");
-    shots(sel).forEach(function(x){var a=el("a");a.href=x.path;a.target="_blank";a.rel="noopener";a.title=x.caption||"Open full size";a.appendChild(mkImg(x.path,"",x.caption||sel.name+" screenshot"));gal.appendChild(a);});
+    shots(sel).forEach(function(x){var f=el("figure"),a=el("a");f.style.margin="0";a.href=x.path;a.target="_blank";a.rel="noopener";a.title=x.caption||"Open full size";a.appendChild(mkImg(x.path,"",x.caption||sel.name+" screenshot"));f.appendChild(a);if(x.caption)f.appendChild(el("figcaption","wdesc",x.caption));gal.appendChild(f);});
     v.appendChild(gal);
   }
   var rows=L.filter(function(l){return !fw||l.world===fw;});
-  v.appendChild(readTable([["Lot",g("name")],["World",g("world")],["Type",g("type")],["Size",g("size")],["Tenants",g("tenants"),"notes"],["Description",g("description"),"notes"],["Notes",g("notes"),"notes"]],rows,L.length?"No lots in this world.":"No worlds or lots yet."+(token?" Switch on Edit to add some, or give Claude a rundown.":" Give Claude a rundown of your lots and it will fill this in.")));
+  v.appendChild(readTable([["Lot",g("name")],["World",g("world")],["Type",g("type")],["Size",g("size")],["Tenants",g("tenants"),"notes"],["Description",g("description"),"notes"],["Notes",g("notes"),"notes"],["Photos",function(l){var sh=shots(l);if(!sh.length)return "";var b=el("div","shots");sh.forEach(function(x){var a=el("a");a.href=x.path;a.target="_blank";a.rel="noopener";a.title=x.caption||"Open full size";a.appendChild(mkImg(x.path,"thumb",x.caption||l.name+" screenshot"));b.appendChild(a);});return b;}]],rows,L.length?"No lots in this world.":"No worlds or lots yet."+(token?" Switch on Edit to add some, or give Claude a rundown.":" Give Claude a rundown of your lots and it will fill this in.")));
 }
 function simpleView(v,key,cols,rows,empty){
   if(editing)v.appendChild(editTable(key,rows,empty));else v.appendChild(readTable(cols,rows,empty));
