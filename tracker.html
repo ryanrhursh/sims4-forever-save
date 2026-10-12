@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forever Save Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+:root {
+  --bg: #F2F5F3;
+  --surface: #FFFFFF;
+  --ink: #16231E;
+  --muted: #55655E;
+  --line: #D3DDD8;
+  --accent: #13805A;
+  --warn-bg:#FFF3D6;--warn:#8A5A00;--bad-bg:#FBE3E3;--bad:#9C0006;--info-bg:#E3EEF9;--info:#1F4E79;--gate-bg: #E4F1EB;
+  --c-script: #9A4A12;
+  --c-pkg: #2A5A9C;
+  --c-game: #13805A;
+  --c-step: #55655E;
+  --f-display: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1613;
+    --surface: #15201C;
+    --ink: #E6EFEA;
+    --muted: #9BADA5;
+    --line: #27362F;
+    --accent: #46C694;
+    --warn-bg:#FFF3D6;--warn:#8A5A00;--bad-bg:#FBE3E3;--bad:#9C0006;--info-bg:#E3EEF9;--info:#1F4E79;--gate-bg: #15271F;
+    --c-script: #F0A56A;
+    --c-pkg: #8DB4F0;
+    --c-game: #46C694;
+    --c-step: #9BADA5;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1613;
+  --surface: #15201C;
+  --ink: #E6EFEA;
+  --muted: #9BADA5;
+  --line: #27362F;
+  --accent: #46C694;
+  --warn-bg:#FFF3D6;--warn:#8A5A00;--bad-bg:#FBE3E3;--bad:#9C0006;--info-bg:#E3EEF9;--info:#1F4E79;--gate-bg: #15271F;
+  --c-script: #F0A56A;
+  --c-pkg: #8DB4F0;
+  --c-game: #46C694;
+  --c-step: #9BADA5;
+  color-scheme: dark;
+}
+
+
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--warn-bg:#2E2512;--warn:#F0C070;--bad-bg:#331A1A;--bad:#F29A9A;--info-bg:#15222F;--info:#8DB4F0}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--f-body);padding:28px 16px 72px}
+.wrap{max-width:70rem;margin:0 auto;min-width:0}
+h1,h2{font-family:var(--f-display);margin:0;text-wrap:balance}
+h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.1;letter-spacing:-.01em}
+h2{font-size:1.35rem;margin:0 0 10px}
+nav{display:flex;gap:16px;margin:0 0 14px;font-size:.95rem}
+a{color:var(--accent)}
+.meta{color:var(--muted);margin:10px 0 0;max-width:62ch}
+code{font-family:var(--f-mono);font-size:.88em}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:10px;margin:22px 0}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.tile b{display:block;font:700 1.9rem/1.1 var(--f-display)}
+.tile span{color:var(--muted);font-size:.9rem}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:2}
+.tabs button{font:600 .92rem var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+.tools input,.tools select{font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0}
+.tools input{flex:1 1 14rem}
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font:600 .8rem var(--f-body);text-transform:uppercase;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.notes{min-width:18rem}
+.pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:.82rem;font-weight:600;white-space:nowrap;background:var(--line);color:var(--ink)}
+.s-Working,.s-Resolved{background:var(--gate-bg);color:var(--accent)}
+.s-Testing{background:var(--info-bg);color:var(--info)}
+.s-Needs{background:var(--warn-bg);color:var(--warn)}
+.s-Broken,.s-Open{background:var(--bad-bg);color:var(--bad)}
+.stale{background:var(--warn-bg);color:var(--warn)}
+.opt{color:var(--muted);font-size:.82rem}
+.empty{padding:22px;color:var(--muted)}
+dl{display:grid;grid-template-columns:minmax(9rem,14rem) 1fr;gap:0;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+dt,dd{margin:0;padding:10px 14px;border-bottom:1px solid var(--line)}
+dt{font-weight:600}
+dt:last-of-type,dd:last-of-type{border-bottom:0}
+@media(max-width:560px){dl{grid-template-columns:1fr}dt{border-bottom:0;padding-bottom:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<nav><a href="index.html">Install order</a><a href="tracker.html" aria-current="page"><b>Tracker</b></a></nav>
+<h1>Forever Save Tracker</h1>
+<p class="meta" id="meta">Loading…</p>
+</header>
+<div class="tiles" id="tiles"></div>
+<div class="tabs" role="tablist" id="tabs"></div>
+<main id="view"></main>
+<p class="meta">This page is read-only. After a play session, tell Claude what you did and it updates <code>tracker-data.json</code> in this repo, which this page reads.</p>
+</div>
+<script>
+"use strict";
+var D=null, tab="mods", q="", fb="", fs="";
+var el=function(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+function pill(t,cls){return el("span","pill "+(cls||""),t);}
+function sCls(s){return "s-"+String(s).split(" ")[0];}
+function days(d){if(!d)return null;var t=Date.parse(d+"T00:00:00");return isNaN(t)?null:Math.floor((Date.now()-t)/864e5);}
+function table(cols,rows,empty){
+  var w=el("div","scroll");
+  if(!rows.length){w.appendChild(el("div","empty",empty));return w;}
+  var t=el("table"),h=el("tr");
+  cols.forEach(function(c){h.appendChild(el("th",null,c[0]));});
+  var th=el("thead");th.appendChild(h);t.appendChild(th);
+  var tb=el("tbody");
+  rows.forEach(function(r){
+    var tr=el("tr");
+    cols.forEach(function(c){
+      var td=el("td",c[2]||""),v=c[1](r);
+      if(v instanceof Node)td.appendChild(v);else td.textContent=v==null?"":v;
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);w.appendChild(t);return w;
+}
+function tiles(){
+  var m=D.mods,n=function(f){return m.filter(f).length;};
+  var inst=m.filter(function(x){return x.status!=="Not installed"&&x.status!=="Retired";});
+  var stale=inst.filter(function(x){var d=days(x.lastChecked);return d===null||d>D.staleDays;});
+  var items=[[n(function(x){return x.status==="Working";}),"Working"],[n(function(x){return x.status==="Testing";}),"Testing"],
+   [n(function(x){return x.status==="Needs update"||x.status==="Broken";}),"Need attention"],[stale.length,"Stale (>"+D.staleDays+" days)"],
+   [n(function(x){return x.status==="Not installed"&&x.required;}),"Required, not installed"],[D.issues.filter(function(i){return i.status!=="Resolved";}).length,"Open issues"]];
+  var t=document.getElementById("tiles");t.textContent="";
+  items.forEach(function(i){var d=el("div","tile");d.appendChild(el("b",null,i[0]));d.appendChild(el("span",null,i[1]));t.appendChild(d);});
+}
+var TABS=[["mods","Mods"],["issues","Issues"],["patches","Patches"],["backups","Backups"],["sims","Sims"],["sessions","Sessions"],["save","Save info"]];
+function mods(v){
+  var tools=el("div","tools"),s=el("input");s.type="search";s.placeholder="Search mods";s.value=q;s.setAttribute("aria-label","Search mods");
+  s.oninput=function(){q=s.value;draw(true);};
+  var b=el("select");b.setAttribute("aria-label","Batch");
+  [""].concat(Array.from(new Set(D.mods.map(function(x){return x.batch;})))).forEach(function(x){var o=el("option",null,x||"All batches");o.value=x;b.appendChild(o);});
+  b.value=fb;b.onchange=function(){fb=b.value;draw();};
+  var st=el("select");st.setAttribute("aria-label","Status");
+  [""].concat(D.statuses).forEach(function(x){var o=el("option",null,x||"All statuses");o.value=x;st.appendChild(o);});
+  st.value=fs;st.onchange=function(){fs=st.value;draw();};
+  tools.append(s,b,st);v.appendChild(tools);
+  var rows=D.mods.filter(function(x){
+    return (!fb||x.batch===fb)&&(!fs||x.status===fs)&&(!q||(x.name+" "+x.creator+" "+x.notes).toLowerCase().indexOf(q.toLowerCase())>-1);});
+  v.appendChild(table([
+   ["Batch",function(x){return x.batch;}],
+   ["Mod",function(x){var f=el("span");f.appendChild(document.createTextNode(x.name));if(!x.required){f.appendChild(document.createElement("br"));f.appendChild(el("span","opt","Optional"));}return f;}],
+   ["Creator",function(x){return x.creator;}],
+   ["Status",function(x){return pill(x.status,sCls(x.status));}],
+   ["Version",function(x){return x.version||"–";}],
+   ["Tested on",function(x){return x.testedOn||"–";}],
+   ["Last checked",function(x){
+      if(!x.lastChecked)return "–";var d=days(x.lastChecked),f=el("span",null,x.lastChecked);
+      if(x.status!=="Not installed"&&x.status!=="Retired"&&d!==null&&d>D.staleDays){f.appendChild(document.createTextNode(" "));f.appendChild(pill(d+" days","stale"));}return f;}],
+   ["Page",function(x){if(!/^https:\/\//.test(x.url))return "–";var a=el("a",null,x.linkText||"Link");a.href=x.url;a.rel="noopener";return a;}],
+   ["Notes",function(x){return x.notes;},"notes"]],rows,"No mods match."));
+}
+function simple(v,cols,rows,empty){v.appendChild(table(cols,rows,empty));}
+function draw(keepFocus){
+  var v=document.getElementById("view");v.textContent="";
+  var tb=document.getElementById("tabs");tb.textContent="";
+  TABS.forEach(function(t){var b=el("button",null,t[1]);b.setAttribute("role","tab");b.setAttribute("aria-selected",t[0]===tab);b.onclick=function(){tab=t[0];draw();};tb.appendChild(b);});
+  var g=function(k){return function(r){return r[k]||"";};};
+  if(tab==="mods")mods(v);
+  else if(tab==="issues")simple(v,[["Date",g("date")],["Symptom",g("symptom"),"notes"],["Version",g("version")],["Suspected mod",g("suspect")],["Test used",g("test")],["50/50 rounds",g("rounds")],["Fix",g("fix"),"notes"],["Status",function(r){return pill(r.status,sCls(r.status));}],["Resolved",g("resolved")]],D.issues,"No issues logged yet.");
+  else if(tab==="patches")simple(v,[["Released",g("date")],["Patch",g("patch")],["Full version",g("fullVersion")],["Script mods back on?",g("scriptModsOn")],["Backup first?",g("backup")],["Mods broken",g("broken"),"notes"],["Mods updated",g("updated"),"notes"],["What was done",g("did"),"notes"],["Fixed on",g("fixedOn")]],D.patches,"No patches logged yet. Current game version: "+D.gameVersion+".");
+  else if(tab==="backups")simple(v,[["Date",g("date")],["Reason",g("reason")],["Version",g("version")],["Where",g("location"),"notes"],["What",g("what")],["Mods snapshot",g("snapshot")],["Notes",g("notes"),"notes"]],D.backups,"No backups logged yet.");
+  else if(tab==="sims")simple(v,[["Sim",g("name")],["Household",g("household")],["Home world",g("homeWorld")],["Life stage",g("lifeStage")],["Role",g("role"),"notes"],["Aspiration",g("aspiration")],["Career",g("career")],["Languages",g("languages")],["Added",g("added")],["Notes",g("notes"),"notes"]],D.sims,"No Sims yet.");
+  else if(tab==="sessions")simple(v,[["Date",g("date")],["What happened",g("summary"),"notes"],["Tracker changes",g("changes"),"notes"]],D.sessions.slice().reverse(),"No sessions logged yet.");
+  else{
+    var s=D.save,dl=el("dl");
+    [["Save",s.name],["Creator",s.creator],["Source",s.url],["Game version",D.gameVersion],["Slot name",s.slot||"–"],["Started",s.startedOn||"–"],["Known issue",s.knownIssue]].forEach(function(p){
+      dl.appendChild(el("dt",null,p[0]));var dd=el("dd");
+      if(/^https:\/\//.test(p[1])){var a=el("a",null,"CurseForge page");a.href=p[1];a.rel="noopener";dd.appendChild(a);}else dd.textContent=p[1];dl.appendChild(dd);});
+    v.appendChild(dl);
+  }
+  if(keepFocus){var i=v.querySelector("input");if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length);}}
+}
+fetch("tracker-data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();}).then(function(d){
+  D=d;document.getElementById("meta").textContent="Game version "+d.gameVersion+". Data last updated "+d.updated+".";tiles();draw();
+}).catch(function(e){
+  document.getElementById("meta").textContent="Could not load tracker-data.json ("+e.message+"). Open this page from the GitHub Pages address, not as a local file.";
+});
+</script>
+</body>
+</html>

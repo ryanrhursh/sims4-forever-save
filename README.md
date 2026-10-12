@@ -2,7 +2,8 @@
 
 A modded Sims 4 forever-world setup for PC.
 
-- `index.html` is the install-order checklist, published with GitHub Pages. Ticks are saved in your browser on each device.
-- `forever-save-tracker.xlsx` is the tracker workbook. GitHub offers it as a download. Edit it in Excel and upload the new copy to update it.
+- [`index.html`](https://ryanrhursh.github.io/sims4-forever-save/) is the install-order checklist. Ticks are saved in your browser on each device.
+- [`tracker.html`](https://ryanrhursh.github.io/sims4-forever-save/tracker.html) shows mod status, issues, patches, backups, Sims and a session log. It reads `tracker-data.json`.
+- `tracker-data.json` is the data behind the tracker. Claude updates it from a rundown of each play session. See `CLAUDE.md`.
 
 Game version when this was written: 1.128.90.1030.
