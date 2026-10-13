@@ -4,7 +4,7 @@ Repo for the owner's modded Sims 4 forever world (PC, all expansion packs). Serv
 
 ## Files
 - `index.html`: install-order checklist (Batches 0 to 4, ids s0 to s4, each with a short test gate). Ticks live in the owner's browser (localStorage), so Claude cannot read or change them. Edit only when mod advice changes.
-- `tracker.html`: viewer and editor. Never put data in it. The owner can turn on editing with a fine-grained GitHub token (Contents read/write on this repo) kept in their browser; Save then commits straight to `tracker-data.json` on `main`.
+- `tracker.html`: viewer and editor, with a page per mod at `tracker.html#mod/<id>`. Never put data in it. The owner can turn on editing with a fine-grained GitHub token (Contents read/write on this repo) kept in their browser; Save then commits straight to `tracker-data.json` on `main`.
 - `mods-manifest.json`: the last scan of the owner's real Mods folder, written by the page's Mods folder tab (file names, sizes and dates only, never mod files). Do not hand-edit it. It may not exist yet.
 - `tracker-data.json`: the single source of truth for the tracker. Every tracker change is an edit to this file.
 
@@ -14,6 +14,7 @@ The owner opens a new session per task and pastes a rundown of what they did in 
 1. Read `tracker-data.json` (the previous state is not in your context).
 2. Translate the rundown into edits, only for things the owner actually said:
    - Mod installed, tested, updated, broken or removed: set that mod's `status`, `version`, `testedOn` (game version), `lastChecked` (today, `YYYY-MM-DD`). Statuses: Not installed, Testing, Working, Needs update, Broken, Retired.
+   - Newest release of a mod: set `latestVersion` and `latestChecked` (the date you checked) only from the owner or a source fetched this session, and cite it in `notes`. Each mod has its own page at `tracker.html#mod/<id>` that compares `version` (and versions read from scanned file names) with `latestVersion`, so keep `id`s stable.
    - A problem: add to `issues` (date, symptom, version, suspect, test, rounds, fix, status Open or Resolved, resolved). Update the entry when it is later solved instead of adding a duplicate.
    - New game patch: add to `patches`, set top-level `gameVersion`, and flag mods whose `testedOn` is older (set to Needs update only if the owner says they are affected, otherwise leave the status and say they are untested on the new version).
    - Backup taken: add to `backups`.

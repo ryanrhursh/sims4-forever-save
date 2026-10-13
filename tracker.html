@@ -128,6 +128,10 @@ td input[type=checkbox]{width:1.1rem;height:1.1rem;accent-color:var(--accent)}
 .cover{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;margin:0 0 8px;display:block;background:var(--line)}
 .fileBtn{position:relative;overflow:hidden}
 .fileBtn input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;min-width:0}
+.back{display:inline-block;margin:0 0 12px;font-size:.95rem}
+.mhead{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 6px}
+.mhead h2{margin:0 6px 0 0}
+.mono{font-family:var(--f-mono);font-size:.85rem;overflow-wrap:anywhere}
 </style>
 </head>
 <body>
@@ -260,7 +264,7 @@ var SCHEMA={
   {h:"Batch",f:"batch"},{h:"Mod",f:"name"},{h:"Creator",f:"creator"},{h:"Optional?",f:"required",t:"bool",neg:true},
   {h:"Status",f:"status",t:"select",o:D.statuses},{h:"Version",f:"version"},{h:"Tested on",f:"testedOn"},{h:"Last checked",f:"lastChecked",t:"date"},
   {h:"Link URL",f:"url"},{h:"Notes",f:"notes",t:"area",cls:"notes"}];},
-  blank:function(){return {id:"new-"+Date.now().toString(36),batch:"",name:"",creator:"",category:"",required:true,status:"Not installed",version:"",testedOn:"",lastChecked:"",url:"",linkText:"Link",notes:""};}},
+  blank:function(){return {id:"new-"+Date.now().toString(36),batch:"",name:"",creator:"",category:"",required:true,status:"Not installed",version:"",latestVersion:"",latestChecked:"",testedOn:"",lastChecked:"",url:"",linkText:"Link",notes:""};}},
  issues:{label:"issue",cols:function(){return [
   {h:"Date",f:"date",t:"date"},{h:"Symptom",f:"symptom",t:"area",cls:"notes"},{h:"Version",f:"version"},{h:"Suspected mod",f:"suspect"},{h:"Test used",f:"test"},{h:"50/50 rounds",f:"rounds"},
   {h:"Fix",f:"fix",t:"area",cls:"notes"},{h:"Status",f:"status",t:"select",o:["Open","Resolved"]},{h:"Resolved",f:"resolved",t:"date"}];},
@@ -369,7 +373,7 @@ function modsView(v){
   if(editing){v.appendChild(editTable("mods",rows,"No mods match."));return;}
   v.appendChild(readTable([
    ["Batch",g("batch")],
-   ["Mod",function(x){var f=el("span");f.appendChild(document.createTextNode(x.name));if(!x.required){f.appendChild(document.createElement("br"));f.appendChild(el("span","opt","Optional"));}return f;}],
+   ["Mod",function(x){var f=el("span");f.appendChild(modLink(x));if(!x.required){f.appendChild(document.createElement("br"));f.appendChild(el("span","opt","Optional"));}return f;}],
    ["Creator",g("creator")],["Status",function(x){return pill(x.status,sCls(x.status));}],["Version",function(x){return x.version||"–";}],["Tested on",function(x){return x.testedOn||"–";}],
    ["Last checked",function(x){if(!x.lastChecked)return "–";var d=days(x.lastChecked),f=el("span",null,x.lastChecked);
       if(x.status!=="Not installed"&&x.status!=="Retired"&&d!==null&&d>D.staleDays){f.appendChild(document.createTextNode(" "));f.appendChild(pill(d+" days","stale"));}return f;}],
@@ -424,14 +428,16 @@ function saveView(v){
 function draw(keepFocus){
   var v=document.getElementById("view");v.textContent="";
   var tb=document.getElementById("tabs");tb.textContent="";
-  TABS.forEach(function(t){var b=el("button",null,t[1]);b.setAttribute("role","tab");b.setAttribute("aria-selected",t[0]===tab);b.onclick=function(){tab=t[0];armed=null;draw();};tb.appendChild(b);});
-  if(editing&&tab==="mods"){/* settings strip */
+  TABS.forEach(function(t){var b=el("button",null,t[1]);b.setAttribute("role","tab");b.setAttribute("aria-selected",t[0]===tab);b.onclick=function(){tab=t[0];armed=null;if(route())history.pushState(null,"",location.pathname+location.search);draw();window.scrollTo(0,0);};tb.appendChild(b);});
+  if(editing&&tab==="mods"&&route()===null){/* settings strip */
     var cfg=el("div","cfg");
     [["Game version","gameVersion","text"],["Stale after (days)","staleDays","number"]].forEach(function(p){
       var l=el("label",null,p[0]),i=el("input");i.type=p[2];i.value=D[p[1]];i.oninput=function(){D[p[1]]=p[2]==="number"?(parseInt(i.value,10)||0):i.value;mark();tiles();};l.appendChild(i);cfg.appendChild(l);});
     v.appendChild(cfg);
   }
-  if(tab==="mods")modsView(v);
+  var rid=route();
+  if(rid!==null)modPage(v,rid);
+  else if(tab==="mods")modsView(v);
   else if(tab==="folder")folderView(v);
   else if(tab==="issues")simpleView(v,"issues",[["Date",g("date")],["Symptom",g("symptom"),"notes"],["Version",g("version")],["Suspected mod",g("suspect")],["Test used",g("test")],["50/50 rounds",g("rounds")],["Fix",g("fix"),"notes"],["Status",function(r){return pill(r.status,sCls(r.status));}],["Resolved",g("resolved")]],D.issues,"No issues logged yet.");
   else if(tab==="patches")simpleView(v,"patches",[["Released",g("date")],["Patch",g("patch")],["Full version",g("fullVersion")],["Script mods back on?",g("scriptModsOn")],["Backup first?",g("backup")],["Mods broken",g("broken"),"notes"],["Mods updated",g("updated"),"notes"],["What was done",g("did"),"notes"],["Fixed on",g("fixedOn")]],D.patches,"No patches logged yet. Current game version: "+D.gameVersion+".");
@@ -492,7 +498,7 @@ function autoAdd(){
     if(!u.scr&&(limit||u.n>25||cat==="CC"||cat==="Build/Buy")){skipped++;return;}
     var kw=nz(u.unit),id="scan-"+kw.slice(0,40),k=id,i=2;while(have[k])k=id+"-"+(i++);have[k]=1;
     counts[cat]=(counts[cat]||0)+1;
-    rows.push({id:k,batch:"Found in scan",name:u.unit.replace(/([a-z])([A-Z])/g,"$1 $2"),creator:"",category:cat,required:false,status:"Testing",version:"",testedOn:"",lastChecked:"",url:"",linkText:"Link",
+    rows.push({id:k,batch:"Found in scan",name:u.unit.replace(/([a-z])([A-Z])/g,"$1 $2"),creator:"",category:cat,required:false,status:"Testing",version:"",latestVersion:"",latestChecked:"",testedOn:"",lastChecked:"",url:"",linkText:"Link",
       notes:"Added automatically from the Mods folder scan on "+today_+" from file names: "+u.n+" file"+(u.n===1?"":"s")+", for example "+u.ex.join("; ")+". Identify it and fill in the creator.",match:[kw],auto:2});
   });
   rows.sort(function(a,b){return a.category<b.category?-1:a.category>b.category?1:(a.name<b.name?-1:1);});
@@ -686,7 +692,7 @@ function folderView(v){
   }
   v.appendChild(el("h2","sub","Tracked mods"));
   v.appendChild(readTable([
-    ["Mod",function(r){return r.m.name;}],["Tracker status",function(r){return pill(r.m.status,sCls(r.m.status));}],
+    ["Mod",function(r){return modLink(r.m);}],["Tracker status",function(r){return pill(r.m.status,sCls(r.m.status));}],
     ["Files",function(r){return r.checkable?String(r.n):"–";}],["Size",function(r){return r.n?fmtSize(r.b):"–";}],["Newest file",function(r){return r.n?fmtDate(r.t):"–";}],
     ["Result",function(r){var x=verdict(r);return pill(x[0],x[1]);}]],A.per,"No mods."));
   listBlock(v,"Script files nested too deep",A.deep,"None. Script mods must sit in the Mods folder or one subfolder deep, and none are deeper.");
@@ -718,6 +724,79 @@ function folderView(v){
   if(A.dirs.length>400)det.appendChild(el("p","meta","Showing the first 400 of "+A.dirs.length+" folders."));
   v.appendChild(det);
 }
+
+/* ---------- mod page (#mod/<id>) ---------- */
+var navIn=false,retY=0;
+function route(){var m=/^#mod\/(.+)$/.exec(location.hash);if(!m)return null;try{return decodeURIComponent(m[1]);}catch(e){return m[1];}}
+function modLink(m){var a=el("a",null,m.name||m.id);a.href="#mod/"+encodeURIComponent(m.id);a.onclick=function(){navIn=true;retY=window.scrollY;};return a;}
+function modFiles(m){
+  if(!M||(Array.isArray(m.match)&&!m.match.length))return [];
+  var kw=modKw(m),ign=(D.modsIgnore||[]).map(nz).filter(Boolean);
+  return M.files.filter(function(f){var np=nz(f[0]);return !ignKey(f[0],ign)&&kw.some(function(k){return np.indexOf(k)>-1;});});
+}
+function verOf(p){
+  var s=p.split("/").pop().replace(/\.[^.]+$/,""),re=/(?:^|[^a-z0-9])(?:v(\d+(?:[._]\d+){0,3})|(\d+(?:[._]\d+){1,3}))(?![0-9])/gi,x,out=[];
+  while((x=re.exec(s)))out.push((x[1]||x[2]).replace(/_/g,"."));
+  return out;
+}
+function cmpVer(a,b){
+  var x=String(a||"").match(/\d+/g),y=String(b||"").match(/\d+/g);if(!x||!y)return null;
+  for(var i=0;i<Math.max(x.length,y.length);i++){var p=parseInt(x[i]||"0",10),q=parseInt(y[i]||"0",10);if(p!==q)return p<q?-1:1;}
+  return 0;
+}
+function modPage(v,id){
+  var m=D.mods.filter(function(x){return x.id===id;})[0];
+  var back=el("a","back","← Back to "+(TABS.filter(function(t){return t[0]===tab;})[0]||TABS[0])[1]);back.href=location.pathname+location.search;
+  back.onclick=function(e){e.preventDefault();if(navIn){navIn=false;history.back();}else{history.pushState(null,"",location.pathname+location.search);draw();}};
+  v.appendChild(back);
+  if(!m){v.appendChild(el("div","setup","No mod with the id "+id+" is in the tracker. It may have been renamed or removed."));return;}
+  var files=modFiles(m),checkable=!(Array.isArray(m.match)&&!m.match.length);
+  var fv=[];files.forEach(function(f){verOf(f[0]).forEach(function(x){if(fv.indexOf(x)<0)fv.push(x);});});
+  var head=el("div","mhead");head.appendChild(el("h2",null,m.name||m.id));head.appendChild(pill(m.status,sCls(m.status)));
+  if(m.category)head.appendChild(pill(m.category));if(m.batch)head.appendChild(pill(m.batch));if(!m.required)head.appendChild(pill("Optional"));
+  v.appendChild(head);
+  if(m.auto)v.appendChild(el("p","meta","Added by a Mods folder scan from file names. Tell Claude what it is"+(token&&sha?", or switch on Edit and fill it in here.":".")));
+  var dl=el("dl");
+  function row(k,val){dl.appendChild(el("dt",null,k));var dd=el("dd");if(val instanceof Node)dd.appendChild(val);else dd.textContent=val==null||val===""?"–":val;dl.appendChild(dd);}
+  if(editing){
+    var cats=Array.from(new Set(D.mods.map(function(x){return x.category;}).filter(Boolean)));
+    [{h:"Mod",f:"name"},{h:"Creator",f:"creator"},{h:"Website URL",f:"url"},{h:"Link text",f:"linkText"},{h:"Category",f:"category",t:"combo",o:cats},{h:"Batch",f:"batch"},
+     {h:"Optional?",f:"required",t:"bool",neg:true},{h:"Status",f:"status",t:"select",o:D.statuses},{h:"Installed version",f:"version"},
+     {h:"Newest known version",f:"latestVersion"},{h:"Newest version checked",f:"latestChecked",t:"date"},{h:"Tested on game version",f:"testedOn"},
+     {h:"Last checked",f:"lastChecked",t:"date"},{h:"Notes",f:"notes",t:"area"}].forEach(function(c){row(c.h,control("mods",m,c));});
+  }else{
+    row("Creator",m.creator);
+    if(/^https:\/\//.test(m.url||"")){var a=el("a",null,(m.linkText&&m.linkText!=="Link"?m.linkText+": ":"")+m.url.replace(/^https:\/\/(www\.)?/,""));a.href=m.url;a.target="_blank";a.rel="noopener";row("Website",a);}else row("Website","");
+    row("Installed version",m.version);
+    row("Version in file names",fv.length?fv.join(", ")+" (read from file names, may be wrong)":(files.length?"None found in the file names":""));
+    row("Newest known version",m.latestVersion?m.latestVersion+(m.latestChecked?" (checked "+m.latestChecked+")":""):"Not recorded yet");
+    var have=m.version||(fv.length===1?fv[0]:""),c=cmpVer(have,m.latestVersion),res;
+    if(!m.latestVersion)res=pill("Unknown: newest version not recorded");
+    else if(!have)res=pill("Unknown: installed version not recorded");
+    else if(c===null)res=pill("Can't compare "+have+" with "+m.latestVersion);
+    else res=c<0?pill("Update available: "+have+" → "+m.latestVersion,"s-Needs"):pill("Up to date","s-Working");
+    row("Version check",res);
+    var tf=el("span",null,m.testedOn||"–");
+    if(m.testedOn&&cmpVer(m.testedOn,D.gameVersion)<0){tf.appendChild(document.createTextNode(" "));tf.appendChild(pill("Not tested on "+D.gameVersion,"stale"));}
+    row("Tested on game version",tf);
+    var lc=el("span",null,m.lastChecked||"–"),d=days(m.lastChecked);
+    if(m.lastChecked&&m.status!=="Not installed"&&m.status!=="Retired"&&d!==null&&d>D.staleDays){lc.appendChild(document.createTextNode(" "));lc.appendChild(pill(d+" days","stale"));}
+    row("Last checked",lc);
+    row("Notes",m.notes);
+  }
+  var fs=files.reduce(function(a,f){return a+f[1];},0),nt=files.reduce(function(a,f){return Math.max(a,f[2]||0);},0);
+  row("In Mods folder",!checkable?"Lives outside the Mods folder, so scans do not check it":!M?"No scan yet":files.length?files.length+" file"+(files.length===1?"":"s")+", "+fmtSize(fs)+", newest "+fmtDate(nt):"Not found in the last scan");
+  if(checkable){var kw=el("span","mono",(Array.isArray(m.match)?m.match:[nz(m.name)]).join(", "));row("Scan keywords",kw);}
+  v.appendChild(dl);
+  if(M&&files.length){
+    v.appendChild(el("h2","sub","Files in the scan from "+fmtDate(Date.parse(M.scannedAt))));
+    v.appendChild(readTable([["File",function(f){return el("span","mono",f[0]);}],["Size",function(f){return fmtSize(f[1]);}],["Modified",function(f){return fmtDate(f[2]);}]],
+      files.slice().sort(function(a,b){return a[0].toLowerCase()<b[0].toLowerCase()?-1:1;}),""));
+  }
+  var nm=String(m.name||"").toLowerCase(),iss=(D.issues||[]).filter(function(i){return nm&&((i.suspect||"")+" "+(i.symptom||"")+" "+(i.fix||"")).toLowerCase().indexOf(nm)>-1;});
+  if(iss.length){v.appendChild(el("h2","sub","Issues that mention it"));v.appendChild(readTable([["Date",g("date")],["Symptom",g("symptom"),"notes"],["Fix",g("fix"),"notes"],["Status",function(r){return pill(r.status,sCls(r.status));}]],iss,""));}
+}
+window.addEventListener("hashchange",function(){if(!D)return;armed=null;var onMod=route()!==null;draw();window.scrollTo(0,onMod?0:retY);});
 
 /* ---------- auth / chrome ---------- */
 function renderChrome(){
