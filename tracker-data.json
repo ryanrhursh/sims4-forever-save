@@ -498,120 +498,6 @@
       "linkText": "",
       "notes": "Imports and manages saved households and lots. A Windows app from LuniverSims, not a mod; keep it out of Mods.",
       "match": []
-    },
-    {
-      "id": "scan-anim",
-      "batch": "Found in scan",
-      "name": "Anim",
-      "creator": "",
-      "category": "Unlisted",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 9 files in Anim. Identify it and fill in the creator.",
-      "match": [
-        "anim"
-      ],
-      "auto": true
-    },
-    {
-      "id": "scan-bazar",
-      "batch": "Found in scan",
-      "name": "Bazar",
-      "creator": "",
-      "category": "Unlisted",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 21 files in Bazar. Identify it and fill in the creator.",
-      "match": [
-        "bazar"
-      ],
-      "auto": true
-    },
-    {
-      "id": "scan-cas",
-      "batch": "Found in scan",
-      "name": "CAS",
-      "creator": "",
-      "category": "Unlisted",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 4 files in CAS. Identify it and fill in the creator.",
-      "match": [
-        "cas"
-      ],
-      "auto": true
-    },
-    {
-      "id": "scan-gameplay",
-      "batch": "Found in scan",
-      "name": "Gameplay",
-      "creator": "",
-      "category": "Unlisted",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 3 files in Gameplay. Identify it and fill in the creator.",
-      "match": [
-        "gameplay"
-      ],
-      "auto": true
-    },
-    {
-      "id": "scan-foundation",
-      "batch": "Found in scan",
-      "name": "Foundation",
-      "creator": "",
-      "category": "Unlisted",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 5 files in Foundation. Identify it and fill in the creator.",
-      "match": [
-        "foundation"
-      ],
-      "auto": true
-    },
-    {
-      "id": "scan-kawaiistacie",
-      "batch": "Found in scan",
-      "name": "KawaiiStacie",
-      "creator": "",
-      "category": "Unlisted",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12: 5 files in KawaiiStacie. Identify it and fill in the creator.",
-      "match": [
-        "kawaiistacie"
-      ],
-      "auto": true
     }
   ],
   "patches": [],
@@ -663,6 +549,11 @@
       "date": "2026-10-13",
       "summary": "Simplify the install order: fewer batches, short test gates, optional mods made required, Wicked Perversions dropped, just what is needed to get each mod.",
       "changes": "Rebuilt index.html into Batches 0 to 4 with short notes, download links and two checks per batch. Removed Nisa's Wicked Perversions. Made Basemental Drugs, Roommate Stories, My Own Business Aspiration, Pharmacist Career and Unlimited Jobs required. Added Lumpinou's Toolbox and Mood Pack Mod (needed by First Impressions). Regrouped mod batches to match. Fixed creators: Slice of Life (Kawaiistacie), More Columns in CAS (weerbesu), Wildlife Biologist and Landlord careers (KiaraSims4Mods), Seasonal Emotions (Ellesimsworld), Tray Importer (Deevo). Added download links and pack requirements."
+    },
+    {
+      "date": "2026-10-13",
+      "summary": "Asked whether the folder-named scan rows should be in the tracker.",
+      "changes": "Removed the six auto rows named after folders (Anim, Bazar, CAS, Gameplay, Foundation, KawaiiStacie), the same cleanup the page's next scan does. modsIgnore left empty so those folders are still scanned."
     }
   ],
   "modsIgnore": []
