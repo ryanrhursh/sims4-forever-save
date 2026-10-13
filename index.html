@@ -149,8 +149,8 @@ table.sym { border-collapse: collapse; width: 100%; min-width: 36rem; font-size:
   <header>
     <p style="margin:0 0 14px;font-size:.95rem"><a href="index.html"><b>Install order</b></a> &nbsp; <a href="tracker.html">Tracker</a></p>
     <h1>Sims 4 Install Order</h1>
-    <p class="lede">A batch-by-batch install plan for a modded forever world on PC, built around a restaurateur who gardens on the side. Add one batch, load your save, then tick the test gate before you move on.</p>
-    <p class="meta">Mods go in <code>Documents\Electronic Arts\The Sims 4\Mods</code>. Researched from creator pages and EA forum threads on October 9, 2026, when patch 1.128 was current. I could not confirm that every mod has a 1.128 build, so open each mod's own page and use the build it lists for your game version.</p>
+    <p class="lede">Add one batch, load your save, run that batch's checks, then move on.</p>
+    <p class="meta">Mods go in <code>Documents\Electronic Arts\The Sims 4\Mods</code>. Script files (<code>.ts4script</code>) only load from Mods or one subfolder inside it. Use the build each mod's page lists for your game version. Links checked October 13, 2026.</p>
   </header>
 
   <div class="bar" role="status" aria-live="polite">
@@ -160,13 +160,11 @@ table.sym { border-collapse: collapse; width: 100%; min-width: 36rem; font-size:
 
   <section class="routine" id="testing">
     <h2>How testing works</h2>
-    <p class="sub">Every batch ends with a test block. Pass it before you add the next batch.</p>
     <ol>
-      <li>Copy your Saves folder before each batch, and again after the batch passes. The second copy is your known-good point.</li>
-      <li>Run the rows in order: a clean start, the tasks for the mods you just added, then the wrap-up.</li>
-      <li>A pass means no error pop-ups, no new lastException file, and every task did what the mod's page says it should.</li>
-      <li>If a task fails, move that batch's files out of Mods, delete <code>localthumbcache.package</code>, and confirm the problem is gone. Add the files back one or two at a time. The steps are in When a mod breaks.</li>
-      <li>Log the result in your tracker workbook, so you can see later which build you tested.</li>
+      <li>Copy your Saves folder before each batch.</li>
+      <li>Delete <code>localthumbcache.package</code> and old lastException files from <code>Documents\Electronic Arts\The Sims 4</code>, then launch and load the save.</li>
+      <li>Run the batch's checks. A pass means no error pop-up and no new lastException file.</li>
+      <li>If something fails, see <a href="#fix">When a mod breaks</a>. If it passes, log the versions in the <a href="tracker.html">Tracker</a>.</li>
     </ol>
   </section>
 
@@ -174,60 +172,26 @@ table.sym { border-collapse: collapse; width: 100%; min-width: 36rem; font-size:
 
   <section class="routine">
     <h2>After every patch</h2>
-    <p class="sub">Do these in order each time EA updates the game.</p>
     <ol>
       <li>Turn Script Mods Allowed back on in Game Options, Other. EA resets it.</li>
-      <li>Read the new version number at the bottom right of the main menu.</li>
-      <li>Check the EA Forums broken and updated mods thread for that patch.</li>
-      <li>Update every mod that needs it and delete the old files, so no duplicates remain.</li>
-      <li>Delete <code>localthumbcache.package</code> from the Documents\Electronic Arts\The Sims 4 folder.</li>
-      <li>If the game still errors, move half your mods out, test, and repeat on the half that breaks it.</li>
+      <li>Check the EA Forums "Broken and Updated Mods" thread for the new patch.</li>
+      <li>Update the mods that need it and delete their old files.</li>
+      <li>Delete <code>localthumbcache.package</code>.</li>
     </ol>
   </section>
 
   <section class="routine" id="fix">
     <h2>When a mod breaks</h2>
-    <p class="sub">Work down this list and stop as soon as the problem goes away.</p>
     <ol>
-      <li>Turn Script Mods Allowed back on in Game Options, Other. EA resets it with each patch, and it is the most common reason script mods go quiet.</li>
-      <li>Compare your game version with the EA forum thread for the current patch. If the mod is listed as broken, update it or remove it.</li>
-      <li>Delete old and duplicate files. After an update, the previous version has to be gone, including copies in other subfolders.</li>
-      <li>Delete <code>localthumbcache.package</code> from the Documents\Electronic Arts\The Sims 4 folder, then launch again. Do this every time you change what is in Mods.</li>
-      <li>Run a vanilla test. Move the whole Mods folder to your Desktop and launch. If the problem stays, a mod is not the cause. If it goes away, one is.</li>
-      <li>Find the culprit with the 50/50 method below.</li>
-      <li>Write down what you found in the Issue Log of your tracker workbook.</li>
+      <li>Check that Script Mods Allowed is on and the mod has a build for your game version.</li>
+      <li>Delete old or duplicate copies of the mod, then delete <code>localthumbcache.package</code>.</li>
+      <li>Open the newest lastException file and look for a mod's name in it.</li>
+      <li>Still stuck: move half your mods out, test, and keep halving the half with the problem. Keep each mod with the mods it needs.</li>
     </ol>
-
-    <h3>The 50/50 method</h3>
-    <ol>
-      <li>Move half of your mod files out of Mods into a holding folder on your Desktop. Keep a script mod together with the files it needs, such as XML Injector for Seasonal Emotions.</li>
-      <li>Delete <code>localthumbcache.package</code>, launch, and load your save.</li>
-      <li>If the problem is gone, the culprit is in the half you moved out. If it is still there, it is in the half that stayed.</li>
-      <li>Split the half that holds the culprit and repeat until one mod is left.</li>
-      <li>Update or remove that mod. Move the others back in small groups, testing after each group.</li>
-    </ol>
-
-    <h3>Common symptoms</h3>
-    <div class="tablewrap">
-      <table class="sym">
-        <thead><tr><th scope="col">What you see</th><th scope="col">Likely cause</th><th scope="col">What to do</th></tr></thead>
-        <tbody>
-          <tr><td>A script mod does nothing after a patch</td><td>Script Mods Allowed was reset, or the mod has no build for the new patch.</td><td>Re-enable the setting, then check the mod's page for a build that matches your game version. Some mods run on their own and show no pie menu by design.</td></tr>
-          <tr><td>A script mod never loads</td><td>Its .ts4script file sits more than one folder deep.</td><td>Move it into Mods or one subfolder inside Mods.</td></tr>
-          <tr><td>Chefs or waiters stop working after a patch</td><td>EA changed how worker shifts are set up. Dine Out Reloaded can get blamed when another mod that touches shifts is out of date.</td><td>Update Dine Out Reloaded and any other restaurant or career mod. Check Carl's mod status post for the patch.</td></tr>
-          <tr><td>Body parts look stretched or distorted</td><td>Nisa's Wicked Perversions does not match your WickedWhims release, or an old rig or body mod is still installed.</td><td>Install the Wicked Perversions release that matches your WickedWhims version and delete outdated rig and body mods.</td></tr>
-          <tr><td>Pregnancy behaves oddly</td><td>Whims pregnancy overrides MCCC pregnancy by default.</td><td>Turn the override off in the Whims settings if you want MCCC in charge.</td></tr>
-          <tr><td>Duplicate items or odd behavior after an update</td><td>The old version of the mod is still in Mods.</td><td>Search Mods for the mod's name and delete the older files.</td></tr>
-          <tr><td>An error pop-up appears</td><td>A script mod threw an error. The game writes lastException files into the Documents\Electronic Arts\The Sims 4 folder.</td><td>Open the newest lastException file, look for a mod's name in the file paths, then update or remove that mod.</td></tr>
-          <tr><td>The game will not start, or shows a white screen</td><td>A broken mod or CC file.</td><td>Run the vanilla test, then the 50/50 method.</td></tr>
-          <tr><td>Sims miss work and the job never starts</td><td>A calendar holiday in the Ultimate Save can cause a work rabbit hole bug. The save's author reports this.</td><td>Open the calendar, set the filter to Holidays, and choose Edit on each holiday. If a holiday's edit screen does not open, delete that holiday. You can recreate it afterward.</td></tr>
-        </tbody>
-      </table>
-    </div>
   </section>
 
   <div class="foot">
-    <p>Your ticks save to this page. Creator names and versions can change, so treat each page you open as the current answer.</p>
+    <p>Your ticks save to this page.</p>
     <div class="reset-wrap" id="resetWrap"><button type="button" id="resetBtn">Clear all ticks</button></div>
   </div>
 </div>
@@ -239,135 +203,74 @@ table.sym { border-collapse: collapse; width: 100%; min-width: 36rem; font-size:
   var KIND = { script: ["Script", "k-script"], pkg: ["Package", "k-pkg"], mod: ["Mod", "k-pkg"], game: ["In game", "k-game"], step: ["Step", "k-step"], tool: ["Tool", "k-pkg"] };
 
   var BATCHES = [
-    { id: "b0", n: "Batch 0", name: "Prep", sub: "Before you download anything.",
+    { id: "s0", n: "Batch 0", name: "Prep", sub: "Before any mods.",
       items: [
-        { id: "p1", name: "Back up your saves", kind: "step", note: "Copy <code>Documents\\Electronic Arts\\The Sims 4\\Saves</code> somewhere safe. Repeat before every patch." },
-        { id: "p2", name: "Make the Mods folder structure", kind: "step", note: "Inside Mods, make folders such as Core, Gameplay, Careers and CC. Script mods only load one folder down, so keep every .ts4script file in Mods or one subfolder." },
-        { id: "p3", name: "Turn on mods in Game Options", kind: "step", note: "Game Options, Other: enable Custom Content and Mods, then Script Mods Allowed." },
-        { id: "p4", name: "Note your game version", kind: "step", note: "It shows at the bottom right of the main menu. Yours reads 1.128.90.1030. Compare it with each mod's changelog." },
-        { id: "p5", name: "Bookmark the 1.128 broken and updated mods thread", kind: "step", note: "Search EA Forums for \"Broken and Updated Sims 4 Mods and CC patch 1.128\". It lists mods creators have cleared or retired.", link: ["https://forums.ea.com/discussions/the-sims-4-mods-and-custom-content-en/re-sims-4-saying-its-corrupted-but-i-have-no-mods-or-no-way-to-repair-it-/9233090", "EA mods forum"] },
-        { id: "p6", name: "Install the Ultimate Save (NO CC)", by: "PlumbobKingdom", kind: "step", note: "Download the latest file in your language from the Files tab. The page says the save needs no mods and no CC, so nothing has to be installed before it. Objects from packs you do not own show up missing, and the page does not say which packs it uses. The author calls it a work in progress. The page does not say where to put the file; the game reads saves from Documents\\Electronic Arts\\The Sims 4\\saves.", link: ["https://www.curseforge.com/sims4/save-files/ultimate-save", "CurseForge page"] }
+        { id: "p1", name: "Back up your saves", kind: "step", note: "Copy <code>Documents\\Electronic Arts\\The Sims 4\\Saves</code> somewhere safe." },
+        { id: "p3", name: "Turn on mods", kind: "step", note: "Game Options, Other: turn on Custom Content and Mods and Script Mods Allowed, then restart the game." },
+        { id: "p6", name: "Ultimate Save (NO CC)", by: "PlumbobKingdom", kind: "step", note: "Download the latest file from the Files tab and put it in <code>Documents\\Electronic Arts\\The Sims 4\\Saves</code>.", link: ["https://www.curseforge.com/sims4/save-files/ultimate-save", "CurseForge"] }
       ],
       tests: [
-        { name: "Check the calendar holidays", note: "Open the calendar, set the filter to Holidays and choose Edit on each holiday. The save's author says a holiday whose edit screen will not open can make Sims miss work. Delete any holiday that will not open. You can recreate it afterward." },
-        { name: "Visit a second world and come back", note: "Travel to another world and return to your home world. This confirms the save's other worlds load." },
-        { name: "Run your main Sim through a normal day", note: "Cook a meal, use the shower, sleep, and go to work if they have a job. This is the baseline that later batches get compared against." }
-      ],
-      reloadNote: "Time the load from the main menu and write it down. Later batches compare against this number.",
-      logNote: "Write your baseline load time in the Notes column of your 1.128 row on the Patch Log sheet." },
-
-    { id: "b1", n: "Batch 1", name: "Foundation", sub: "The two tools almost everything else leans on.",
-      items: [
-        { id: "m1", name: "MC Command Center", by: "Deaderpool", kind: "script", note: "Story progression, population and household control. Install the core file plus only the modules you want. Windows only." },
-        { id: "m2", name: "UI Cheats Extension", by: "weerbesu", kind: "script", note: "Edit needs, skills, relationships and traits from the pie menu. Use the build the creator lists for 1.128." }
-      ],
-      tests: [
-        { name: "Open the MC Command Center menu", note: "Click a Sim and open the MC Command Center menu. Open one of its pages, then close it. The menu should open without an error pop-up." },
-        { name: "Change a need and a skill with UI Cheats", note: "Follow the creator's page to change one need and one skill on a Sim. Confirm the change is still there after a minute of play." },
-        { name: "Check the pie menus", note: "Open pie menus on a Sim, an object and the ground. They should open quickly with no blank entries." }
+        { name: "Load the save", note: "It loads with no error pop-up." },
+        { name: "Check the calendar holidays", note: "Calendar, filter to Holidays, choose Edit on each one. Delete any whose edit screen will not open; the save's author says they make Sims miss work." }
       ] },
 
-    { id: "b2", n: "Batch 2", name: "Whims and adult content", sub: "Pick one Whims mod and one Basemental mod, not several.",
+    { id: "s1", n: "Batch 1", name: "Core", sub: "Tools and libraries other mods need.",
       items: [
-        { id: "w1", name: "WickedWhims", by: "TURBODRIVER", kind: "script", note: "Includes everything in Wonderful Whims plus adult content, so skip Wonderful Whims. Delete old WickedWhims files before installing a new release.", link: ["https://turbodriver.itch.io/wickedwhims", "Creator page"] },
-        { id: "w2", name: "Nisa's Wicked Perversions", by: "Nisa", kind: "pkg", opt: true, note: "If you use it, match its version to your WickedWhims release. A mismatch causes most error reports." },
-        { id: "w3", name: "Basemental Drugs", by: "Basemental", kind: "script", opt: true, note: "Includes the alcohol features, so you do not need a separate alcohol mod." },
-        { id: "w4", name: "Decide who controls pregnancy", kind: "step", note: "Whims pregnancy overrides MCCC pregnancy by default. If you want MCCC in charge, turn the override off in the Whims settings." }
+        { id: "m1", name: "MC Command Center", by: "Deaderpool", kind: "script", note: "Install the core file plus only the modules you want.", link: ["https://deaderpool-mccc.com/", "Creator site"] },
+        { id: "m2", name: "UI Cheats Extension", by: "weerbesu", kind: "script", note: "Free on weerbesu's Patreon. Install both the .package and the .ts4script from the zip." },
+        { id: "i4", name: "XML Injector", by: "Scumbumbo", kind: "script", note: "Needed by Seasonal Emotions and the Wildlife Biologist and Landlord careers.", link: ["https://modthesims.info/d/622928", "Mod The Sims"] },
+        { id: "l1", name: "Lumpinou's Toolbox", by: "Lumpinou", kind: "script", note: "Needed by First Impressions.", link: ["https://www.patreon.com/posts/86658397", "Patreon post"] },
+        { id: "l2", name: "Mood Pack Mod", by: "Lumpinou", kind: "pkg", note: "Needed by First Impressions.", link: ["https://www.patreon.com/posts/43759541", "Patreon post"] }
       ],
       tests: [
-        { name: "Open the WickedWhims settings", note: "Open the settings the way the creator's page describes and confirm they load. Change only what you want to change." },
-        { name: "Decide who controls pregnancy", note: "Whims pregnancy overrides MCCC pregnancy by default. Pick the one you want, then check both mods' pregnancy settings so only that one is active." },
-        { name: "Check Sim bodies", note: "Look at a Sim in Create a Sim, then have one take a shower. Stretched or distorted body parts mean a Wicked Perversions mismatch or an old rig or body mod." },
-        { name: "Match the Wicked Perversions version", opt: true, note: "Compare the Nisa's Wicked Perversions version with the one your WickedWhims release lists. Most error reports come from a mismatch." },
-        { name: "Try Basemental", opt: true, note: "Open its menu, then have a Sim drink one alcoholic drink. Watch for error pop-ups." }
+        { name: "Open the MC Command Center menu", note: "Click a Sim, open it, close it. No error pop-up." },
+        { name: "Change a need with UI Cheats", note: "Right-click a need bar and change it." }
       ] },
 
-    { id: "b3", n: "Batch 3", name: "Immersion and stories", sub: "Add these one at a time and load the save after each. Mood mods overlap, so conflicts show up here first.",
+    { id: "s2", n: "Batch 2", name: "Gameplay", sub: "Whims, Basemental, and mood and story mods.",
       items: [
-        { id: "i1", name: "Slice of Life", by: "Sacrificial", kind: "script", note: "Personality quirks, illness, injuries and deeper moods." },
-        { id: "i2", name: "Meaningful Stories", by: "roBurky", kind: "script", note: "Redesigns the mood and emotion system so life events carry weight." },
-        { id: "i3", name: "First Impressions", by: "Lumpinou", kind: "mod", note: "Shows trait-based first impressions in the relationship panel." },
-        { id: "i4", name: "XML Injector", by: "Scumbumbo", kind: "script", note: "Required by Seasonal Emotions." },
-        { id: "i5", name: "Seasonal Emotions", by: "Ellesimworld", kind: "mod", note: "Sims feel happier or sadder in a season you choose. Needs XML Injector and Seasons." },
-        { id: "i6", name: "Connected Sims", by: "A.deep.indigo", kind: "mod", note: "Adds more than 50 ways for friends and family to interact." },
-        { id: "i7", name: "Roommate Stories", by: "Kawaiistacie", kind: "mod", opt: true, note: "Optional. The game already has its own roommate feature, so you do not need this to have a roommate. This mod only adds extras: roommates get a career track, friends and activities of their own and come and go without you steering them. Skip it if you want fewer mods in the load order, or add it later once everything else is stable." }
+        { id: "w1", name: "WickedWhims", by: "TURBODRIVER", kind: "script", note: "Includes Wonderful Whims, so skip that. Delete old WickedWhims files before installing a new release.", link: ["https://turbodriver.itch.io/wickedwhims", "Creator page"] },
+        { id: "w3", name: "Basemental Drugs", by: "Basemental", kind: "script", note: "Free from the Adult Mods menu on the site. Redownload after every patch.", link: ["https://basementalcc.com/", "Creator site"] },
+        { id: "i1", name: "Slice of Life", by: "Kawaiistacie", kind: "script", note: "Each feature downloads separately. Put the script file directly in Mods.", link: ["https://www.kawaii-stacie.com/post/slice-of-life-mod", "Creator site"] },
+        { id: "i2", name: "Meaningful Stories", by: "roBurky", kind: "script", note: "Free (pay what you want).", link: ["https://roburky.itch.io/sims4-meaningful-stories", "itch.io"] },
+        { id: "i3", name: "First Impressions", by: "Lumpinou", kind: "mod", note: "Needs Lumpinou's Toolbox and Mood Pack Mod. Download only one version: WithTimeDecay or NoTimeDecay.", link: ["https://www.patreon.com/posts/44832679", "Patreon post"] },
+        { id: "i5", name: "Seasonal Emotions", by: "Ellesimsworld", kind: "mod", note: "Needs XML Injector and Seasons.", link: ["https://www.patreon.com/posts/127780275", "Patreon post"] },
+        { id: "i6", name: "Connected Sims", by: "a.deep.indigo", kind: "mod", note: "Free (pay what you want).", link: ["https://adeepindigomods.itch.io/connected-sims", "itch.io"] },
+        { id: "i7", name: "Roommate Stories", by: "Kawaiistacie", kind: "mod", link: ["https://www.kawaii-stacie.com/post/roommate-stories", "Creator site"] }
       ],
       tests: [
-        { name: "Slice of Life", note: "Play a few Sim hours and watch for the new moodlets, quirks or illness its page describes." },
-        { name: "Meaningful Stories", note: "Do three or four social interactions, then check the moodlets and emotion display. This and Slice of Life both change moods, so if moods look wrong, remove the one you added last and retest." },
-        { name: "First Impressions", note: "Meet a new Sim and open the relationship panel. A first-impression sentiment should appear." },
-        { name: "Seasonal Emotions", note: "Confirm XML Injector is installed and you own Seasons. Choose the current season in the mod's settings and look for its moodlet." },
-        { name: "Connected Sims", note: "Open the pie menu on a friend or family member and look for the added interactions." },
-        { name: "Roommate Stories", opt: true, note: "Only if you installed it. Its page says to add the Roommate Stories career track, or use the cheat <code>careers.add_career KawaiiStacie_RoommateCareers_RoommateStoryCareer</code>. Then play a day and watch the roommate leave and return on their own." }
+        { name: "Open the WickedWhims settings", note: "Pick who controls pregnancy. Whims overrides MCCC by default." },
+        { name: "Play a few Sim hours", note: "New moodlets show up, and meeting a new Sim adds a first-impression sentiment." }
       ] },
 
-    { id: "b4", n: "Batch 4", name: "Restaurant and botanist", sub: "The mods and in-game steps for your Sim.",
+    { id: "s3", n: "Batch 3", name: "Business and careers", sub: "Add a few at a time.",
       items: [
-        { id: "r1", name: "Dine Out Reloaded (public version)", by: "Carl's Guides", kind: "script", note: "Free public build, V4.2 at last check. Mods that change work shifts can break and make this one look like the cause, so check Carl's mod status post for 1.128.", link: ["https://www.patreon.com/posts/64188681", "Download post"] },
-        { id: "r2", name: "Restaurateur Aspiration", by: "KiaraSims4Mods", kind: "mod", note: "Takes a Sim from newbie to a 5-star restaurant. The reward trait pays 1,000,000 simoleons.", link: ["https://snootysims.com/mods/restaurateur-aspiration/", "Listing"] },
-        { id: "r3", name: "My Own Business Aspiration", kind: "mod", opt: true, note: "Alternative that also covers retail and vet clinics. Skip it if you use the Restaurateur aspiration.", link: ["https://www.curseforge.com/sims4/mods/my-own-business-aspiration", "CurseForge"] },
-        { id: "r4", name: "Pharmacist Career", by: "midnitetech", kind: "mod", opt: true, note: "Adds an herbalism skill that suits a botanist." },
-        { id: "r5", name: "Build the restaurant after Dine Out Reloaded is installed", kind: "game", note: "Restaurants built earlier can leave chefs standing outside. Only edit the restaurant while it is closed." },
-        { id: "r6", name: "Create the Sim with the Restaurateur aspiration", kind: "game", note: "Pick it in Create a Sim." },
-        { id: "r7", name: "Start him in the Gardener career, Botanist branch", kind: "game", note: "Needs Seasons. It is semi-active, so it fits around restaurant hours.", link: ["https://help.ea.com/hu/articles/the-sims/the-sims-4/the-sims-4-gardener-career", "EA career guide"] }
+        { id: "r1", name: "Dine Out Reloaded (public version)", by: "Carl's Guides", kind: "script", note: "Build or rebuild restaurants after installing it, and only edit one while it is closed.", link: ["https://www.patreon.com/posts/64188681", "Download post"] },
+        { id: "r2", name: "Restaurateur Aspiration", by: "KiaraSims4Mods", kind: "mod", link: ["https://snootysims.com/mods/restaurateur-aspiration/", "Listing"] },
+        { id: "r3", name: "My Own Business Aspiration", kind: "mod", link: ["https://www.curseforge.com/sims4/mods/my-own-business-aspiration", "CurseForge"] },
+        { id: "r4", name: "Pharmacist Career", by: "midnitetech", kind: "mod", note: "Delete the old version before updating.", link: ["https://www.patreon.com/posts/139108219", "Patreon post"] },
+        { id: "c1", name: "More Career Opportunities", by: "KiaraSims4Mods", kind: "mod", note: "No download page found under this name. Check the creator's CurseForge list." },
+        { id: "c2", name: "midnitetech careers", by: "midnitetech", kind: "mod", note: "Take the careers you want.", link: ["https://www.patreon.com/midnitetech", "Patreon"] },
+        { id: "c3", name: "Wildlife Biologist Career", by: "KiaraSims4Mods", kind: "mod", note: "Needs Island Living, Snowy Escape and XML Injector.", link: ["https://www.curseforge.com/sims4/mods/wildlife-biologist-career", "CurseForge"] },
+        { id: "c4", name: "Landlord Career", by: "KiaraSims4Mods", kind: "mod", note: "Needs For Rent and XML Injector.", link: ["https://www.curseforge.com/sims4/mods/landlord-career", "CurseForge"] },
+        { id: "c5", name: "Unlimited Jobs", kind: "mod", link: ["https://www.curseforge.com/sims4/mods/unlimited-jobs", "CurseForge"] }
       ],
       tests: [
-        { name: "Open Carl's Dine Out Settings", note: "Find the Carl's Dine Out Settings option and confirm its menu opens. The mod's page says where to look." },
-        { name: "Build a small test restaurant", note: "Use a spare lot, not your main one. Add a host stand, a kitchen and two tables. Only edit it while it is closed." },
-        { name: "Run one shift", note: "Open it and send two or three Sims to eat. Watch that the host seats them, the waiter takes the order and the chef cooks it." },
-        { name: "Check the chef is inside", note: "A chef who stands outside means the restaurant was built before the mod was installed. Rebuild it." },
-        { name: "Work a shift yourself", opt: true, note: "Turn on the option in Carl's settings that lets your Sim be the chef or server, then work part of one shift." },
-        { name: "Check the Restaurateur aspiration", note: "In Create a Sim or the Aspirations panel, confirm Restaurateur is listed and its milestones open." },
-        { name: "Check the Gardener career", note: "Use Find a Job on the phone or computer and confirm Gardener is offered. It needs Seasons. Its daily task is harvesting produce." },
-        { name: "Check the herbalism skill", opt: true, note: "If you installed the Pharmacist Career, confirm the herbalism skill appears in the skills panel." }
+        { name: "Open Carl's Dine Out Settings", note: "The menu opens." },
+        { name: "Check the job list and aspirations", note: "Find a Job lists each new career, and both aspirations show in the Aspirations panel." }
       ] },
 
-    { id: "b5", n: "Batch 5", name: "More careers", sub: "Add a couple at a time.",
+    { id: "s4", n: "Batch 4", name: "World and CC", sub: "CC last, so a broken file is easy to trace.",
       items: [
-        { id: "c1", name: "More Career Opportunities", by: "KiaraSims4Mods", kind: "mod", note: "Adds a large set of new careers." },
-        { id: "c2", name: "midnitetech careers", by: "midnitetech", kind: "mod", note: "Chiropractor, Librarian and other active or hybrid careers. Take the ones you want." },
-        { id: "c3", name: "Wildlife Biologist career", kind: "mod", note: "Updated in late June 2026 on CurseForge." },
-        { id: "c4", name: "Landlord career", kind: "mod", note: "Updated in late June 2026 on CurseForge." },
-        { id: "c5", name: "Unlimited Jobs", kind: "mod", opt: true, note: "Lets a Sim add a second freelance trade without dropping the first.", link: ["https://www.curseforge.com/sims4/mods/unlimited-jobs", "CurseForge"] }
+        { id: "h1", name: "Home Regions", by: "Kuttoe", kind: "script", note: "Base game only.", link: ["https://kuttoe.itch.io/keep-sims-in-home-region", "Creator page"] },
+        { id: "h2", name: "Language Barriers", by: "Frankk", kind: "script", link: ["https://frankkmods.com/", "Creator site"] },
+        { id: "k1", name: "More Columns in CAS", by: "weerbesu", kind: "mod", note: "Free on weerbesu's Patreon. Pick the 3, 4 or 5 column version; needs at least 1920x1080." },
+        { id: "k2", name: "Sims 4 Tray Importer", by: "Deevo", kind: "tool", note: "A Windows app from LuniverSims, not a mod. Do not put it in Mods." },
+        { id: "k3", name: "Add CC in small batches", kind: "step", note: "Put it in <code>Mods\\CC</code>, a few creators at a time." }
       ],
       tests: [
-        { name: "Check the job list", note: "Open Find a Job and confirm each career you installed is listed." },
-        { name: "Work a full day in one new career", note: "Join one new career with a test Sim, send them to work, and confirm they leave, come back and get paid. If they never leave, check the calendar holidays." },
-        { name: "Check the career panel text", note: "Open the career panel and confirm the daily task and promotion requirements show text, not blank entries." },
-        { name: "Check the Gardener career", note: "Open your main Sim's career panel and confirm the Gardener career still shows with its promotion requirements." },
-        { name: "Add a second freelance trade", opt: true, note: "With Unlimited Jobs, pick a second freelance trade and confirm it is added instead of replacing the first." }
-      ] },
-
-    { id: "b6", n: "Batch 6", name: "Forever world setup", sub: "Settings and tests that make the world run without you.",
-      items: [
-        { id: "h1", name: "Home Regions", by: "Kuttoe", kind: "script", note: "Keeps walkby Sims and townies to Sims who live in the local world, so only Willow Creek residents show up at Willow Creek venues. It creates homeless local Sims when a role needs filling and spreads townies evenly across worlds. Sims you invite by phone, club or group are exempt. Needs only the Base Game. CurseForge lists the July 6, 2026 release for patch 1.125.59 and the creator's page was updated October 8, so look for a build that names 1.128.", link: ["https://kuttoe.itch.io/keep-sims-in-home-region", "Creator page"] },
-        { id: "h2", name: "Language Barriers", by: "Frankk", kind: "script", note: "This is the mod that gives Sims different languages; Home Regions does not. It adds six: Simlish, Komorebigo, Selvadoradian, Sixami, Toki Sulani and Windenburgish. Sims get their home world's language and can learn others from textbooks, the Simlingo app or other Sims. I could not confirm a 1.128 build, so check the creator's site for the latest version before you install.", link: ["https://frankkmods.com/", "Creator site"] },
-        { id: "h3", name: "Review the Home Regions filters", kind: "game", note: "The mod has regional and soft filters, venue and career filters, and tourist toggles. Leave the defaults until you have watched a Sim week, then adjust." },
-        { id: "f1", name: "Pick one story progression driver", kind: "step", note: "Let MCCC or the base game's Neighborhood Stories handle NPC life events, not both." },
-        { id: "f2", name: "Set MCCC story progression and population", kind: "game", note: "Turn on the NPC events you want. If townies disappear, check the culling setting in MCCC population." },
-        { id: "f3", name: "Drop in a brand new Sim from the household manager", kind: "game", note: "Confirm you can add a fresh household at any time without breaking the save." },
-        { id: "f4", name: "Play one Sim week and watch the neighborhood", kind: "game", note: "Look for NPCs changing jobs, moving, marrying and having kids. Also meet Sims in two different worlds and check that the locals live there and speak that world's language." }
-      ],
-      tests: [
-        { name: "Open the Home Regions settings", note: "Open the mod's menu and look at the regional, venue and career filters and the tourist toggles. Confirm they load." },
-        { name: "Check townies in two worlds", note: "Visit a public venue in two different worlds and click several walkbys or customers. Their households should live in the world you are in. Sims you invite by phone, club or group are exempt." },
-        { name: "Check Language Barriers", note: "Click your main Sim and confirm a language shows. The mod's page says where to look. Then meet a Sim from another world and talk. Without a shared language, communication is limited and miscommunication moodlets can appear." },
-        { name: "Check MCCC story progression", note: "Open the MCCC settings and confirm the story progression options you chose were saved." }
-      ] },
-
-    { id: "b7", n: "Batch 7", name: "CC", sub: "Last, so a broken file is easy to trace.",
-      items: [
-        { id: "k1", name: "More Columns in CAS", by: "Simmattically", kind: "mod", note: "Keeps a large CC collection browsable." },
-        { id: "k2", name: "Sims 4 Tray Importer", kind: "tool", note: "Imports and manages saved households and lots." },
-        { id: "k3", name: "Add CC in small batches", kind: "step", note: "Put it in <code>Mods\\CC</code>. Add a few creators at a time and open Create a Sim after each." },
-        { id: "k4", name: "Browse starting-point creators", kind: "step", opt: true, note: "Maxis match: Simpliciaty, Harrie. Alpha: Pixicat, Arethabee, Sixam. Build and buy: PeacemakerIC. Check each creator's current status." }
-      ],
-      tests: [
-        { name: "Scroll each CC category in Create a Sim", note: "Open the categories you added items to. Items should show real thumbnails, with no blank or placeholder entries." },
-        { name: "Apply a new item and rotate the Sim", note: "Apply one new hair or clothing item, rotate the Sim, and try it on an everyday and a formal outfit." },
-        { name: "Place a CC object in Build mode", note: "Search for a new object, place it on a lot, then delete it." },
-        { name: "Check the extra CAS columns", note: "With More Columns in CAS installed, confirm the extra columns show and the layout is not broken." },
-        { name: "Check Tray Importer", opt: true, note: "Open it and confirm it lists your saved households." }
+        { name: "Check townies and languages", note: "Walkbys at a venue live in that world, and your Sim shows a language." },
+        { name: "Scroll Create a Sim", note: "CC shows real thumbnails and the extra columns appear." }
       ] }
   ];
 
@@ -377,14 +280,9 @@ table.sym { border-collapse: collapse; width: 100%; min-width: 36rem; font-size:
   var TEST_CACHE = {};
   function testsFor(b) {
     if (TEST_CACHE[b.id]) return TEST_CACHE[b.id];
-    var list = [];
-    list.push({ id: b.id + "-s1", phase: "start", name: "Start clean", note: "Delete old lastException files from Documents\\Electronic Arts\\The Sims 4 and delete <code>localthumbcache.package</code>. Check that Script Mods Allowed is on, then launch and load the save. No error pop-up should appear." });
-    (b.tests || []).forEach(function (t, i) {
-      list.push({ id: b.id + "-t" + (i + 1), phase: "test", name: t.name, note: t.note, opt: t.opt });
+    var list = (b.tests || []).map(function (t, i) {
+      return { id: b.id + "-t" + (i + 1), phase: "test", name: t.name, note: t.note, opt: t.opt };
     });
-    list.push({ id: b.id + "-w1", phase: "wrap", name: "Save, quit to the main menu and reload", note: b.reloadNote || "Time the load and compare it with your Batch 0 baseline. A big jump points to the batch you just added." });
-    list.push({ id: b.id + "-w2", phase: "wrap", name: "Check for a new lastException file", note: "Look in Documents\\Electronic Arts\\The Sims 4. If no new file was written, the batch passed. Copy your Saves folder as a known-good backup and add a row on the Backups sheet." });
-    list.push({ id: b.id + "-w3", phase: "wrap", name: "Log the result", note: b.logNote || "In your tracker workbook, set each mod from this batch to Working and fill in the version installed, the game version tested on and the last checked date." });
     TEST_CACHE[b.id] = list;
     return list;
   }
@@ -425,8 +323,8 @@ table.sym { border-collapse: collapse; width: 100%; min-width: 36rem; font-size:
       out += '<ul class="items">';
       b.items.forEach(function (it) { out += itemHtml(it, false); });
       out += "</ul>";
-      out += '<div class="testhead"><h3>' + (b.id === "b0" ? "Test the baseline" : "Test this batch") + '</h3><span class="bcount" id="tc-' + b.id + '"></span></div>';
-      out += '<p class="sub">Every required row has to pass before you add the next batch. If a task fails, open <a href="#fix">When a mod breaks</a>.</p>';
+      out += '<div class="testhead"><h3>' + (b.id === "s0" ? "Test the baseline" : "Test this batch") + '</h3><span class="bcount" id="tc-' + b.id + '"></span></div>';
+      out += '<p class="sub">Start clean as in <a href="#testing">How testing works</a>, then run these.</p>';
       out += '<ul class="items">';
       testsFor(b).forEach(function (t) { out += itemHtml(t, true); });
       out += "</ul></section>";

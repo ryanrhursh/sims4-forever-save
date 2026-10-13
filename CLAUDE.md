@@ -3,7 +3,7 @@
 Repo for the owner's modded Sims 4 forever world (PC, all expansion packs). Served with GitHub Pages at https://ryanrhursh.github.io/sims4-forever-save/ (deploys from `main`, root; allow up to 10 minutes after a push).
 
 ## Files
-- `index.html`: install-order checklist (batches b0 to b7, with test gates). Ticks live in the owner's browser (localStorage), so Claude cannot read or change them. Edit only when mod advice changes.
+- `index.html`: install-order checklist (Batches 0 to 4, ids s0 to s4, each with a short test gate). Ticks live in the owner's browser (localStorage), so Claude cannot read or change them. Edit only when mod advice changes.
 - `tracker.html`: viewer and editor. Never put data in it. The owner can turn on editing with a fine-grained GitHub token (Contents read/write on this repo) kept in their browser; Save then commits straight to `tracker-data.json` on `main`.
 - `mods-manifest.json`: the last scan of the owner's real Mods folder, written by the page's Mods folder tab (file names, sizes and dates only, never mod files). Do not hand-edit it. It may not exist yet.
 - `tracker-data.json`: the single source of truth for the tracker. Every tracker change is an edit to this file.
@@ -35,7 +35,7 @@ The owner opens a new session per task and pastes a rundown of what they did in 
 - Statements about whether a mod works on a patch come from the owner or from a source you fetched this session. Cite the source in `notes`. Do not rely on memory for current mod status.
 - Mod facts: the owner's game build was 1.128.90.1030 (DX11) on 2026-10-12. The EA forum "Broken and Updated Mods" thread for each patch is the first place to check.
 - Script Mods Allowed in game settings resets after each patch. Remind the owner when logging a patch.
-- Keep `index.html` text plain and free of claims you have not checked. Roommate Stories is optional because the game has its own roommate feature.
+- Keep `index.html` text plain and free of claims you have not checked. Each row gives only what is needed to get the mod: creator, download link, required mods or packs.
 - Do not commit `.xlsx` copies or other generated duplicates of the data.
 
 ## Git
