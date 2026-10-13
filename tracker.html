@@ -455,7 +455,9 @@ var JUNK=/\.(txt|md|png|jpe?g|gif|html?|pdf|url|ini|db|log|docx?|rtf)$/i;
 function nz(s){return String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");}
 function fmtSize(b){if(b>=1073741824)return (b/1073741824).toFixed(2)+" GB";if(b>=1048576)return (b/1048576).toFixed(1)+" MB";if(b>=1024)return Math.round(b/1024)+" KB";return b+" B";}
 function fmtDate(ms){if(!ms)return "–";var d=new Date(ms);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
-function modKw(m){return (Array.isArray(m.match)?m.match:[m.name]).map(nz).filter(function(k){return k.length>=3;});}
+function modKw(m){return (Array.isArray(m.match)?m.match:[m.name]).map(function(k){k=String(k||"").trim();return /\/$/.test(k)?{dir:"/"+k.toLowerCase()}:nz(k);}).filter(function(k){return typeof k==="object"?k.dir.length>2:k.length>=3;});}
+/* a keyword ending in "/" names a folder: every file inside a folder of that name matches */
+function kwHit(kw,p,np){var lp="/"+p.toLowerCase();return kw.some(function(k){return typeof k==="object"?lp.indexOf(k.dir)>-1:np.indexOf(k)>-1;});}
 function ignKey(p,ign){
   if(!ign.length)return null;
   var g=p.split("/");g[g.length-1]=g[g.length-1].replace(/\.[^.]+$/,"");
@@ -522,7 +524,7 @@ function analyze(ud){
     var isI=!!ignKey(p,ign),names=[];
     if(isI){ignored++;ignoredB+=f[1];}
     else{
-      per.forEach(function(r){if(r.kw.some(function(k){return np.indexOf(k)>-1;})){r.n++;r.b+=f[1];if(f[2]>r.t)r.t=f[2];names.push(r.m.name);}});
+      per.forEach(function(r){if(kwHit(r.kw,p,np)){r.n++;r.b+=f[1];if(f[2]>r.t)r.t=f[2];names.push(r.m.name);}});
       if(!names.length&&!JUNK.test(p)){
         var fs=segs.slice(0,-1),unit=unitOf(segs,p,ud,direct);
         var u=unm[unit]||(unm[unit]={unit:unit,n:0,b:0,t:0,scr:false,pk:false,ex:[]});if(u.ex.length<3)u.ex.push(p);if(ext==="ts4script")u.scr=true;if(ext==="ts4script"||ext==="package")u.pk=true;u.n++;u.b+=f[1];if(f[2]>u.t)u.t=f[2];
@@ -732,7 +734,7 @@ function modLink(m){var a=el("a",null,m.name||m.id);a.href="#mod/"+encodeURIComp
 function modFiles(m){
   if(!M||(Array.isArray(m.match)&&!m.match.length))return [];
   var kw=modKw(m),ign=(D.modsIgnore||[]).map(nz).filter(Boolean);
-  return M.files.filter(function(f){var np=nz(f[0]);return !ignKey(f[0],ign)&&kw.some(function(k){return np.indexOf(k)>-1;});});
+  return M.files.filter(function(f){var np=nz(f[0]);return !ignKey(f[0],ign)&&kwHit(kw,f[0],np);});
 }
 function verOf(p){
   var s=p.split("/").pop().replace(/\.[^.]+$/,""),re=/(?:^|[^a-z0-9])(?:v(\d+(?:[._]\d+){0,3})|(\d+(?:[._]\d+){1,3}))(?![0-9])/gi,x,out=[];
@@ -786,7 +788,7 @@ function modPage(v,id){
   }
   var fs=files.reduce(function(a,f){return a+f[1];},0),nt=files.reduce(function(a,f){return Math.max(a,f[2]||0);},0);
   row("In Mods folder",!checkable?"Lives outside the Mods folder, so scans do not check it":!M?"No scan yet":files.length?files.length+" file"+(files.length===1?"":"s")+", "+fmtSize(fs)+", newest "+fmtDate(nt):"Not found in the last scan");
-  if(checkable){var kw=el("span","mono",(Array.isArray(m.match)?m.match:[nz(m.name)]).join(", "));row("Scan keywords",kw);}
+  if(checkable){var kw=el("span","mono",(Array.isArray(m.match)?m.match:[nz(m.name)]).map(function(k){return /\/$/.test(k)?"everything in "+k.slice(0,-1)+" folders":k;}).join(", "));row("Scan keywords",kw);}
   v.appendChild(dl);
   if(M&&files.length){
     v.appendChild(el("h2","sub","Files in the scan from "+fmtDate(Date.parse(M.scannedAt))));

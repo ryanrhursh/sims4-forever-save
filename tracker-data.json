@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-12",
+  "updated": "2026-10-13",
   "gameVersion": "1.128.90.1030",
   "staleDays": 45,
   "statuses": [
@@ -154,6 +154,26 @@
       "notes": "Includes everything in Wonderful Whims, so skip that one. Delete old WickedWhims files before installing a new release.",
       "match": [
         "wickedwhims"
+      ]
+    },
+    {
+      "id": "wickedwhims-animations",
+      "batch": "Batch 2",
+      "name": "WickedWhims animations",
+      "creator": "Various",
+      "category": "Adult",
+      "required": false,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Animation packs for WickedWhims from several creators. Everything in the Mods/Anim folder is a WickedWhims animation (owner, 2026-10-13). Needs WickedWhims. In the 2026-10-13 scan: Azmodan22, KhlasGay, OLL, 0nizu, CIPHER UVS and GreyNaya packs.",
+      "match": [
+        "anim/"
       ]
     },
     {
@@ -732,6 +752,11 @@
       "date": "2026-10-13",
       "summary": "Fix the MCCC modules too.",
       "changes": "Added mccheats, mcclubs, mccontrol, mcgedcom and mctuner to MC Command Center's scan keywords and removed the five scan rows for those files. Status left as Not installed."
+    },
+    {
+      "date": "2026-10-13",
+      "summary": "Anything in the Anim folder is a WickedWhims animation.",
+      "changes": "Added a WickedWhims animations row (Batch 2, Adult, optional) that matches everything in the Anim folder. tracker.html: a scan keyword ending in / now matches every file inside a folder of that name. Status left as Not installed."
     }
   ],
   "modsIgnore": []
