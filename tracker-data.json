@@ -47,7 +47,12 @@
         "mc_occult",
         "mc_cleaner",
         "mc_population",
-        "mc_cas"
+        "mc_cas",
+        "mccheats",
+        "mcclubs",
+        "mccontrol",
+        "mcgedcom",
+        "mctuner"
       ]
     },
     {
@@ -656,111 +661,6 @@
         "kawaiistacieskincare"
       ],
       "auto": 2
-    },
-    {
-      "id": "scan-mccheats",
-      "batch": "Found in scan",
-      "name": "mc cheats",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12 from file names: 1 file, for example Foundation/mc_cheats.ts4script. Identify it and fill in the creator.",
-      "match": [
-        "mccheats"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-mcclubs",
-      "batch": "Found in scan",
-      "name": "mc clubs",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12 from file names: 1 file, for example Foundation/mc_clubs.ts4script. Identify it and fill in the creator.",
-      "match": [
-        "mcclubs"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-mccontrol",
-      "batch": "Found in scan",
-      "name": "mc control",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12 from file names: 1 file, for example Foundation/mc_control.ts4script. Identify it and fill in the creator.",
-      "match": [
-        "mccontrol"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-mcgedcom",
-      "batch": "Found in scan",
-      "name": "mc gedcom",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12 from file names: 1 file, for example Foundation/mc_gedcom.ts4script. Identify it and fill in the creator.",
-      "match": [
-        "mcgedcom"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-mctuner",
-      "batch": "Found in scan",
-      "name": "mc tuner",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12 from file names: 1 file, for example Foundation/mc_tuner.ts4script. Identify it and fill in the creator.",
-      "match": [
-        "mctuner"
-      ],
-      "auto": 2
     }
   ],
   "patches": [],
@@ -827,6 +727,11 @@
       "date": "2026-10-13",
       "summary": "Seasonal Emotions shows as not in the Mods folder, but ellesimsworld_GeneralSeason_Emotions is in the Gameplay folder.",
       "changes": "Added scan keyword seasonemotions to Seasonal Emotions so Gameplay/ellesimsworld_GeneralSeason_Emotions.package matches. Status left as Not installed."
+    },
+    {
+      "date": "2026-10-13",
+      "summary": "Fix the MCCC modules too.",
+      "changes": "Added mccheats, mcclubs, mccontrol, mcgedcom and mctuner to MC Command Center's scan keywords and removed the five scan rows for those files. Status left as Not installed."
     }
   ],
   "modsIgnore": []
