@@ -600,6 +600,66 @@
         "newtownieandrandomnames",
         "newrandomnames"
       ]
+    },
+    {
+      "id": "color-sliders",
+      "batch": "Batch 4",
+      "name": "Color Sliders",
+      "creator": "thepancake1 and MizoreYukii",
+      "category": "CC",
+      "required": true,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "2026-10-13",
+      "url": "https://www.tumblr.com/thepancake1mods/817528250997833728/color-sliders-v4a",
+      "linkText": "Tumblr post",
+      "notes": "Adds color sliders to Create a Sim. Installed file: CAS/thepancake1_ColorSlidersUI_EnableSliders_v4f.package. Newest version not confirmed on 2026-10-13.",
+      "match": [
+        "colorsliders"
+      ]
+    },
+    {
+      "id": "more-traits-in-cas",
+      "batch": "Batch 4",
+      "name": "More Traits in CAS",
+      "creator": "thepancake1 and MizoreYukii",
+      "category": "CC",
+      "required": true,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "2026-10-13",
+      "url": "https://www.patreon.com/pancakemizore/posts/more-traits-in-62838078",
+      "linkText": "Patreon post",
+      "notes": "More trait slots in Create a Sim. UI mod, so it often needs an update after a patch. Installed file is labelled v2d for game 1.121 (CAS/thepancake1-MoreTraitsInCAS-v2d-1.121.package); check the post for a build for your game version.",
+      "match": [
+        "moretraitsincas"
+      ]
+    },
+    {
+      "id": "luumia-body-hair",
+      "batch": "Batch 4",
+      "name": "Body Hair v5+",
+      "creator": "Luumia",
+      "category": "CC",
+      "required": true,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "2026-10-13",
+      "url": "https://www.patreon.com/luumia/posts/body-hair-v5-47986877",
+      "linkText": "Patreon post",
+      "notes": "Body hair CC, found under Tattoos in Create a Sim. Installed file: CAS/LUUMIA_BodyHairV5PLUS_Merged_FIX.package.",
+      "match": [
+        "luumiabodyhair"
+      ]
     }
   ],
   "patches": [],
@@ -686,6 +746,11 @@
       "date": "2026-10-13",
       "summary": "The KawaiiStacie ones are all Slice of Life. Delete Mods.rar (already removed from the folder). New Townie and Random Names is from Mod The Sims. Bazar folder is all CC. Roommate Buffs belongs to Roommate Stories.",
       "changes": "Slice of Life now matches everything in the KawaiiStacie folder; removed the five KawaiiStacie scan rows. Roommate Stories gained keyword roommatebuffs. Added New Random Names by Cowplant's Cake (Batch 4, World, Testing, newest known version 1.10 from Mod The Sims). Added bazar to modsIgnore. Removed Mods.rar from mods-manifest.json at the owner's request."
+    },
+    {
+      "date": "2026-10-13",
+      "summary": "Gave links for Color Sliders, More Traits in CAS and LUUMIA body hair; asked which file is the Simdulgence one.",
+      "changes": "Added Color Sliders and More Traits in CAS (thepancake1 and MizoreYukii) and Body Hair v5+ (Luumia) to Batch 4 as Testing with the owner's links. Newest versions left blank (not confirmed)."
     }
   ],
   "modsIgnore": [
