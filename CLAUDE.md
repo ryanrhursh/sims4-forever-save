@@ -1,6 +1,6 @@
 # Sims 4 forever save: instructions for Claude
 
-Repo for the owner's modded Sims 4 forever world (PC, all expansion packs). Served with GitHub Pages at https://ryanrhursh.github.io/sims4-forever-save/ (deploys from `main`, root; allow up to 10 minutes after a push).
+Repo for the owner's modded Sims 4 forever world (PC, all expansion, game and stuff packs). Served with GitHub Pages at https://ryanrhursh.github.io/sims4-forever-save/ (deploys from `main`, root; allow up to 10 minutes after a push).
 
 ## Files
 - `index.html`: install-order checklist (Batches 0 to 4, ids s0 to s4, each with a short test gate). Ticks live in the owner's browser (localStorage), so Claude cannot read or change them. Edit only when mod advice changes.

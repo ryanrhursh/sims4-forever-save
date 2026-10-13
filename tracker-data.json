@@ -524,26 +524,6 @@
       ]
     },
     {
-      "id": "more-career-opportunities",
-      "batch": "Batch 3",
-      "name": "More Career Opportunities",
-      "creator": "KiaraSims4Mods",
-      "category": "Careers",
-      "required": true,
-      "status": "Not installed",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "",
-      "notes": "Adds a large set of new careers. No download page found under this name on 2026-10-13; check the creator's CurseForge list.",
-      "match": [
-        "morecareeropportunities"
-      ]
-    },
-    {
       "id": "midnitetech-careers",
       "batch": "Batch 3",
       "name": "midnitetech careers",
@@ -1586,6 +1566,11 @@
       "date": "2026-10-13",
       "summary": "Adding all the active careers from kiarasims4mods.net/careers/active/; check each career's page for what is needed to make it work.",
       "changes": "Added 17 KiaraSims4Mods active careers to Batch 3 (Not installed) with packs, required mods, venue, skills, degree jump and rewards in notes, and setup steps to place and furnish each venue (objects from the Active Career Tutorial Guide) plus career-specific routines. Added the mods they need: Universal Venue List and Work Interactions Pie Menu (Batch 1), Singing Gig Event, Tax System and Political party traits (Batch 3)."
+    },
+    {
+      "date": "2026-10-13",
+      "summary": "I have all game and stuff packs. Remove More Career Opportunities.",
+      "changes": "Removed the More Career Opportunities row from the tracker and the install order. CLAUDE.md now says the owner has all expansion, game and stuff packs."
     }
   ],
   "modsIgnore": [
