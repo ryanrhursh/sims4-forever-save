@@ -248,7 +248,8 @@
       "linkText": "Patreon post",
       "notes": "Needs XML Injector and Seasons.",
       "match": [
-        "seasonalemotions"
+        "seasonalemotions",
+        "seasonemotions"
       ]
     },
     {
@@ -821,6 +822,11 @@
       "date": "2026-10-13",
       "summary": "Make each mod's name in the Mods folder section a link to a page for that mod with its website and installed vs newest known version.",
       "changes": "tracker.html: added a page per mod at tracker.html#mod/<id>, linked from the Mods and Mods folder tabs. It shows creator, website, installed version, version read from file names, newest known version and a version check, tested-on game version, last checked, files from the latest scan, scan keywords and related issues, and is editable when editing is on. tracker-data.json: added empty latestVersion and latestChecked to every mod."
+    },
+    {
+      "date": "2026-10-13",
+      "summary": "Seasonal Emotions shows as not in the Mods folder, but ellesimsworld_GeneralSeason_Emotions is in the Gameplay folder.",
+      "changes": "Added scan keyword seasonemotions to Seasonal Emotions so Gameplay/ellesimsworld_GeneralSeason_Emotions.package matches. Status left as Not installed."
     }
   ],
   "modsIgnore": []
