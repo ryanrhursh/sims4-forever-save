@@ -213,7 +213,8 @@
       "linkText": "Creator site",
       "notes": "Personality quirks, illness, injuries and deeper moods. Each feature downloads separately; put the script file directly in Mods. Creator corrected from Sacrificial on 2026-10-13 (Kawaiistacie's site and Patreon).",
       "match": [
-        "sliceoflife"
+        "sliceoflife",
+        "kawaiistacie/"
       ]
     },
     {
@@ -315,7 +316,8 @@
       "notes": "Roommates get careers, friends and activities of their own.",
       "match": [
         "roommatestories",
-        "roommatecareers"
+        "roommatecareers",
+        "roommatebuffs"
       ]
     },
     {
@@ -579,109 +581,25 @@
       "match": []
     },
     {
-      "id": "scan-kawaiistaciefun",
-      "batch": "Found in scan",
-      "name": "Kawaii Stacie ♡ Fun",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
+      "id": "new-random-names",
+      "batch": "Batch 4",
+      "name": "New Random Names",
+      "creator": "Cowplant's Cake",
+      "category": "World",
+      "required": true,
       "status": "Testing",
       "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
+      "latestVersion": "1.10",
+      "latestChecked": "2026-10-13",
       "testedOn": "",
       "lastChecked": "2026-10-13",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12 from file names: 1 file, for example KawaiiStacie/KawaiiStacie ♡ Fun Juice.ts4script. Identify it and fill in the creator.",
+      "url": "https://modthesims.info/d/633909/new-random-names.html",
+      "linkText": "Mod The Sims",
+      "notes": "Adds names from many regions to the random name button and to townies (humans, pets and robots). Base game. One file: New Townie and Random Names.package. Mod The Sims lists 1.10 (28 Oct 2024) as the latest version and game version 1.116 as compatible (checked 2026-10-13).",
       "match": [
-        "kawaiistaciefun"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-kawaiistaciehealth",
-      "batch": "Found in scan",
-      "name": "Kawaii Stacie ♡ Health",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "2026-10-13",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12 from file names: 1 file, for example KawaiiStacie/KawaiiStacie ♡ Health.ts4script. Identify it and fill in the creator.",
-      "match": [
-        "kawaiistaciehealth"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-kawaiistaciemenstrual",
-      "batch": "Found in scan",
-      "name": "Kawaii Stacie ♡ Menstrual",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "2026-10-13",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12 from file names: 1 file, for example KawaiiStacie/KawaiiStacie ♡ Menstrual Cycle.ts4script. Identify it and fill in the creator.",
-      "match": [
-        "kawaiistaciemenstrual"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-kawaiistaciemy",
-      "batch": "Found in scan",
-      "name": "Kawaii Stacie ♡ My",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "2026-10-13",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12 from file names: 1 file, for example KawaiiStacie/KawaiiStacie ♡ My Personality.ts4script. Identify it and fill in the creator.",
-      "match": [
-        "kawaiistaciemy"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-kawaiistacieskincare",
-      "batch": "Found in scan",
-      "name": "Kawaii Stacie ♡ Skincare",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "2026-10-13",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-12 from file names: 1 file, for example KawaiiStacie/KawaiiStacie ♡ Skincare Beauty.ts4script. Identify it and fill in the creator.",
-      "match": [
-        "kawaiistacieskincare"
-      ],
-      "auto": 2
+        "newtownieandrandomnames",
+        "newrandomnames"
+      ]
     }
   ],
   "patches": [],
@@ -763,9 +681,15 @@
       "date": "2026-10-13",
       "summary": "Set all found mods to Testing. Everything in the CC folder is CC.",
       "changes": "Added cc to modsIgnore so the 34 files in the CC folder are skipped by scans and saved only as a count. Added scan keyword morecascolumns to More Columns in CAS so CAS/More_CAS_Columns_(5_Columns).package matches. Set WickedWhims animations and More Columns in CAS from Not installed to Testing (every other found mod was already Testing). Set lastChecked to 2026-10-13 on the 20 Testing mods that had none."
+    },
+    {
+      "date": "2026-10-13",
+      "summary": "The KawaiiStacie ones are all Slice of Life. Delete Mods.rar (already removed from the folder). New Townie and Random Names is from Mod The Sims. Bazar folder is all CC. Roommate Buffs belongs to Roommate Stories.",
+      "changes": "Slice of Life now matches everything in the KawaiiStacie folder; removed the five KawaiiStacie scan rows. Roommate Stories gained keyword roommatebuffs. Added New Random Names by Cowplant's Cake (Batch 4, World, Testing, newest known version 1.10 from Mod The Sims). Added bazar to modsIgnore. Removed Mods.rar from mods-manifest.json at the owner's request."
     }
   ],
   "modsIgnore": [
-    "cc"
+    "cc",
+    "bazar"
   ]
 }
