@@ -751,10 +751,16 @@
       "date": "2026-10-13",
       "summary": "Gave links for Color Sliders, More Traits in CAS and LUUMIA body hair; asked which file is the Simdulgence one.",
       "changes": "Added Color Sliders and More Traits in CAS (thepancake1 and MizoreYukii) and Body Hair v5+ (Luumia) to Batch 4 as Testing with the owner's links. Newest versions left blank (not confirmed)."
+    },
+    {
+      "date": "2026-10-13",
+      "summary": "Ignore the Simdulgence file as CC.",
+      "changes": "Added simdulgence to modsIgnore, which skips any file with Simdulgence in its name."
     }
   ],
   "modsIgnore": [
     "cc",
-    "bazar"
+    "bazar",
+    "simdulgence"
   ]
 }
