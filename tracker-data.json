@@ -53,6 +53,20 @@
         "mccontrol",
         "mcgedcom",
         "mctuner"
+      ],
+      "setup": [
+        {
+          "task": "Pick one story progression driver",
+          "note": "Let MCCC or the game's Neighborhood Stories handle NPC life events, not both. Turn the other one off.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Set MCCC story progression and population",
+          "note": "Turn on the NPC events you want. If townies start disappearing, check the culling setting under MCCC population.",
+          "done": false,
+          "doneOn": ""
+        }
       ]
     },
     {
@@ -154,6 +168,20 @@
       "notes": "Includes everything in Wonderful Whims, so skip that one. Delete old WickedWhims files before installing a new release.",
       "match": [
         "wickedwhims"
+      ],
+      "setup": [
+        {
+          "task": "Decide who controls pregnancy",
+          "note": "Whims pregnancy overrides MCCC pregnancy by default. If you want MCCC in charge, turn the override off in the WickedWhims settings, then check both mods so only one is active.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Go through the WickedWhims settings",
+          "note": "Open them the way the creator's page describes and change only what you want.",
+          "done": false,
+          "doneOn": ""
+        }
       ]
     },
     {
@@ -215,6 +243,14 @@
       "match": [
         "sliceoflife",
         "kawaiistacie/"
+      ],
+      "setup": [
+        {
+          "task": "Choose which Slice of Life features are on",
+          "note": "Your files include Health and Beauty & Fashion pickers. Use them in game to pick the features you want.",
+          "done": false,
+          "doneOn": ""
+        }
       ]
     },
     {
@@ -235,6 +271,14 @@
       "notes": "Redesigns the mood and emotion system. Mood mods overlap, so add one at a time.",
       "match": [
         "meaningfulstories"
+      ],
+      "setup": [
+        {
+          "task": "Go through the Meaningful Stories settings",
+          "note": "Every feature is optional and can be adjusted in its in-game settings menu (creator's itch.io page).",
+          "done": false,
+          "doneOn": ""
+        }
       ]
     },
     {
@@ -276,6 +320,14 @@
       "match": [
         "seasonalemotions",
         "seasonemotions"
+      ],
+      "setup": [
+        {
+          "task": "Choose your season in the Seasonal Emotions settings",
+          "note": "Sims feel happier or sadder in the season you pick. Needs XML Injector and Seasons.",
+          "done": false,
+          "doneOn": ""
+        }
       ]
     },
     {
@@ -318,6 +370,14 @@
         "roommatestories",
         "roommatecareers",
         "roommatebuffs"
+      ],
+      "setup": [
+        {
+          "task": "Give your roommates the Roommate Stories career track",
+          "note": "Its page says to add the career track, or use the cheat careers.add_career KawaiiStacie_RoommateCareers_RoommateStoryCareer. Then play a day and check the roommate leaves and comes back on their own.",
+          "done": false,
+          "doneOn": ""
+        }
       ]
     },
     {
@@ -339,6 +399,20 @@
       "match": [
         "dineoutreloaded",
         "dineout"
+      ],
+      "setup": [
+        {
+          "task": "Build or rebuild your restaurants",
+          "note": "Restaurants built before the mod was installed can leave chefs standing outside. Only edit a restaurant while it is closed.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Set up Carl's Dine Out Settings",
+          "note": "Includes the option that lets your own Sim work as chef or server.",
+          "done": false,
+          "doneOn": ""
+        }
       ]
     },
     {
@@ -519,6 +593,14 @@
       "notes": "Keeps walkbys and townies to Sims who live in the local world and spreads townies across worlds. Base Game only. No build naming 1.128 was confirmed.",
       "match": [
         "homeregion"
+      ],
+      "setup": [
+        {
+          "task": "Review the Home Regions filters after one Sim week",
+          "note": "It has regional and soft filters, venue and career filters, and tourist toggles. Leave the defaults for a Sim week, then adjust.",
+          "done": false,
+          "doneOn": ""
+        }
       ]
     },
     {
@@ -539,6 +621,14 @@
       "notes": "Gives Sims six languages by home world. No 1.128 build confirmed, so check the site before installing.",
       "match": [
         "languagebarrier"
+      ],
+      "setup": [
+        {
+          "task": "Check each main Sim's languages",
+          "note": "Sims get their home world's language and can learn others from textbooks, the Simlingo app or other Sims.",
+          "done": false,
+          "doneOn": ""
+        }
       ]
     },
     {
@@ -756,6 +846,11 @@
       "date": "2026-10-13",
       "summary": "Ignore the Simdulgence file as CC.",
       "changes": "Added simdulgence to modsIgnore, which skips any file with Simdulgence in its name."
+    },
+    {
+      "date": "2026-10-13",
+      "summary": "Add a to-do list of setup for each mod, for once everything is installed and tested.",
+      "changes": "tracker.html: new Setup tab listing each mod's setup steps in install order, a Setup to-do checklist on every mod page (ticking saves to GitHub when editing is enabled; Edit mode adds, rewords or removes steps), and a Setup steps left tile. tracker-data.json: added setup steps for MC Command Center, WickedWhims, Slice of Life, Meaningful Stories, Seasonal Emotions, Roommate Stories, Dine Out Reloaded, Home Regions and Language Barriers, taken from the researched install notes and the Meaningful Stories page."
     }
   ],
   "modsIgnore": [

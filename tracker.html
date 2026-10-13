@@ -132,6 +132,17 @@ td input[type=checkbox]{width:1.1rem;height:1.1rem;accent-color:var(--accent)}
 .mhead{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 6px}
 .mhead h2{margin:0 6px 0 0}
 .mono{font-family:var(--f-mono);font-size:.85rem;overflow-wrap:anywhere}
+.todo{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.todo li{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-bottom:1px solid var(--line)}
+.todo li:last-child{border-bottom:0}
+.todo input[type=checkbox]{width:1.15rem;height:1.15rem;margin:.2rem 0 0;accent-color:var(--accent);flex:none}
+.todo .t{font-weight:600}
+.todo .n{display:block;color:var(--muted);font-size:.9rem}
+.todo li.done .t{text-decoration:line-through;color:var(--muted)}
+.todo .ed{display:grid;gap:6px;flex:1;min-width:0}
+.todo .ed input,.todo .ed textarea{font:inherit;font-size:.9rem;width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 7px}
+.sgroup{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:20px 0 8px}
+.sgroup h2{margin:0;font-size:1.1rem}
 </style>
 </head>
 <body>
@@ -351,13 +362,14 @@ function tiles(){
   var stale=inst.filter(function(x){var d=days(x.lastChecked);return d===null||d>D.staleDays;});
   var items=[[n(function(x){return x.status==="Working";}),"Working"],[n(function(x){return x.status==="Testing";}),"Testing"],
    [n(function(x){return x.status==="Needs update"||x.status==="Broken";}),"Need attention"],[stale.length,"Stale (>"+D.staleDays+" days)"],
-   [n(function(x){return x.status==="Not installed"&&x.required;}),"Required, not installed"],[(D.issues||[]).filter(function(i){return i.status!=="Resolved";}).length,"Open issues"]];
+   [n(function(x){return x.status==="Not installed"&&x.required;}),"Required, not installed"],[(D.issues||[]).filter(function(i){return i.status!=="Resolved";}).length,"Open issues"],
+   [m.reduce(function(a,x){return a+(x.setup||[]).filter(function(t){return !t.done;}).length;},0),"Setup steps left"]];
   var t=document.getElementById("tiles");t.textContent="";
   items.forEach(function(i){var d=el("div","tile");d.appendChild(el("b",null,i[0]));d.appendChild(el("span",null,i[1]));t.appendChild(d);});
 }
 
 /* ---------- views ---------- */
-var TABS=[["mods","Mods"],["folder","Mods folder"],["issues","Issues"],["patches","Patches"],["backups","Backups"],["sims","Sims"],["worlds","Worlds"],["sessions","Sessions"],["save","Save info"]];
+var TABS=[["mods","Mods"],["folder","Mods folder"],["setup","Setup"],["issues","Issues"],["patches","Patches"],["backups","Backups"],["sims","Sims"],["worlds","Worlds"],["sessions","Sessions"],["save","Save info"]];
 function g(k){return function(r){return r[k]||"";};}
 function modsView(v){
   var tools=el("div","tools"),s=el("input");s.type="search";s.placeholder="Search mods";s.value=q;s.setAttribute("aria-label","Search mods");
@@ -439,6 +451,7 @@ function draw(keepFocus){
   if(rid!==null)modPage(v,rid);
   else if(tab==="mods")modsView(v);
   else if(tab==="folder")folderView(v);
+  else if(tab==="setup")setupView(v);
   else if(tab==="issues")simpleView(v,"issues",[["Date",g("date")],["Symptom",g("symptom"),"notes"],["Version",g("version")],["Suspected mod",g("suspect")],["Test used",g("test")],["50/50 rounds",g("rounds")],["Fix",g("fix"),"notes"],["Status",function(r){return pill(r.status,sCls(r.status));}],["Resolved",g("resolved")]],D.issues,"No issues logged yet.");
   else if(tab==="patches")simpleView(v,"patches",[["Released",g("date")],["Patch",g("patch")],["Full version",g("fullVersion")],["Script mods back on?",g("scriptModsOn")],["Backup first?",g("backup")],["Mods broken",g("broken"),"notes"],["Mods updated",g("updated"),"notes"],["What was done",g("did"),"notes"],["Fixed on",g("fixedOn")]],D.patches,"No patches logged yet. Current game version: "+D.gameVersion+".");
   else if(tab==="backups")simpleView(v,"backups",[["Date",g("date")],["Reason",g("reason")],["Version",g("version")],["Where",g("location"),"notes"],["What",g("what")],["Mods snapshot",g("snapshot")],["Notes",g("notes"),"notes"]],D.backups,"No backups logged yet.");
@@ -795,10 +808,72 @@ function modPage(v,id){
     v.appendChild(readTable([["File",function(f){return el("span","mono",f[0]);}],["Size",function(f){return fmtSize(f[1]);}],["Modified",function(f){return fmtDate(f[2]);}]],
       files.slice().sort(function(a,b){return a[0].toLowerCase()<b[0].toLowerCase()?-1:1;}),""));
   }
+  v.appendChild(el("h2","sub","Setup to-do"));
+  v.appendChild(todoList(m,true));
   var nm=String(m.name||"").toLowerCase(),iss=(D.issues||[]).filter(function(i){return nm&&((i.suspect||"")+" "+(i.symptom||"")+" "+(i.fix||"")).toLowerCase().indexOf(nm)>-1;});
   if(iss.length){v.appendChild(el("h2","sub","Issues that mention it"));v.appendChild(readTable([["Date",g("date")],["Symptom",g("symptom"),"notes"],["Fix",g("fix"),"notes"],["Status",function(r){return pill(r.status,sCls(r.status));}]],iss,""));}
 }
 window.addEventListener("hashchange",function(){if(!D)return;armed=null;var onMod=route()!==null;draw();window.scrollTo(0,onMod?0:retY);});
+
+/* ---------- setup to-do ---------- */
+var tBusy=false,tAgain=false,tOnly=false;
+function canTick(){return !!(token&&sha);}
+async function tickSave(){
+  if(tBusy){tAgain=true;return;}
+  tBusy=true;var ok=await save();tBusy=false;
+  if(tAgain){tAgain=false;return tickSave();}
+  if(ok)tOnly=false;
+}
+function tick(step,on){
+  step.done=on;step.doneOn=on?today():"";
+  tiles();
+  if(dirty&&!tOnly){mark();draw();return;}   /* other unsaved edits: leave saving to Save changes */
+  tOnly=true;dirty=true;draw();tickSave();
+}
+function todoList(m,onPage){
+  var steps=m.setup||[],box=el("div");
+  if(editing){
+    var ul=el("ul","todo");
+    steps.forEach(function(t,i){
+      var li=el("li"),ed=el("div","ed"),a=el("input");a.type="text";a.value=t.task||"";a.placeholder="Step";a.setAttribute("aria-label","Setup step");
+      a.oninput=function(){t.task=a.value;mark();};
+      var b=el("textarea");b.value=t.note||"";b.placeholder="Note (optional)";b.setAttribute("aria-label","Note");b.oninput=function(){t.note=b.value;mark();};
+      ed.append(a,b);
+      var x=el("button","btn danger","Remove");x.type="button";x.onclick=function(){steps.splice(i,1);mark();tiles();draw();};
+      li.append(ed,x);ul.appendChild(li);
+    });
+    if(steps.length)box.appendChild(ul);
+    var add=el("button","btn","Add setup step");add.type="button";add.style.marginTop="8px";
+    add.onclick=function(){m.setup=m.setup||[];m.setup.push({task:"",note:"",done:false,doneOn:""});mark();tiles();draw();};
+    box.appendChild(add);return box;
+  }
+  if(!steps.length){box.appendChild(el("p","meta",onPage?"No setup steps for this mod."+(canTick()?" Switch on Edit to add some.":""):""));return box;}
+  var ul2=el("ul","todo");
+  steps.forEach(function(t){
+    var li=el("li",t.done?"done":""),cb=el("input"),id="st"+(++_dl);cb.type="checkbox";cb.id=id;cb.checked=!!t.done;cb.disabled=!canTick();
+    cb.onchange=function(){tick(t,cb.checked);};
+    var lab=el("label");lab.htmlFor=id;lab.appendChild(el("span","t",t.task||"(blank step)"));
+    if(t.note)lab.appendChild(el("span","n",t.note));
+    if(t.done&&t.doneOn)lab.appendChild(el("span","n","Done "+t.doneOn));
+    li.append(cb,lab);ul2.appendChild(li);
+  });
+  box.appendChild(ul2);
+  if(onPage&&!canTick())box.appendChild(el("p","meta","Enable editing on this device to tick steps off."));
+  return box;
+}
+function setupView(v){
+  var ms=D.mods.filter(function(m){return (m.setup||[]).length||editing&&m.status!=="Not installed"&&m.status!=="Retired";});
+  var all=0,done=0;D.mods.forEach(function(m){(m.setup||[]).forEach(function(t){all++;if(t.done)done++;});});
+  var inst=D.mods.filter(function(m){return m.status!=="Not installed"&&m.status!=="Retired";}),ready=inst.filter(function(m){return m.status==="Working";}).length;
+  v.appendChild(el("p","meta","Settings and one-time jobs for each mod. Do them once every batch is installed and has passed its test, so a broken mod is not hiding behind a setting. "+done+" of "+all+" steps done. "+ready+" of "+inst.length+" installed mods are marked Working so far."+(canTick()?" Ticking a step saves it to GitHub.":" Enable editing on this device to tick steps off.")));
+  if(!ms.length){v.appendChild(el("div","setup","No setup steps yet. Tell Claude what each mod needs, or switch on Edit to add steps."));return;}
+  ms.forEach(function(m){
+    var st=m.setup||[],left=st.filter(function(t){return !t.done;}).length;
+    var h=el("div","sgroup"),h2=el("h2");h2.appendChild(modLink(m));h.appendChild(h2);h.appendChild(pill(m.status,sCls(m.status)));
+    h.appendChild(el("span","opt",st.length?(left?left+" of "+st.length+" left":"All done"):""));
+    v.appendChild(h);v.appendChild(todoList(m,false));
+  });
+}
 
 /* ---------- auth / chrome ---------- */
 function renderChrome(){
