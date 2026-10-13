@@ -151,6 +151,54 @@
       ]
     },
     {
+      "id": "universal-venue-list",
+      "batch": "Batch 1",
+      "name": "Universal Venue List",
+      "creator": "Basemental",
+      "category": "Foundation",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "2.58",
+      "latestChecked": "2026-10-13",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://basementalcc.com/mods/universal-venue-list/",
+      "linkText": "Creator site",
+      "notes": "Needed by every KiaraSims4Mods active career except Lifeguard, to add their venue lot types. Only one venue list can be in Mods; other venue lists and Lot Extender conflict with active careers. Base game. Basemental lists version 2.58, released 2026-09-07 (checked 2026-10-13).",
+      "match": [
+        "venuelist"
+      ],
+      "setup": [
+        {
+          "task": "Make sure it is the only venue list",
+          "note": "Remove any other venue list and Lot Extender. KiaraSims4Mods' guide names them as the main conflict with active careers.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "work-interactions-pie-menu",
+      "batch": "Batch 1",
+      "name": "Work Interactions Pie Menu",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://www.curseforge.com/sims4/mods/work-interactions",
+      "linkText": "CurseForge",
+      "notes": "Computer > Career interactions for employed Sims. Needed by the Firefighter, Higher Education, Lawyer, Military and Resort Owner active careers. Needs XML Injector. Its page lists Businesses & Hobbies, Discover University, Eco Lifestyle, Get to Work, High School Years, Horse Ranch, Royalty & Legacy and Snowy Escape.",
+      "match": [
+        "workinteractions"
+      ]
+    },
+    {
       "id": "wickedwhims",
       "batch": "Batch 2",
       "name": "WickedWhims",
@@ -576,6 +624,688 @@
       ]
     },
     {
+      "id": "singing-gig-event",
+      "batch": "Batch 3",
+      "name": "Singing Gig Event",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://legacy.curseforge.com/sims4/mods/singing-gig-event",
+      "linkText": "CurseForge",
+      "notes": "Needed by the Singer active career. Needs City Living.",
+      "match": [
+        "singinggig"
+      ]
+    },
+    {
+      "id": "tax-system",
+      "batch": "Batch 3",
+      "name": "Tax System",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://legacy.curseforge.com/sims4/mods/tax-system",
+      "linkText": "CurseForge",
+      "notes": "Tax Day tradition and Sim-RS portal. Needed by the Tax Preparer active career. Needs City Living, Enchanted by Nature, Seasons and XML Injector.",
+      "match": [
+        "taxsystem"
+      ]
+    },
+    {
+      "id": "political-party-traits",
+      "batch": "Batch 3",
+      "name": "Political party traits",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://kiarasims4mods.net/traits/lifestyle/",
+      "linkText": "Creator site",
+      "notes": "The Politician active career needs the Sim to have one of these traits: Llamacrat, Simdipendent or Plumbobican. Get them from the Lifestyle traits page.",
+      "match": [
+        "llamacrat",
+        "simdipendent",
+        "plumbobican"
+      ]
+    },
+    {
+      "id": "angler-active-career",
+      "batch": "Batch 3",
+      "name": "Angler (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://www.curseforge.com/sims4/mods/angler-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: City Living, Get to Work, Growing Together. Also needs: Basemental's Universal Venue List, XML Injector. Venue: Fishing Pier. Skills: Fishing. University: Biology degree starts at level 3 (Hook Baiter); distinguished degree at level 5 (Saltwater Initiate). Reward: 1,500 Simoleons at level 10 (Legendary Piscator). Details and interactions: https://kiarasims4mods.net/2021/12/23/angler-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "anglercareer",
+        "angleractive"
+      ],
+      "setup": [
+        {
+          "task": "Place the Fishing Pier venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a fishing pond and a fishing sign.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "artist-active-career",
+      "batch": "Batch 3",
+      "name": "Artist (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://www.curseforge.com/sims4/mods/artist-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Discover University, Get to Work. Also needs: Basemental's Universal Venue List, XML Injector. Venue: Art Studio. Skills: Painting. University: Art degree jumps to level 3 (Canvas Creator); honors to level 5 (Studio Artist). Reward: 2,500 Simoleons at level 10. Details and interactions: https://kiarasims4mods.net/2022/10/05/artist-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "artistcareer",
+        "artistactive"
+      ],
+      "setup": [
+        {
+          "task": "Place the Art Studio venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a front desk, easels and murals.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "firefighter-active-career",
+      "batch": "Batch 3",
+      "name": "Firefighter (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://www.curseforge.com/sims4/mods/firefighter-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Get to Work, StrangerVille. Also needs: Basemental's Universal Venue List, Work Interactions Pie Menu, XML Injector. Venue: Fire Station. Skills: Fitness, Handiness. University: Biology or Physics degree jumps to level 3 (Fire Safety Instructor); honors to level 5 (Firefighter). Reward: 5,000 Simoleons at level 10 (Fire Chief). Recommended: Fire Station Lot Trait and Firefighter Super Hero Aspiration (both by KiaraSims4Mods). Details and interactions: https://kiarasims4mods.net/2021/11/09/firefighter-career-2/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "firefightercareer",
+        "firefighteractive"
+      ],
+      "setup": [
+        {
+          "task": "Place the Fire Station venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a front desk and workout equipment.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Learn the fire call routine",
+          "note": "From Soot Stripper up to Assistant Fire Chief: when a fire pop-up appears, choose OK, click the front desk, choose Travel to lot on fire, put the fire out before other firefighters do, then click your Sim and choose Return to fire station.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "higher-education-active-career",
+      "batch": "Batch 3",
+      "name": "Higher Education (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://www.curseforge.com/sims4/mods/higher-education-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Discover University, Get to Work. Also needs: Basemental's Universal Venue List, Work Interactions Pie Menu, XML Injector. Venue: Student Services. Skills: Charisma, Logic, Research & Debate. University: Not listed. Reward: Not listed. Details and interactions: https://kiarasims4mods.net/2022/02/27/higher-education-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "highereducation"
+      ],
+      "setup": [
+        {
+          "task": "Place the Student Services venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a front desk and computers.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Plan for the level 2 tasks",
+          "note": "At Higher Education Program Specialist the Sim needs any university degree and must pass an exam taken from the phone (125 Simoleons, about a 50/50 chance). Then choose the Administration or Faculty branch. Interactions are under Computer > University > Higher Education.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "journalist-active-career",
+      "batch": "Batch 3",
+      "name": "Journalist (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://legacy.curseforge.com/sims4/mods/journalist-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: For Rent, Get to Work. Also needs: Basemental's Universal Venue List, XML Injector. Venue: Journalist Studio. Skills: Writing. University: Communications or Language & Literature degree jumps to level 3; honors to level 5 (Freelance Journalist). Reward: Money from level 6, plus objects at levels 7 to 10. Details and interactions: https://kiarasims4mods.net/2025/08/27/journalist-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "journalistcareer",
+        "journalistactive"
+      ],
+      "setup": [
+        {
+          "task": "Place the Journalist Studio venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a front desk and computers.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "lawyer-active-career",
+      "batch": "Batch 3",
+      "name": "Lawyer (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://www.curseforge.com/sims4/mods/lawyer-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Discover University, Get to Work. Also needs: Basemental's Universal Venue List, Work Interactions Pie Menu, XML Injector. Venue: Law Firm (levels 1-4), Law Office (levels 5-9) and Supreme Court Building (level 10). Skills: Research & Debate. University: History or Language and Literature degree jumps to level 4 (Paralegal); honors to level 5 (Budding Barrister). Reward: Not listed. Details and interactions: https://kiarasims4mods.net/2022/11/30/lawyer-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "lawyercareer",
+        "lawyeractive"
+      ],
+      "setup": [
+        {
+          "task": "Place the venues: Law Firm (levels 1-4), Law Office (levels 5-9) and Supreme Court Building (level 10)",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish each venue",
+          "note": "Needs a front desk and computers.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Learn the trial and verdict routine",
+          "note": "Levels 5-7: after Attend Trial (only at the venue), use Check Verdict Status on a work computer, then leave the venue. The verdict text only arrives when you are not at the venue, 1-4 hours later; then use Attend Verdict Reading from the phone's work menu.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "lifeguard-active-career",
+      "batch": "Batch 3",
+      "name": "Lifeguard (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://legacy.curseforge.com/sims4/mods/lifeguard-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Get to Work, Island Living. Also needs: XML Injector. Venue: Beach. Skills: Fitness. University: Biology degree jumps to level 2 (Stand-in Lifeguard). Reward: New clothes and a life preserver at level 2, beach towel at level 3. Details and interactions: https://kiarasims4mods.net/2024/08/31/lifeguard-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "lifeguardcareer",
+        "lifeguardactive"
+      ],
+      "setup": [
+        {
+          "task": "Place the Beach venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a computer (the beach has the rest).",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "military-active-career",
+      "batch": "Batch 3",
+      "name": "Military (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://www.curseforge.com/sims4/mods/military-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Get to Work, StrangerVille. Also needs: Basemental's Universal Venue List, Work Interactions Pie Menu, XML Injector. Venue: Military Base. Skills: Charisma, Fitness, Logic, Rocket Science. University: History or Physics degree jumps to level 3 (Drill Instructor); honors to level 5 (Fighter Pilot). Reward: Medals at every level, display case and flag pole. Recommended: Military Hero Aspiration (KiaraSims4Mods). Details and interactions: https://kiarasims4mods.net/2022/04/20/military-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "militarycareer",
+        "militaryactive"
+      ],
+      "setup": [
+        {
+          "task": "Place the Military Base venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a front desk, computers, workout equipment and a rocket ship.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "nail-technician-active-career",
+      "batch": "Batch 3",
+      "name": "Nail Technician (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://legacy.curseforge.com/sims4/mods/nail-technician-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Get to Work, Spa Day. Also needs: Basemental's Universal Venue List, XML Injector. Venue: Nail Salon. Skills: Wellness. University: Not listed. Reward: Not listed. Details and interactions: https://kiarasims4mods.net/2023/04/14/nail-technician-active-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "nailtechnician"
+      ],
+      "setup": [
+        {
+          "task": "Place the Nail Salon venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a front desk and massage chairs.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "personal-trainer-active-career",
+      "batch": "Batch 3",
+      "name": "Personal Trainer (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://legacy.curseforge.com/sims4/mods/personal-trainer-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Get to Work. Also needs: Basemental's Universal Venue List, XML Injector. Venue: Personal Trainer Studio. Skills: Fitness. University: Biology degree jumps to level 2 (Personal Trainer). Reward: Not listed. Details and interactions: https://kiarasims4mods.net/2024/04/16/personal-trainer-active-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "personaltrainer"
+      ],
+      "setup": [
+        {
+          "task": "Place the Personal Trainer Studio venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs workout equipment, a rock climbing wall, showers, a front desk and one more computer desk.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "photographer-active-career",
+      "batch": "Batch 3",
+      "name": "Photographer (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://legacy.curseforge.com/sims4/mods/photographer-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Get to Work, Moschino Stuff. Also needs: Basemental's Universal Venue List, XML Injector. Venue: Photo Studio. Skills: Photography. University: Art History or Fine Art degree jumps to level 2 (Portrait Photographer). Reward: 1,000 Simoleons at level 3. Details and interactions: https://kiarasims4mods.net/2023/09/15/photographer-active-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "photographercareer",
+        "photographeractive"
+      ],
+      "setup": [
+        {
+          "task": "Place the Photo Studio venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a photo studio, cameras and computers.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Learn the client routine",
+          "note": "When a client arrives: Interview Client, ask What's your ideal photo?, take the photo (phone, photo studio or tripod with the subject on the marker), then Show off Photos and email or gift them.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "politician-active-career",
+      "batch": "Batch 3",
+      "name": "Politician (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://www.curseforge.com/sims4/mods/politican-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: City Living, Discover University, Get Famous, Get to Work, Parenthood. Also needs: Basemental's Universal Venue List, XML Injector, a Llamacrat, Simdipendent or Plumbobican trait. Venue: City Hall (to Mayor), Governor's Mansion (Governor), Capitol Hill (Senator) and The Sim House (Vice Leader and National Leader). Skills: Charisma, Research & Debate, Fame. University: Communications, Economics or History degree jumps to level 3 (Campaign Intern); honors to level 5 (City Council Member). Reward: 1,000 Simoleons each promotion, 250,000 at National Leader. Recommended: Change the World Aspiration and National Spouse Career (KiaraSims4Mods). Details and interactions: https://kiarasims4mods.net/2022/06/01/politician-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "politiciancareer",
+        "politicanactive",
+        "politicianactive"
+      ],
+      "setup": [
+        {
+          "task": "Place the venues: City Hall (to Mayor), Governor's Mansion (Governor), Capitol Hill (Senator) and The Sim House (Vice Leader and National Leader)",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish each venue",
+          "note": "Needs a front desk and computers; The Sim House needs two front desks.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Give the Sim a political party trait",
+          "note": "Llamacrat, Simdipendent or Plumbobican.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "resort-owner-active-career",
+      "batch": "Batch 3",
+      "name": "Resort Owner (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://www.curseforge.com/sims4/mods/resort-owner-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Get to Work, Growing Together, Island Living, Spa Day. Also needs: Basemental's Universal Venue List, Work Interactions Pie Menu, XML Injector. Venue: Resort. Skills: Charisma, Wellness. University: Not listed. Reward: Not listed. Details and interactions: https://kiarasims4mods.net/2022/01/03/resort-owner-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "resortowner"
+      ],
+      "setup": [
+        {
+          "task": "Place the Resort venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a front desk, workout equipment, an easel, a pool, a hot tub, a kitchen, a yoga mat, a meditation stool, a chess table, a bar, a coffee station and anything else fun.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "rocket-scientist-active-career",
+      "batch": "Batch 3",
+      "name": "Rocket Scientist (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://legacy.curseforge.com/sims4/mods/rocket-scientist-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Get to Work. Also needs: Basemental's Universal Venue List, XML Injector. Venue: Sim Space Center. Skills: Rocket Science. University: Physics degree jumps to level 3 (Rocket Science Engineer). Reward: Money and an object every level; 10,000 Simoleons, a rocket ship and CAS parts at level 5. Details and interactions: https://kiarasims4mods.net/2024/09/30/rocket-scientist-career-2/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "rocketscientist"
+      ],
+      "setup": [
+        {
+          "task": "Place the Sim Space Center venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs rocket ships, at least 2 computers and a front desk.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "singer-active-career",
+      "batch": "Batch 3",
+      "name": "Singer (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://legacy.curseforge.com/sims4/mods/singer-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: City Living, Get Famous, Get to Work. Also needs: Basemental's Universal Venue List, Singing Gig Event, XML Injector. Venue: Concert Hall. Skills: Fame, Singing. University: Fine Arts degree jumps to level 4 (Local Favorite). Reward: Money and objects from level 2; 10,000 Simoleons at level 10. Details and interactions: https://kiarasims4mods.net/2024/08/26/singer-career-2/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "singercareer",
+        "singeractive"
+      ],
+      "setup": [
+        {
+          "task": "Place the Concert Hall venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a microphone, a karaoke machine, a piano, a guitar, a violin and chairs.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "stylist-active-career",
+      "batch": "Batch 3",
+      "name": "Stylist (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://www.curseforge.com/sims4/mods/stylist-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: Get Famous, Get to Work. Also needs: Basemental's Universal Venue List, XML Injector. Venue: Salon. Skills: Painting, Photography, Fame. University: Art History or Fine Art degree jumps to level 3 (Polka Dot Specialist); honors to level 5 (Trendsetter in Training). Reward: Money every level, objects at levels 2-6 and 8. Recommended: World Famous Stylist Aspiration (KiaraSims4Mods). Details and interactions: https://kiarasims4mods.net/2022/07/21/stylist-career-2/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "stylistcareer",
+        "stylistactive"
+      ],
+      "setup": [
+        {
+          "task": "Place the Salon venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a front desk, styling stations, easels and wardrobe platforms.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
+      "id": "tax-preparer-active-career",
+      "batch": "Batch 3",
+      "name": "Tax Preparer (active career)",
+      "creator": "KiaraSims4Mods",
+      "category": "Careers",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://legacy.curseforge.com/sims4/mods/tax-preparer-active-career",
+      "linkText": "CurseForge",
+      "notes": "Active career. Packs: City Living, Discover University, Get to Work. Also needs: Basemental's Universal Venue List, Tax System Mod, XML Injector. Venue: Sim-RS Services. Skills: Financial Literacy. University: Economics degree jumps to level 3 (Tax Records Analyst). Reward: 10,000 Simoleons at level 5 (Commissioner of Sim-RS). Details and interactions: https://kiarasims4mods.net/2025/10/15/tax-preparer-active-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
+      "match": [
+        "taxpreparer"
+      ],
+      "setup": [
+        {
+          "task": "Place the Sim-RS Services venue",
+          "note": "Place a lot from the Gallery, set its lot type to the career venue (needs the Universal Venue List), then check the world map shows that lot type.",
+          "done": false,
+          "doneOn": ""
+        },
+        {
+          "task": "Furnish the venue",
+          "note": "Needs a front desk and computers.",
+          "done": false,
+          "doneOn": ""
+        }
+      ]
+    },
+    {
       "id": "home-regions",
       "batch": "Batch 4",
       "name": "Home Regions",
@@ -851,6 +1581,11 @@
       "date": "2026-10-13",
       "summary": "Add a to-do list of setup for each mod, for once everything is installed and tested.",
       "changes": "tracker.html: new Setup tab listing each mod's setup steps in install order, a Setup to-do checklist on every mod page (ticking saves to GitHub when editing is enabled; Edit mode adds, rewords or removes steps), and a Setup steps left tile. tracker-data.json: added setup steps for MC Command Center, WickedWhims, Slice of Life, Meaningful Stories, Seasonal Emotions, Roommate Stories, Dine Out Reloaded, Home Regions and Language Barriers, taken from the researched install notes and the Meaningful Stories page."
+    },
+    {
+      "date": "2026-10-13",
+      "summary": "Adding all the active careers from kiarasims4mods.net/careers/active/; check each career's page for what is needed to make it work.",
+      "changes": "Added 17 KiaraSims4Mods active careers to Batch 3 (Not installed) with packs, required mods, venue, skills, degree jump and rewards in notes, and setup steps to place and furnish each venue (objects from the Active Career Tutorial Guide) plus career-specific routines. Added the mods they need: Universal Venue List and Work Interactions Pie Menu (Batch 1), Singing Gig Event, Tax System and Political party traits (Batch 3)."
     }
   ],
   "modsIgnore": [

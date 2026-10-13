@@ -220,7 +220,9 @@ table.sym { border-collapse: collapse; width: 100%; min-width: 36rem; font-size:
         { id: "m2", name: "UI Cheats Extension", by: "weerbesu", kind: "script", note: "Free on weerbesu's Patreon. Install both the .package and the .ts4script from the zip." },
         { id: "i4", name: "XML Injector", by: "Scumbumbo", kind: "script", note: "Needed by Seasonal Emotions and the Wildlife Biologist and Landlord careers.", link: ["https://modthesims.info/d/622928", "Mod The Sims"] },
         { id: "l1", name: "Lumpinou's Toolbox", by: "Lumpinou", kind: "script", note: "Needed by First Impressions.", link: ["https://www.patreon.com/posts/86658397", "Patreon post"] },
-        { id: "l2", name: "Mood Pack Mod", by: "Lumpinou", kind: "pkg", note: "Needed by First Impressions.", link: ["https://www.patreon.com/posts/43759541", "Patreon post"] }
+        { id: "l2", name: "Mood Pack Mod", by: "Lumpinou", kind: "pkg", note: "Needed by First Impressions.", link: ["https://www.patreon.com/posts/43759541", "Patreon post"] },
+        { id: "v1", name: "Universal Venue List", by: "Basemental", kind: "mod", note: "Needed by the active careers. Keep only one venue list in Mods; other venue lists and Lot Extender conflict.", link: ["https://basementalcc.com/mods/universal-venue-list/", "Creator site"] },
+        { id: "v2", name: "Work Interactions Pie Menu", by: "KiaraSims4Mods", kind: "mod", note: "Needed by the Firefighter, Higher Education, Lawyer, Military and Resort Owner careers. Needs XML Injector.", link: ["https://www.curseforge.com/sims4/mods/work-interactions", "CurseForge"] }
       ],
       tests: [
         { name: "Open the MC Command Center menu", note: "Click a Sim, open it, close it. No error pop-up." },
@@ -243,7 +245,7 @@ table.sym { border-collapse: collapse; width: 100%; min-width: 36rem; font-size:
         { name: "Play a few Sim hours", note: "New moodlets show up, and meeting a new Sim adds a first-impression sentiment." }
       ] },
 
-    { id: "s3", n: "Batch 3", name: "Business and careers", sub: "Add a few at a time.",
+    { id: "s3", n: "Batch 3", name: "Business and careers", sub: "Add a few at a time. Active careers need the Universal Venue List from Batch 1.",
       items: [
         { id: "r1", name: "Dine Out Reloaded (public version)", by: "Carl's Guides", kind: "script", note: "Build or rebuild restaurants after installing it, and only edit one while it is closed.", link: ["https://www.patreon.com/posts/64188681", "Download post"] },
         { id: "r2", name: "Restaurateur Aspiration", by: "KiaraSims4Mods", kind: "mod", link: ["https://snootysims.com/mods/restaurateur-aspiration/", "Listing"] },
@@ -253,11 +255,32 @@ table.sym { border-collapse: collapse; width: 100%; min-width: 36rem; font-size:
         { id: "c2", name: "midnitetech careers", by: "midnitetech", kind: "mod", note: "Take the careers you want.", link: ["https://www.patreon.com/midnitetech", "Patreon"] },
         { id: "c3", name: "Wildlife Biologist Career", by: "KiaraSims4Mods", kind: "mod", note: "Needs Island Living, Snowy Escape and XML Injector.", link: ["https://www.curseforge.com/sims4/mods/wildlife-biologist-career", "CurseForge"] },
         { id: "c4", name: "Landlord Career", by: "KiaraSims4Mods", kind: "mod", note: "Needs For Rent and XML Injector.", link: ["https://www.curseforge.com/sims4/mods/landlord-career", "CurseForge"] },
-        { id: "c5", name: "Unlimited Jobs", kind: "mod", link: ["https://www.curseforge.com/sims4/mods/unlimited-jobs", "CurseForge"] }
+        { id: "c5", name: "Unlimited Jobs", kind: "mod", link: ["https://www.curseforge.com/sims4/mods/unlimited-jobs", "CurseForge"] },
+        { id: "g1", name: "Singing Gig Event", by: "KiaraSims4Mods", kind: "mod", note: "Needed by the Singer career. Needs City Living.", link: ["https://legacy.curseforge.com/sims4/mods/singing-gig-event", "CurseForge"] },
+        { id: "g2", name: "Tax System", by: "KiaraSims4Mods", kind: "mod", note: "Needed by the Tax Preparer career. Needs City Living, Enchanted by Nature, Seasons and XML Injector.", link: ["https://legacy.curseforge.com/sims4/mods/tax-system", "CurseForge"] },
+        { id: "g3", name: "Political party traits", by: "KiaraSims4Mods", kind: "mod", note: "The Politician career needs one: Llamacrat, Simdipendent or Plumbobican.", link: ["https://kiarasims4mods.net/traits/lifestyle/", "Creator site"] },
+        { id: "a1", name: "Angler (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, XML Injector. Packs: City Living, Get to Work, Growing Together.", link: ["https://www.curseforge.com/sims4/mods/angler-active-career", "CurseForge"] },
+        { id: "a2", name: "Artist (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, XML Injector. Packs: Discover University, Get to Work.", link: ["https://www.curseforge.com/sims4/mods/artist-active-career", "CurseForge"] },
+        { id: "a3", name: "Firefighter (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, Work Interactions Pie Menu, XML Injector. Packs: Get to Work, StrangerVille.", link: ["https://www.curseforge.com/sims4/mods/firefighter-active-career", "CurseForge"] },
+        { id: "a4", name: "Higher Education (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, Work Interactions Pie Menu, XML Injector. Packs: Discover University, Get to Work.", link: ["https://www.curseforge.com/sims4/mods/higher-education-active-career", "CurseForge"] },
+        { id: "a5", name: "Journalist (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, XML Injector. Packs: For Rent, Get to Work.", link: ["https://legacy.curseforge.com/sims4/mods/journalist-career", "CurseForge"] },
+        { id: "a6", name: "Lawyer (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, Work Interactions Pie Menu, XML Injector. Packs: Discover University, Get to Work.", link: ["https://www.curseforge.com/sims4/mods/lawyer-active-career", "CurseForge"] },
+        { id: "a7", name: "Lifeguard (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs XML Injector. Packs: Get to Work, Island Living.", link: ["https://legacy.curseforge.com/sims4/mods/lifeguard-active-career", "CurseForge"] },
+        { id: "a8", name: "Military (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, Work Interactions Pie Menu, XML Injector. Packs: Get to Work, StrangerVille.", link: ["https://www.curseforge.com/sims4/mods/military-active-career", "CurseForge"] },
+        { id: "a9", name: "Nail Technician (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, XML Injector. Packs: Get to Work, Spa Day.", link: ["https://legacy.curseforge.com/sims4/mods/nail-technician-active-career", "CurseForge"] },
+        { id: "a10", name: "Personal Trainer (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, XML Injector. Packs: Get to Work.", link: ["https://legacy.curseforge.com/sims4/mods/personal-trainer-active-career", "CurseForge"] },
+        { id: "a11", name: "Photographer (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, XML Injector. Packs: Get to Work, Moschino Stuff.", link: ["https://legacy.curseforge.com/sims4/mods/photographer-active-career", "CurseForge"] },
+        { id: "a12", name: "Politician (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, XML Injector, a Llamacrat, Simdipendent or Plumbobican trait. Packs: City Living, Discover University, Get Famous, Get to Work, Parenthood.", link: ["https://www.curseforge.com/sims4/mods/politican-active-career", "CurseForge"] },
+        { id: "a13", name: "Resort Owner (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, Work Interactions Pie Menu, XML Injector. Packs: Get to Work, Growing Together, Island Living, Spa Day.", link: ["https://www.curseforge.com/sims4/mods/resort-owner-active-career", "CurseForge"] },
+        { id: "a14", name: "Rocket Scientist (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, XML Injector. Packs: Get to Work.", link: ["https://legacy.curseforge.com/sims4/mods/rocket-scientist-active-career", "CurseForge"] },
+        { id: "a15", name: "Singer (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, Singing Gig Event, XML Injector. Packs: City Living, Get Famous, Get to Work.", link: ["https://legacy.curseforge.com/sims4/mods/singer-active-career", "CurseForge"] },
+        { id: "a16", name: "Stylist (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, XML Injector. Packs: Get Famous, Get to Work.", link: ["https://www.curseforge.com/sims4/mods/stylist-active-career", "CurseForge"] },
+        { id: "a17", name: "Tax Preparer (active career)", by: "KiaraSims4Mods", kind: "mod", note: "Needs Universal Venue List, Tax System Mod, XML Injector. Packs: City Living, Discover University, Get to Work.", link: ["https://legacy.curseforge.com/sims4/mods/tax-preparer-active-career", "CurseForge"] }
       ],
       tests: [
         { name: "Open Carl's Dine Out Settings", note: "The menu opens." },
-        { name: "Check the job list and aspirations", note: "Find a Job lists each new career, and both aspirations show in the Aspirations panel." }
+        { name: "Check the job list and aspirations", note: "Find a Job lists each new career, and both aspirations show in the Aspirations panel." },
+        { name: "Check one active career venue", note: "Place one career's venue lot, set its lot type, and confirm the world map shows it." }
       ] },
 
     { id: "s4", n: "Batch 4", name: "World and CC", sub: "CC last, so a broken file is easy to trace.",
