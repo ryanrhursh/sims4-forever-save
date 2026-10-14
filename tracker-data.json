@@ -1385,24 +1385,6 @@
       ]
     },
     {
-      "id": "sims-4-tray-importer",
-      "batch": "Batch 4",
-      "name": "Sims 4 Tray Importer",
-      "creator": "Deevo",
-      "category": "Tool",
-      "required": true,
-      "status": "Not installed",
-      "version": "",
-      "latestVersion": "1.25.8.2",
-      "latestChecked": "2026-10-14",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "https://luniversims.fr/files/file/73-sims-4-tray-importer/",
-      "linkText": "LuniverSims",
-      "notes": "Imports and manages saved households and lots. A Windows app (a Mac version is linked from the same page) by Deevo for LuniverSims, not a mod; keep it out of Mods. LuniverSims lists version 1.25.8.2 (2025-11-22) as the latest (checked 2026-10-14).",
-      "match": []
-    },
-    {
       "id": "new-random-names",
       "batch": "Batch 4",
       "name": "New Random Names",
@@ -1734,6 +1716,11 @@
       "date": "2026-10-14",
       "summary": "Got Kiara traits; does KiaraSims4Mods_Lifestyle_Traits.package have what we need?",
       "changes": "Renamed Political party traits to Lifestyle traits, matched it to KiaraSims4Mods_Lifestyle_Traits.package and set it to Testing. Journalist active career now matches KiaraSims4Mods_Journalism_ActiveCareer.package and is Testing, like the other careers. Removed the two scan rows for those files. Added resource to modsIgnore so the game's Resource.cfg file is skipped."
+    },
+    {
+      "date": "2026-10-14",
+      "summary": "Remove Sims 4 Tray Importer.",
+      "changes": "Removed the Sims 4 Tray Importer row from the tracker and the install order."
     }
   ],
   "modsIgnore": [
