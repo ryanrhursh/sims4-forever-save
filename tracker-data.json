@@ -429,6 +429,26 @@
       ]
     },
     {
+      "id": "complete-traits-pack",
+      "batch": "Batch 2",
+      "name": "Complete 100+ Traits Pack",
+      "creator": "klimter",
+      "category": "Immersion",
+      "required": true,
+      "status": "Not installed",
+      "version": "",
+      "latestVersion": "1.125.59",
+      "latestChecked": "2026-10-14",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "https://www.curseforge.com/sims4/mods/complete-traits-pack-100-traits",
+      "linkText": "CurseForge",
+      "notes": "About 113 traits by klimter (social, teen, toddler, infant, elder, hobby, odd, extreme, planet-inspired and more). Base game; needs no other mods. Each trait is its own file, so you can delete ones you don't want. Don't also install klimter's individual trait packs (duplicates). Not by KiaraSims4Mods: it has no lot traits and not the Llamacrat, Simdipendent or Plumbobican traits the Politician career needs. CurseForge lists the latest file as 1.125.59, dated 2026-09-17 (checked 2026-10-14).",
+      "match": [
+        "klimter"
+      ]
+    },
+    {
       "id": "dine-out-reloaded-public-version",
       "batch": "Batch 3",
       "name": "Dine Out Reloaded (public version)",
@@ -1723,6 +1743,11 @@
       "date": "2026-10-14",
       "summary": "Sims 4 Tray Importer is at luniversims.fr/files/file/73-sims-4-tray-importer/.",
       "changes": "Set Tray Importer's link to the LuniverSims page and its newest known version to 1.25.8.2 (2025-11-22, from that page). Added the link to the install order."
+    },
+    {
+      "date": "2026-10-14",
+      "summary": "Switch Kiara's traits to the Complete 100+ Traits Pack on CurseForge.",
+      "changes": "Added Complete 100+ Traits Pack by klimter (Batch 2, Immersion, Not installed, newest known 1.125.59) to the tracker and install order. Kept the Political party traits row, since the pack is not Kiara's and lacks the traits the Politician career needs."
     }
   ],
   "modsIgnore": [
