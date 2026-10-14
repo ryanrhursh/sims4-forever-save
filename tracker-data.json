@@ -1627,6 +1627,27 @@
         "zerbuthecustom"
       ],
       "auto": 2
+    },
+    {
+      "id": "scan-kiarasims4modslifestyletraits",
+      "batch": "Found in scan",
+      "name": "Kiara Sims4Mods Lifestyle Traits",
+      "creator": "",
+      "category": "Other",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-14 from file names: 1 file, for example CAS/KiaraSims4Mods_Lifestyle_Traits.package. Identify it and fill in the creator.",
+      "match": [
+        "kiarasims4modslifestyletraits"
+      ],
+      "auto": 2
     }
   ],
   "patches": [],
