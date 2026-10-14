@@ -60,7 +60,7 @@
 
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--warn-bg:#2E2512;--warn:#F0C070;--bad-bg:#331A1A;--bad:#F29A9A;--info-bg:#15222F;--info:#8DB4F0}}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--f-body);padding:28px 16px 72px}
-.wrap{max-width:70rem;margin:0 auto;min-width:0}
+.wrap{max-width:none;margin:0 auto;min-width:0}
 h1,h2{font-family:var(--f-display);margin:0;text-wrap:balance}
 h1{font-size:clamp(1.9rem,6vw,2.5rem);line-height:1.1;letter-spacing:-.01em}
 h2{font-size:1.35rem;margin:0 0 10px}
@@ -72,13 +72,18 @@ code{font-family:var(--f-mono);font-size:.88em}
 .tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
 .tile b{display:block;font:700 1.9rem/1.1 var(--f-display)}
 .tile span{color:var(--muted);font-size:.9rem}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:2}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px;background:var(--bg);padding:8px 0}
 .tabs button{font:600 .92rem var(--f-body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
 .tabs button[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
 .tools{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px}
 .tools input,.tools select{font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0}
 .tools input{flex:1 1 14rem}
-.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+/* tables fill the window; each table box is at most one screen tall so its sideways scroll bar stays on screen */
+.scroll{overflow:auto;max-height:calc(100vh - 8rem);max-height:calc(100dvh - 8rem);background:var(--surface);border:1px solid var(--line);border-radius:10px;scrollbar-width:auto;scrollbar-color:var(--muted) var(--bg)}
+.scroll::-webkit-scrollbar{width:14px;height:14px}
+.scroll::-webkit-scrollbar-track{background:var(--bg);border-radius:10px}
+.scroll::-webkit-scrollbar-thumb{background:var(--muted);border-radius:10px;border:3px solid var(--bg)}
+.scroll thead th{position:sticky;top:0;z-index:1;background:var(--surface);box-shadow:inset 0 -1px 0 var(--line)}
 table{border-collapse:collapse;width:100%;font-size:.93rem}
 th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
 th{font:600 .8rem var(--f-body);text-transform:uppercase;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
