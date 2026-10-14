@@ -1460,6 +1460,153 @@
       "match": [
         "luumiabodyhair"
       ]
+    },
+    {
+      "id": "scan-kiarasims4modsjournalismactivecareer",
+      "batch": "Found in scan",
+      "name": "Kiara Sims4Mods Journalism Active Career",
+      "creator": "",
+      "category": "Careers",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 1 file, for example Careers/KiaraSims4Mods_Journalism_ActiveCareer.package. Identify it and fill in the creator.",
+      "match": [
+        "kiarasims4modsjournalismactivecareer"
+      ],
+      "auto": 2
+    },
+    {
+      "id": "scan-kemzimapoliticalworldcoremod",
+      "batch": "Found in scan",
+      "name": "Kem Zima Political World Core Mod",
+      "creator": "",
+      "category": "Gameplay (script)",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 2 files, for example CAS/KemZima_PoliticalWorld_CoreMod(Fictional)_REQUIRED.v8.1.package; CAS/KemZima_PoliticalWorld_CoreMod(Fictional)_REQUIRED.v8.1.ts4script. Identify it and fill in the creator.",
+      "match": [
+        "kemzimapoliticalworldcoremod"
+      ],
+      "auto": 2
+    },
+    {
+      "id": "scan-lot51",
+      "batch": "Found in scan",
+      "name": "lot51",
+      "creator": "",
+      "category": "Gameplay (script)",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 1 file, for example Foundation/lot51_core.ts4script. Identify it and fill in the creator.",
+      "match": [
+        "lot51"
+      ],
+      "auto": 2
+    },
+    {
+      "id": "scan-module1kemzimapoliticalworld",
+      "batch": "Found in scan",
+      "name": "Module1 Kemzima Political World",
+      "creator": "",
+      "category": "Other",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 1 file, for example CAS/(OPTIONAL)_Module1_Kemzima_PoliticalWorld_AutoAssign_PoliticalTraitsNPCs.package. Identify it and fill in the creator.",
+      "match": [
+        "module1kemzimapoliticalworld"
+      ],
+      "auto": 2
+    },
+    {
+      "id": "scan-module4kemzimapoliticalworld",
+      "batch": "Found in scan",
+      "name": "Module4 Kemzima Political World",
+      "creator": "",
+      "category": "Other",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 1 file, for example CAS/(OPTIONAL)_Module4_Kemzima_PoliticalWorld_Phobia(LGBTQ & Xenophobia).package. Identify it and fill in the creator.",
+      "match": [
+        "module4kemzimapoliticalworld"
+      ],
+      "auto": 2
+    },
+    {
+      "id": "scan-module5kemzimapoliticalworld",
+      "batch": "Found in scan",
+      "name": "Module5 Kemzima Political World",
+      "creator": "",
+      "category": "Other",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 1 file, for example CAS/(OPTIONAL)_Module5_Kemzima_PoliticalWorld_SelfDiscoverySystem.package. Identify it and fill in the creator.",
+      "match": [
+        "module5kemzimapoliticalworld"
+      ],
+      "auto": 2
+    },
+    {
+      "id": "scan-zerbuthecustom",
+      "batch": "Found in scan",
+      "name": "Zerbu The Custom",
+      "creator": "",
+      "category": "Other",
+      "required": false,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "",
+      "url": "",
+      "linkText": "Link",
+      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 1 file, for example CAS/Zerbu - The Custom Preferences Mod.package. Identify it and fill in the creator.",
+      "match": [
+        "zerbuthecustom"
+      ],
+      "auto": 2
     }
   ],
   "patches": [],
