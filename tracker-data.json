@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-13",
+  "updated": "2026-10-14",
   "gameVersion": "1.128.90.1030",
   "staleDays": 45,
   "statuses": [
@@ -1371,13 +1371,13 @@
       "required": true,
       "status": "Not installed",
       "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
+      "latestVersion": "1.25.8.2",
+      "latestChecked": "2026-10-14",
       "testedOn": "",
       "lastChecked": "",
-      "url": "",
-      "linkText": "",
-      "notes": "Imports and manages saved households and lots. A Windows app from LuniverSims, not a mod; keep it out of Mods.",
+      "url": "https://luniversims.fr/files/file/73-sims-4-tray-importer/",
+      "linkText": "LuniverSims",
+      "notes": "Imports and manages saved households and lots. A Windows app (a Mac version is linked from the same page) by Deevo for LuniverSims, not a mod; keep it out of Mods. LuniverSims lists version 1.25.8.2 (2025-11-22) as the latest (checked 2026-10-14).",
       "match": []
     },
     {
@@ -1718,6 +1718,11 @@
       "date": "2026-10-13",
       "summary": "I have all game and stuff packs. Remove More Career Opportunities.",
       "changes": "Removed the More Career Opportunities row from the tracker and the install order. CLAUDE.md now says the owner has all expansion, game and stuff packs."
+    },
+    {
+      "date": "2026-10-14",
+      "summary": "Sims 4 Tray Importer is at luniversims.fr/files/file/73-sims-4-tray-importer/.",
+      "changes": "Set Tray Importer's link to the LuniverSims page and its newest known version to 1.25.8.2 (2025-11-22, from that page). Added the link to the install order."
     }
   ],
   "modsIgnore": [
