@@ -666,23 +666,24 @@
     {
       "id": "political-party-traits",
       "batch": "Batch 3",
-      "name": "Political party traits",
+      "name": "Lifestyle traits",
       "creator": "KiaraSims4Mods",
       "category": "Careers",
       "required": true,
-      "status": "Not installed",
+      "status": "Testing",
       "version": "",
       "latestVersion": "",
       "latestChecked": "",
       "testedOn": "",
-      "lastChecked": "",
+      "lastChecked": "2026-10-14",
       "url": "https://kiarasims4mods.net/traits/lifestyle/",
       "linkText": "Creator site",
-      "notes": "The Politician active career needs the Sim to have one of these traits: Llamacrat, Simdipendent or Plumbobican. Get them from the Lifestyle traits page.",
+      "notes": "KiaraSims4Mods' Lifestyle trait set, installed as one merged file (CAS/KiaraSims4Mods_Lifestyle_Traits.package). Kiara's Lifestyle page lists 43 traits, including Llamacrat, Simdipendent and Plumbobican, one of which the Politician active career needs. The scan cannot see inside the file, so check in Create a Sim that those three traits show up.",
       "match": [
         "llamacrat",
         "simdipendent",
-        "plumbobican"
+        "plumbobican",
+        "kiarasims4modslifestyletraits"
       ]
     },
     {
@@ -843,18 +844,19 @@
       "creator": "KiaraSims4Mods",
       "category": "Careers",
       "required": true,
-      "status": "Not installed",
+      "status": "Testing",
       "version": "",
       "latestVersion": "",
       "latestChecked": "",
       "testedOn": "",
-      "lastChecked": "",
+      "lastChecked": "2026-10-14",
       "url": "https://legacy.curseforge.com/sims4/mods/journalist-career",
       "linkText": "CurseForge",
       "notes": "Active career. Packs: For Rent, Get to Work. Also needs: Basemental's Universal Venue List, XML Injector. Venue: Journalist Studio. Skills: Writing. University: Communications or Language & Literature degree jumps to level 3; honors to level 5 (Freelance Journalist). Reward: Money from level 6, plus objects at levels 7 to 10. Details and interactions: https://kiarasims4mods.net/2025/08/27/journalist-career/ (kiarasims4mods.net career page and Active Career Tutorial Guide, checked 2026-10-13).",
       "match": [
         "journalistcareer",
-        "journalistactive"
+        "journalistactive",
+        "journalismactivecareer"
       ],
       "setup": [
         {
@@ -1482,27 +1484,6 @@
       ]
     },
     {
-      "id": "scan-kiarasims4modsjournalismactivecareer",
-      "batch": "Found in scan",
-      "name": "Kiara Sims4Mods Journalism Active Career",
-      "creator": "",
-      "category": "Careers",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 1 file, for example Careers/KiaraSims4Mods_Journalism_ActiveCareer.package. Identify it and fill in the creator.",
-      "match": [
-        "kiarasims4modsjournalismactivecareer"
-      ],
-      "auto": 2
-    },
-    {
       "id": "scan-kemzimapoliticalworldcoremod",
       "batch": "Found in scan",
       "name": "Kem Zima Political World Core Mod",
@@ -1627,27 +1608,6 @@
         "zerbuthecustom"
       ],
       "auto": 2
-    },
-    {
-      "id": "scan-kiarasims4modslifestyletraits",
-      "batch": "Found in scan",
-      "name": "Kiara Sims4Mods Lifestyle Traits",
-      "creator": "",
-      "category": "Other",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-14 from file names: 1 file, for example CAS/KiaraSims4Mods_Lifestyle_Traits.package. Identify it and fill in the creator.",
-      "match": [
-        "kiarasims4modslifestyletraits"
-      ],
-      "auto": 2
     }
   ],
   "patches": [],
@@ -1769,11 +1729,17 @@
       "date": "2026-10-14",
       "summary": "Switch Kiara's traits to the Complete 100+ Traits Pack on CurseForge.",
       "changes": "Added Complete 100+ Traits Pack by klimter (Batch 2, Immersion, Not installed, newest known 1.125.59) to the tracker and install order. Kept the Political party traits row, since the pack is not Kiara's and lacks the traits the Politician career needs."
+    },
+    {
+      "date": "2026-10-14",
+      "summary": "Got Kiara traits; does KiaraSims4Mods_Lifestyle_Traits.package have what we need?",
+      "changes": "Renamed Political party traits to Lifestyle traits, matched it to KiaraSims4Mods_Lifestyle_Traits.package and set it to Testing. Journalist active career now matches KiaraSims4Mods_Journalism_ActiveCareer.package and is Testing, like the other careers. Removed the two scan rows for those files. Added resource to modsIgnore so the game's Resource.cfg file is skipped."
     }
   ],
   "modsIgnore": [
     "cc",
     "bazar",
-    "simdulgence"
+    "simdulgence",
+    "resource"
   ]
 }
