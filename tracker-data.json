@@ -199,6 +199,26 @@
       ]
     },
     {
+      "id": "lot51-core-library",
+      "batch": "Batch 1",
+      "name": "Lot51 Core Library",
+      "creator": "Lot51",
+      "category": "Foundation",
+      "required": true,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "1.43",
+      "latestChecked": "2026-10-15",
+      "testedOn": "",
+      "lastChecked": "2026-10-15",
+      "url": "https://lot51.cc/mods/core-library",
+      "linkText": "Creator site",
+      "notes": "Script library that other mods need; here it is needed by Kemzima's Political World. Keep only one copy in Mods. Installed as Foundation/lot51_core.ts4script. Lot51's Core Library page lists 1.43 (released 2026-04-25) as the newest version, seen in search results on 2026-10-15; the page itself blocks automated reading.",
+      "match": [
+        "lot51core"
+      ]
+    },
+    {
       "id": "wickedwhims",
       "batch": "Batch 2",
       "name": "WickedWhims",
@@ -446,6 +466,34 @@
       "notes": "About 113 traits by klimter (social, teen, toddler, infant, elder, hobby, odd, extreme, planet-inspired and more). Base game; needs no other mods. Each trait is its own file, so you can delete ones you don't want. Don't also install klimter's individual trait packs (duplicates). Not by KiaraSims4Mods: it has no lot traits and not the Llamacrat, Simdipendent or Plumbobican traits the Politician career needs. CurseForge lists the latest file as 1.125.59, dated 2026-09-17 (checked 2026-10-14).",
       "match": [
         "klimter"
+      ]
+    },
+    {
+      "id": "political-world",
+      "batch": "Batch 2",
+      "name": "Political World",
+      "creator": "Kemzima",
+      "category": "Immersion",
+      "required": true,
+      "status": "Testing",
+      "version": "",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "2026-10-15",
+      "url": "https://kemzima.itch.io/politicalworld",
+      "linkText": "itch.io",
+      "notes": "Political gameplay: six fictional ideology traits plus Apolitical, political compatibility between Sims, debates, speeches and secret societies. Needs Lot51 Core Library. Installed in CAS: the core mod v8.1 (.package and .ts4script), optional modules 1 (auto-assigns political traits to NPCs; a commenter says it also gave their own Sim one on first load), 4 (phobia; delete it for the LGBTQ+ friendly version) and 5 (self-discovery), and Kemzima_PoliticalWorld_Settings.cfg, its settings file. Its traits are separate from Kiara's Lifestyle traits, which the Politician career needs. The itch.io page lists 6.22 for game 1.118.242, older than the installed v8.1, so the newest version is not recorded.",
+      "match": [
+        "kemzima"
+      ],
+      "setup": [
+        {
+          "task": "Review the Political World settings",
+          "note": "In game, open Political World > Settings. Political Compatibility can be turned on or off there.",
+          "done": false,
+          "doneOn": ""
+        }
       ]
     },
     {
@@ -1494,111 +1542,6 @@
       ]
     },
     {
-      "id": "scan-kemzimapoliticalworldcoremod",
-      "batch": "Found in scan",
-      "name": "Kem Zima Political World Core Mod",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 2 files, for example CAS/KemZima_PoliticalWorld_CoreMod(Fictional)_REQUIRED.v8.1.package; CAS/KemZima_PoliticalWorld_CoreMod(Fictional)_REQUIRED.v8.1.ts4script. Identify it and fill in the creator.",
-      "match": [
-        "kemzimapoliticalworldcoremod"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-lot51",
-      "batch": "Found in scan",
-      "name": "lot51",
-      "creator": "",
-      "category": "Gameplay (script)",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 1 file, for example Foundation/lot51_core.ts4script. Identify it and fill in the creator.",
-      "match": [
-        "lot51"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-module1kemzimapoliticalworld",
-      "batch": "Found in scan",
-      "name": "Module1 Kemzima Political World",
-      "creator": "",
-      "category": "Other",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 1 file, for example CAS/(OPTIONAL)_Module1_Kemzima_PoliticalWorld_AutoAssign_PoliticalTraitsNPCs.package. Identify it and fill in the creator.",
-      "match": [
-        "module1kemzimapoliticalworld"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-module4kemzimapoliticalworld",
-      "batch": "Found in scan",
-      "name": "Module4 Kemzima Political World",
-      "creator": "",
-      "category": "Other",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 1 file, for example CAS/(OPTIONAL)_Module4_Kemzima_PoliticalWorld_Phobia(LGBTQ & Xenophobia).package. Identify it and fill in the creator.",
-      "match": [
-        "module4kemzimapoliticalworld"
-      ],
-      "auto": 2
-    },
-    {
-      "id": "scan-module5kemzimapoliticalworld",
-      "batch": "Found in scan",
-      "name": "Module5 Kemzima Political World",
-      "creator": "",
-      "category": "Other",
-      "required": false,
-      "status": "Testing",
-      "version": "",
-      "latestVersion": "",
-      "latestChecked": "",
-      "testedOn": "",
-      "lastChecked": "",
-      "url": "",
-      "linkText": "Link",
-      "notes": "Added automatically from the Mods folder scan on 2026-10-13 from file names: 1 file, for example CAS/(OPTIONAL)_Module5_Kemzima_PoliticalWorld_SelfDiscoverySystem.package. Identify it and fill in the creator.",
-      "match": [
-        "module5kemzimapoliticalworld"
-      ],
-      "auto": 2
-    },
-    {
       "id": "scan-zerbuthecustom",
       "batch": "Found in scan",
       "name": "Zerbu The Custom",
@@ -1754,6 +1697,11 @@
       "date": "2026-10-15",
       "summary": "Added SonozakiSisters_schedule_small_business_working_hours and SonozakiSisters_Schedule_Small_Business_Working_Hours_1.0 to the Gameplay folder.",
       "changes": "Added Schedule Small Business Working Hours by Sonozaki Sisters (Batch 3, Testing, version 1.0 from the file name) with a setup step for setting the cafe's hours, and added it to the install order."
+    },
+    {
+      "date": "2026-10-15",
+      "summary": "Kemzima PoliticalWorld Settings is a cfg file.",
+      "changes": "Replaced the four Kemzima scan rows with one Political World row (Kemzima, Batch 2, Testing) that matches every Kemzima file, including Kemzima_PoliticalWorld_Settings.cfg, with a setup step for its settings. Replaced the lot51 scan row with Lot51 Core Library (Batch 1, Testing, newest known 1.43)."
     }
   ],
   "modsIgnore": [
