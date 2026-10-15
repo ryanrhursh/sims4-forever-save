@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-14",
+  "updated": "2026-10-15",
   "gameVersion": "1.128.90.1030",
   "staleDays": 45,
   "statuses": [
@@ -621,6 +621,34 @@
       "notes": "Lets a Sim add a second freelance trade without dropping the first.",
       "match": [
         "unlimitedjobs"
+      ]
+    },
+    {
+      "id": "schedule-small-business-working-hours",
+      "batch": "Batch 3",
+      "name": "Schedule Small Business Working Hours",
+      "creator": "Sonozaki Sisters",
+      "category": "Restaurant",
+      "required": true,
+      "status": "Testing",
+      "version": "1.0",
+      "latestVersion": "",
+      "latestChecked": "",
+      "testedOn": "",
+      "lastChecked": "2026-10-15",
+      "url": "https://www.patreon.com/SonozakiSistersSims4/posts/schedule-small-155393656",
+      "linkText": "Patreon post",
+      "notes": "Sets opening and closing hours for each small business. Needs Businesses & Hobbies. Installed in Gameplay as SonozakiSisters_schedule_small_business_working_hours and SonozakiSisters_Schedule_Small_Business_Working_Hours_1.0 (owner, 2026-10-15); keep it no more than one folder deep. Newest version not confirmed: the Patreon post could not be read.",
+      "match": [
+        "schedulesmallbusiness"
+      ],
+      "setup": [
+        {
+          "task": "Set the cafe's opening and closing hours",
+          "note": "Turn on testingcheats, play the business owner, Shift-click the ticket machine or the Open/Closed sign on the cafe lot and choose Small Business Settings. Enter an opening hour and a closing hour from 0 to 23; they cannot be the same.",
+          "done": false,
+          "doneOn": ""
+        }
       ]
     },
     {
@@ -1721,6 +1749,11 @@
       "date": "2026-10-14",
       "summary": "Remove Sims 4 Tray Importer.",
       "changes": "Removed the Sims 4 Tray Importer row from the tracker and the install order."
+    },
+    {
+      "date": "2026-10-15",
+      "summary": "Added SonozakiSisters_schedule_small_business_working_hours and SonozakiSisters_Schedule_Small_Business_Working_Hours_1.0 to the Gameplay folder.",
+      "changes": "Added Schedule Small Business Working Hours by Sonozaki Sisters (Batch 3, Testing, version 1.0 from the file name) with a setup step for setting the cafe's hours, and added it to the install order."
     }
   ],
   "modsIgnore": [
